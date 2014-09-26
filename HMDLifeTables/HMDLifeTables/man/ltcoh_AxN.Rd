@@ -1,0 +1,118 @@
+\name{ltcoh_AxN}
+\alias{ltcoh_AxN}
+\title{\code{ltcoh_AxN} calculates single sex cohort lifetables in various time intervals given LDB inputs}
+\usage{
+  ltcoh_AxN(WORKING = getwd(), cohComp = NULL, sex = "f",
+    OPENAGE = 110, CAGEEXTRP = 90, RADIX = 1e+05, N = 1,
+    abridged = FALSE, save.bin = TRUE, MPVERSION = 5,
+    run.condition = sex, warn.if.not.run = TRUE,
+    XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
+}
+\arguments{
+  \item{WORKING}{path to working directory, which typically
+  ends with the HMD country abbreviation. Default
+  \code{getwd()}.}
+
+  \item{cohComp}{optional. Output from
+  \code{getCohortComponents()}. If \code{cohComp} is
+  already in memory it's faster to supply this argument,
+  otherwise \code{getCohortComponents()} is called
+  internally.}
+
+  \item{sex}{\code{"m"} or \code{"f"}.}
+
+  \item{OPENAGE}{the desired open age. Default value is
+  110}
+
+  \item{CAGEEXTRP}{earliest age at which almost-extinct
+  cohorts may begin extrapolation. Default 90}
+
+  \item{RADIX}{the lifetable radix (l_0). Default 1e5}
+
+  \item{N}{year interval: 1, 5 or 10. Other intervals would
+  also work in theory.}
+
+  \item{abridged}{logical. Default \code{FALSE}. Should the
+  lifetable by in single ages or abridged ages
+  (0,1,5,10...)}
+
+  \item{save.bin}{logical. Default \code{TRUE}.  Should the
+  output be saved as e.g. \code{Rbin/ltcoh_1x1.Rdata} as
+  well. Appropriate name is derived systematically. In this
+  case both objects are saved separately.}
+
+  \item{MPVERSION}{5 or 6. Version 5 exposures assume
+  uniformity, v6 allows for non-uniformity across birthdays
+  in the death distribution by taking information from
+  monthly birth distributions. Differences are negligible.}
+
+  \item{run.condition}{\code{"m"}, \code{"f"},
+  \code{"both"} or \code{"either"}. Default = \code{sex}
+  argument. According to the heuristic in
+  \code{checkRuncoh()}, should the lifetable be computed or
+  not? For example, if at least one male cohort is extinct
+  and \code{run.condition} is \code{"m"}, then it computes.
+  In production, this should be set to \code{"either"} or
+  \code{"both"}, otherwise we could get a border case where
+  males are run but not females.}
+
+  \item{warn.if.not.run}{logical. Default \code{TRUE}. If
+  there isn't enough data (enough extinct cohorts), should
+  the function return a warning?}
+
+  \item{XXX}{the HMD country abbreviation. If left
+  \code{NULL}, this is extracted from \code{WORKING} as the
+  last path part.}
+
+  \item{LDBPATH}{LDBPATH in case the LexisDB is not in
+  \code{WORKING} (local testing), the full path to the
+  LexisDB folder. If left as \code{NULL} it is assumed to
+  be \code{file.path(WORKING, "LexisDB")}}
+
+  \item{IDBPATH}{in case the InputDB is not in
+  \code{WORKING} (local testing), the full path to the
+  LexisDB folder. If left as \code{NULL} it is assumed to
+  be \code{file.path(WORKING, "InputDB")}}
+}
+\value{
+  a \code{data.frame} of output, unrounded in long
+  (stacked) format. Columns for \code{"Year"},
+  \code{"Age"}, \code{"mx"}, \code{"qx"}, \code{"ax"},
+  \code{"lx"}, \code{"dx"}, \code{"Lx"}, \code{"Tx"},
+  \code{"ex"}
+}
+\description{
+  \code{ltcoh_AxN()} is a top-level function intended to be
+  called by users directly. The function uses a simple
+  heuristic, \code{checkRuncoh()}, to determine whether
+  cohort lifetables are to be calculated in the first
+  place, and returns a warning in case insufficient data
+  are available. Thus, the function can in fact be run on
+  each HMD country (except at this time Belgium).
+}
+\details{
+  In the case of multiyear cohorts, the first year is
+  always determined by year modulo \code{N} = 0. The
+  minimum number of years for a cohort to be included for
+  any N > 1 is 2. Thus the first and last cohorts of 5 or
+  10 year cohort data might be 2, 3 or 4-year cohorts,
+  depending on the start and end dates.
+
+  This function uses \code{checkRuncoh()} to automatically
+  determine whether at least one cohort has been observed
+  from birth until extinction for the given
+  \code{run.condition}. The specific check is whether any
+  cohort observed from birth ever has a population count of
+  0 (i.e. it could go extinct prior to or after
+  \code{OPENAGE}.
+
+  This function calls several other functions, including
+  \code{getCohortComponents()} (which itself calls
+  \code{cohTadj()}), \code{checkRuncoh()}, \code{CDa0()}
+  and \code{Abridge()}. It is either used directly or
+  called by \code{RunHMDCountry()}.
+}
+\author{
+  Tim Riffe \email{triffe@demog.berkeley.edu}
+}
+

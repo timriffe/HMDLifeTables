@@ -1,0 +1,34 @@
+\name{YearAgg}
+\alias{YearAgg}
+\title{\code{YearAgg} Aggregate an 'age by year' matrix into N-year groups}
+\usage{
+  YearAgg(mat, years = as.integer(colnames(mat)), N = 1)
+}
+\arguments{
+  \item{mat}{an 'age by year' numeric matrix, ideally with
+  dimensions labeled.}
+
+  \item{years}{vector of years (columns) in \code{mat}.
+  Defaults to the column names of \code{mat}}
+
+  \item{N}{the desired year-group width.}
+}
+\value{
+  an 'age by year' matrix with columns. Column labls will
+  now specify hyphen-separated year ranges.
+}
+\description{
+  this function takes any 'age by year' matrix, ideally
+  with columns and row appropriately labeled, and
+  aggregates it into year groups. The first year of each
+  group are years where \code{year %% N == 0}. if \code{N =
+  1}, nothing happens, for any \code{N > 1} the minimum
+  number of years for a year group is 2. That is to say,
+  for 5-year groupings, the first and last year-groups
+  might not have divided evenly into 5. These are included
+  if they have at least 2 years in them.
+}
+\author{
+  Tim Riffe \email{triffe@demog.berkeley.edu}
+}
+

@@ -1,0 +1,15 @@
+\docType{data}
+\name{country.lookup}
+\alias{country.lookup}
+\title{A lookup table for HMD country abbreviations and full names.}
+\format{A \code{data.frame} with 47 rows and 2 variables}
+\description{
+  A \code{data.frame} containing HMD country abbreviations
+  and their full names.  The variables, both character
+  class, are as follows:
+}
+\details{
+  \itemize{ \item cntries.  \item full.countries. }
+}
+\keyword{datasets}
+

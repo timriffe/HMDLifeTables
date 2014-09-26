@@ -1,0 +1,5 @@
+This is a pending kludge:
+
+sometimes aggregate inputs are missing for GBR. So, in the case of birth counts, how will the lifetable program know where to go looking for data? Look in the LDB for it? Predefine which InputDB files to aggregate from? Just yell at Doma?
+
+

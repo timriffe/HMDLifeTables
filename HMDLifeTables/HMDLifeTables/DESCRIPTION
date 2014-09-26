@@ -1,0 +1,57 @@
+Package: RLifeTable
+Type: Package
+Title: HMD Internal Lifetable Programs
+Version: 6.1.4262
+Date: 2012-11-06
+Author: Tim Riffe, Carl Boe
+Maintainer: Tim Riffe <tim.riffe@gmail.com>
+Description: The full set of lifetable programs up to MP v5, as well as some
+    changes to be made in v6, and proposed changes for v7. This only serves as
+    an internal copy, because it relies on the particular structure of the
+    country working directory at the time of writing, i.e. XXX/ containing
+    /InputDB/ ; /LexisDB/ ; the results folder, /RSTATS/ is added, if absent. A
+    user need only run 'RunHMDCountry()' to make use of this package, though
+    all functions are visible and available. Version numbers follow the MP
+    versions, with decimals for minor revisions.
+Depends:
+    R (>= 2.15)
+Imports:
+    reshape2,
+    compiler
+License: GPL-2
+LazyData: TRUE
+Collate:
+    'AC2AP.R'
+    'AP2AC.R'
+    'Abridge.R'
+    'CDa0.R'
+    'CleanRstuff.R'
+    'Exposures_Deaths_Mx_AxN.R'
+    'Exposures_coh.R'
+    'Exposures_per.R'
+    'Population_A.R'
+    'RunHMDCountry.R'
+    'Write_Births.R'
+    'Write_Deaths_lexis.R'
+    'Write_Exposures_Deaths_Mx.R'
+    'Write_e0.R'
+    'Write_lt.R'
+    'YearAgg.R'
+    'cExposures_and_cMx_AxN.R'
+    'checkRuncoh.R'
+    'getCohortComponents.R'
+    'getPeriodComponents.R'
+    'ltcohBoth_AxN.R'
+    'ltcoh_AxN.R'
+    'ltperBoth_AxN.R'
+    'ltper_AxN.R'
+    'ltper_getDx100.R'
+    'ltper_mx_v5.R'
+    'ltper_mx_v7.R'
+    'perTadj.R'
+    'extractXXXfromWORKING.R'
+    'AKm02a0.R'
+    'AKm02q0.R'
+    'AKq02a0.R'
+    'readIDBcurrent.R'
+    'readLDB.R'

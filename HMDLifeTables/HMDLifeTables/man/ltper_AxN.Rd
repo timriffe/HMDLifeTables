@@ -1,0 +1,92 @@
+\name{ltper_AxN}
+\alias{ltper_AxN}
+\title{\code{ltper_AxN} calculates single sex period lifetables in various time intervals given LDB inputs}
+\usage{
+  ltper_AxN(WORKING = getwd(), perComp = NULL, sex = "m",
+    OPENAGE = 110, RADIX = 1e+05, N = 1, abridged = FALSE,
+    MPVERSION = 5, save.bin = TRUE, XXX = NULL,
+    LDBPATH = NULL, IDBPATH = NULL, testa0v6 = FALSE)
+}
+\arguments{
+  \item{WORKING}{path to working directory, which typically
+  ends with the HMD country abbreviation. Default
+  \code{getwd()}.}
+
+  \item{perComp}{optional. Output from
+  \code{getPeriodComponents()}. If \code{perComp} is
+  already in memory it's faster to supply this argument,
+  otherwise \code{getPeriodComponents()} is called
+  internally.}
+
+  \item{sex}{\code{"m"} or \code{"f"}.}
+
+  \item{OPENAGE}{the desired open age. Default value is
+  110}
+
+  \item{RADIX}{the lifetable radix (l_0). Default 1e5}
+
+  \item{N}{year interval: 1, 5 or 10. Other intervals would
+  also work in theory.}
+
+  \item{abridged}{logical. Default \code{FALSE}. Should the
+  lifetable by in single ages or abridged ages (0,1,5,10,
+  ...)}
+
+  \item{save.bin}{logical. Default \code{TRUE}.  Should the
+  output be saved as e.g. \code{Rbin/ltper_1x1.Rdata} as
+  well. Appropriate name is derived systematically. In this
+  case both objects are saved separately.}
+
+  \item{MPVERSION}{5 or 6 (or 7). Version 5 exposures
+  assume uniformity, v6 allows for non-uniformity across
+  birthdays in the death distribution by taking information
+  from monthly birth distributions. Differences are
+  negligible. Version 7 uses a different mx smoothing
+  technique.}
+
+  \item{XXX}{the HMD country abbreviation. If left
+  \code{NULL}, this is extracted from \code{WORKING} as the
+  last path part.}
+
+  \item{LDBPATH}{LDBPATH in case the LexisDB is not in
+  \code{WORKING} (local testing), the full path to the
+  LexisDB folder. If left as \code{NULL} it is assumed to
+  be \code{file.path(WORKING, "LexisDB")}}
+
+  \item{IDBPATH}{in case the InputDB is not in
+  \code{WORKING} (local testing), the full path to the
+  LexisDB folder. If left as \code{NULL} it is assumed to
+  be \code{file.path(WORKING, "InputDB")}}
+}
+\value{
+  a \code{data.frame} of output, unrounded in long
+  (stacked) format. Columns for \code{"Year"},
+  \code{"Age"}, \code{"mx"}, \code{"qx"}, \code{"ax"},
+  \code{"lx"}, \code{"dx"}, \code{"Lx"}, \code{"Tx"},
+  \code{"ex"}
+}
+\description{
+  \code{ltper_AxN()} is a top-level function intended to be
+  called by users directly. All HMD countries calculate
+  period lifetables. This function has not yet been adapted
+  for Belgium.
+}
+\details{
+  In the case of multiyear cohorts, the first year is
+  always determined by year modulo \code{N} = 0. The
+  minimum number of years for a cohort to be included for
+  any N > 1 is 2. Thus the first and last cohorts of 5 or
+  10 year cohort data might be 2, 3 or 4-year cohorts,
+  depending on the start and end dates.
+
+  This function calls several functions, including
+  \code{getPeriodComponents()}, \code{ltper_getDx100()},
+  \code{ltper_mx_v5()} or \code{ltper_mx_v6()},
+  \code{Abrdige()}, \code{CDa0()} and indirectly
+  \code{perTadj()}. It is either used directly or called by
+  \code{RunHMDCountry()}.
+}
+\author{
+  Tim Riffe \email{triffe@demog.berkeley.edu}
+}
+

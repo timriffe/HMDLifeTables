@@ -1,0 +1,48 @@
+\name{Abridge}
+\alias{Abridge}
+\title{\code{Abridge} a lifetable from single ages to 5-year abridged age groups}
+\usage{
+  Abridge(lx, Tx, ex, OPENAGE)
+}
+\arguments{
+  \item{lx}{a matrix (age by year) of lx values, as passed
+  in by e.g. \code{LTper_AxN()}}
+
+  \item{Tx}{a matrix (age by year) of Tx values, as passed
+  in by e.g. \code{LTper_AxN()}}
+
+  \item{ex}{a matrix (age by year) of ex values, as passed
+  in by e.g. \code{LTper_AxN()}}
+
+  \item{OPENAGE}{the lifetable open age, as passed in by
+  e.g. \code{LTper_AxN()} where the default value is 110}
+}
+\value{
+  a \code{data.frame} of the full lifetable in long
+  (stacked) format, unrounded and unformatted (except the
+  \code{Age} column, which is centered on the age-group
+  hyphens).
+}
+\description{
+  \code{Abridge} is an auxiliary function called by any of
+  the four top level lifetable functions
+  (\code{LTper_AxN()}, ...). This function can be called on
+  its own if you dispose of three equally dimensioned
+  matrices of \code{lx, Tx, ex} values (age by year) in
+  single ages (years may or may not be grouped, it doesn't
+  matter). \code{OPENAGE} is only used for age labelling of
+  the output, which is a full-fledged lifetable as a
+  \code{data.frame} in long (stacked) format, unrounded and
+  unformatted. Procedure were roughly described on page 44
+  of MPv5.
+}
+\details{
+  the \code{ax} method was not documented in MPv5, but was
+  gleaned from the previous matlab version. Closeout
+  procedures are basically the same as with single age
+  lifetables.
+}
+\author{
+  Tim Riffe \email{triffe@demog.berkeley.edu}
+}
+

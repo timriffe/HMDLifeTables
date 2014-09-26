@@ -1,0 +1,37 @@
+\name{ltper_mx_v7}
+\alias{ltper_mx_v7}
+\title{\code{ltper_mx_v7} fits Kannisto mortality to old ages according to version 7 of the methods protocol}
+\usage{
+  ltper_mx_v7(Dx, Exp, extrap.ages.i)
+}
+\arguments{
+  \item{Dx}{'age by year' numeric matrix of death counts,
+  as passed from \code{ltper_AxN()}.}
+
+  \item{Exp}{'age by year' numeric matrix of exposures, as
+  passed from \code{ltper_AxN()}.}
+
+  \item{extrap.ages.i}{vector of age indices where smoothed
+  mx values should start to be imputed.}
+}
+\value{
+  an 'age by year' numeric matrix of mx values, to be used
+  for all subsequent lifetable calculations.
+}
+\description{
+  This function optimizes to Kannisto likelihood to ages
+  70+ in the data, and it returns the entire 'age by year'
+  \code{mx} matrix, properly imputed according to
+  \code{extrap.ages.i} (the output from
+  \code{ltper_getDx100()}). This function is internal, and
+  called only by \code{ltper_AxN()}. It differs from
+  \code{ltper_mx_v5()} in that ages 70-79 are included, but
+  their information is exponentially weighted according to
+  the 80+ population size: smaller populations use more
+  information from the 70-79 range, while large populations
+  asymptotically approach version 5 smoothing.
+}
+\author{
+  Tim Riffe \email{triffe@demog.berkeley.edu}
+}
+

@@ -1,0 +1,64 @@
+\name{RunHMDCountry}
+\alias{RunHMDCountry}
+\title{\code{RunHMDCountry} a function to calculate, prepare and write out a full \code{STATS} folder given up-to-date \code{InputDB} and \code{LexisDB} folders.}
+\usage{
+  RunHMDCountry(WORKING = getwd(), OPENAGE = 110,
+    RADIX = 1e+05, CAGEEXTRP = 90, MPVERSION = 5,
+    STATSFOLDER = "RSTATS", XXX = NULL, LDBPATH = NULL,
+    IDBPATH = NULL)
+}
+\arguments{
+  \item{WORKING}{path to working directory, which typically
+  ends with the HMD country abbreviation. Default
+  \code{getwd()}.}
+
+  \item{OPENAGE}{the desired open age. Default value is
+  110.}
+
+  \item{RADIX}{the lifetable radix (l_0). Default 1e5.}
+
+  \item{CAGEEXTRP}{earliest age at which almost-extinct
+  cohorts may begin extrapolation. Default 90}
+
+  \item{MPVERSION}{5 or 6. See individual functions for
+  descriptions of differences}
+
+  \item{STATSFOLDER}{the folder name where output is to be
+  written to (not a full path). Default \code{"RSTATS"}.}
+
+  \item{XXX}{the HMD country abbreviation. If left
+  \code{NULL}, this is extracted from \code{WORKING} as the
+  last path part.}
+
+  \item{LDBPATH}{in case the LexisDB is not in
+  \code{WORKING} (local testing), the full path to the
+  LexisDB folder. If left as \code{NULL} it is assumed to
+  be \code{file.path(WORKING, "LexisDB")}}
+
+  \item{IDBPATH}{in case the InputDB is not in
+  \code{WORKING} (local testing), the full path to the
+  LexisDB folder. If left as \code{NULL} it is assumed to
+  be \code{file.path(WORKING, "InputDB")}}
+}
+\value{
+  Running this function has many side-effects, most
+  notably, filling up a folder \code{WORKING/Rbin/} with
+  unrounded R binary versions of all output objects, and
+  then filling up a folder \code{WORKING/RSTATS} (name can
+  be changed) with final .txt formatted output.
+}
+\description{
+  This function is the highest-level function, calling all
+  other lifetable functions in the tree either directly or
+  indirectly. Some defaults are not controllable via
+  arguments, though these may be incorporated as this
+  function comes into use, especially those arguments that
+  control whether or not cohort lifetables are to be run-
+  right now it's set to automatic detection. This function
+  can take around 30 seconds to run completely, though this
+  may get faster in future edits.
+}
+\author{
+  Tim Riffe \email{triffe@demog.berkeley.edu}
+}
+

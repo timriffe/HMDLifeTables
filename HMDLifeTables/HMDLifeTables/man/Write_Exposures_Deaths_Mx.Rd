@@ -1,0 +1,44 @@
+\name{Write_Exposures_Deaths_Mx}
+\alias{Write_Exposures_Deaths_Mx}
+\title{\code{Write_Exposures_Deaths_Mx} function to write formatted .txt files for all period Mx, Exposures and Deaths objects.}
+\usage{
+  Write_Exposures_Deaths_Mx(WORKING = getwd(),
+    STATSFOLDER = "RSTATS", MPVERSION = 5, XXX = NULL)
+}
+\arguments{
+  \item{WORKING}{path to working directory, which typically
+  ends with the HMD country abbreviation. Default
+  \code{getwd()}.}
+
+  \item{STATSFOLDER}{the folder name where output is to be
+  written to (not a full path). Default \code{"RSTATS"}.}
+
+  \item{MPVERSION}{5 or 6. Default 5. Here this only
+  affects file headers.}
+
+  \item{XXX}{the HMD country abbreviation. If left
+  \code{NULL}, this is extracted from \code{WORKING} as the
+  last path part.}
+}
+\value{
+  function called for its side effect of creating the files
+  \code{Exposures_1x1.txt} or \code{Deaths_1x1.txt}, etc.
+  Time intervals are detected from the \code{.Rdata} file
+  names. No value returned.
+}
+\description{
+  This function requires that all pertinent data objects
+  (i.e. suffix \code{.Rdata}) be present in the folder
+  \code{WORKING/Rbin/}. Objects are selected by grepping,
+  which works for the present HMD file naming scheme.
+  \code{.Rdata} files are read in, rounded, formatted and
+  written back out into \code{WORKING/RSTATS/} by default,
+  although this can be changed with the \code{STATSFOLDER}
+  argument. This function must be called after
+  \code{Exposures_Deaths_Mx_AxN()}, which must have been
+  run with the argument \code{save.bin = TRUE}.
+}
+\author{
+  Tim Riffe \email{triffe@demog.berkeley.edu}
+}
+
