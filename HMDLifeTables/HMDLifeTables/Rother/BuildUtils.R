@@ -23,7 +23,7 @@ BuildRLifeTablePackage <- function(MPVERSION = 6, MPVERSION.origin = "2013-01-01
   
   if (commit){
     # commit package changes automatically:
-    system(paste("cd /hdir/0/triffe/COMMONS/git/HMD_Rlifetables_git/RLifeTables \n git commit -m ","'Package rebuild ",pkg.vs, "'"))
+    system(paste("cd /data/commons/triffe/COMMONS/git/HMD_Rlifetables_git/RLifeTables \n git commit -m ","'Package rebuild ",pkg.vs, "'"))
   }
   # build
   devtools::build(pkg = "/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTables",

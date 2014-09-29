@@ -41,7 +41,7 @@ AC2AP <- function(ACmatrix, Lexis){
 # InputDB, LexisDB. Other folder are created in there as needed, such as RSTATS, Rbin. Other arguments
 # are self explanatory
 getPeriodComponents <- function(
-  country.folder = "/hdir/0/hmd/HMDWORK/ISL", 
+  country.folder = "/data/commons/hmd/HMDWORK/ISL", 
   sex = "f",
   openage = 110,
   save.bin = TRUE){
@@ -175,7 +175,7 @@ perTadj <- compiler:::cmpfun(function(LDBobj, tadj, sex){
 
 # be sure to change the load() path inside
 # output is an AP matrix of exposures, columns and rows labeled. 110+ is labeled as 110, not 110+.
-Exposures_per <- function(country.folder = "/hdir/0/hmd/HMDWORK/JPN", 
+Exposures_per <- function(country.folder = "/data/commons/hmd/HMDWORK/JPN", 
   pop1 = NULL,    
   pop2 = NULL,
   dl = NULL,
@@ -186,7 +186,7 @@ Exposures_per <- function(country.folder = "/hdir/0/hmd/HMDWORK/JPN",
   save.bin = TRUE, 
   MPversion = 5, #MPversion = 6
   test = FALSE, # test <- TRUE
-  Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly"
+  Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly"
   ){
   # MPversion can only be 5 or 6
   if(!MPversion %in% c(5, 6)){
@@ -262,7 +262,7 @@ Exposures_per <- function(country.folder = "/hdir/0/hmd/HMDWORK/JPN",
   
 # pop1 pop1 is AP
 #births.monthly.path <- "/data/commons/triffe/git/HMD_CS/HMDwork/C_CHE/update_7.11.2012/UpdatedTXT/CHEmonthly.txt"
-#births.monthly.path <- "/hdir/0/triffe/Desktop/RUSmonthly.txt"
+#births.monthly.path <- "/data/commons/triffe/Desktop/RUSmonthly.txt"
 # read in CHEmonthly.txt
   BM              <- read.table(births.monthly.path,
                       header = TRUE, 

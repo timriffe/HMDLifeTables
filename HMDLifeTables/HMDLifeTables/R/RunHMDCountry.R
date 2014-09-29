@@ -283,7 +283,7 @@ RunHMDCountry <- function(WORKING = getwd(),
 #' Generating lifetables.
 #' For a country update, try: (if you're at UCB)
 #' @examples \dontrun{
-#'    RunHMDCountry(WORKING = "/hdir/0/hmd/HMDWORK/ISL") # Does Iceland 
+#'    RunHMDCountry(WORKING = "/data/commons/hmd/HMDWORK/ISL") # Does Iceland 
 #' } 
 #' Assuming the standard HMD folder structure, LexisDB and InputDB file formats, the 
 #' entire body of HMD output will be generated. Intermediate files (unrounded) are also 
@@ -298,7 +298,7 @@ RunHMDCountry <- function(WORKING = getwd(),
 #' different output. Imagine for instance that you wanted cohort lifetables for a wider range of 
 #' years than the default; you could specify:
 #' @examples \dontrun{
-#'    ISLfclt <- ltcoh_AxN(WORKING = "/hdir/0/hmd/HMDWORK/ISL",
+#'    ISLfclt <- ltcoh_AxN(WORKING = "/data/commons/hmd/HMDWORK/ISL",
 #'                         sex = "f",
 #'                         OPENAGE = 95,   # default 110
 #'                         CAGEEXTRP = 80, # default 90
@@ -311,7 +311,7 @@ RunHMDCountry <- function(WORKING = getwd(),
 #' of \code{getCohortComponents()}
 #'  @examples \dontrun{
 #' ISLcohComp <- getCohortComponents(
-#'                         WORKING = "/hdir/0/hmd/HMDWORK/ISL", 
+#'                         WORKING = "/data/commons/hmd/HMDWORK/ISL", 
 #'                         OPENAGE = 95, 
 #'                         sex = "f")
 #' head(ISLcohComp) # if you had data from some non-HMD source or test-source

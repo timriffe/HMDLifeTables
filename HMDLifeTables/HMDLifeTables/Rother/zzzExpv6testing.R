@@ -3,7 +3,7 @@
 ###############################################################################
 
 source("/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTables/R/Exposures_per.R")
-HFDmonthly <- list.files( "/hdir/0/triffe/Desktop/HFDmonthly")
+HFDmonthly <- list.files( "/data/commons/triffe/Desktop/HFDmonthly")
 
 # HMD countries minus BEL
 HMDcntries <- c("AUS","AUT","BGR","BLR","CAN","CHE","CHL","CZE","DNK","DEUTE","DEUTW","DEUTNP",
@@ -13,10 +13,10 @@ HMDcntries <- c("AUS","AUT","BGR","BLR","CAN","CHE","CHL","CZE","DNK","DEUTE","D
 # 30 countries to be tested, not bad
 (TestCountries <- HMDcntries[paste0(HMDcntries, "monthly.txt") %in% HFDmonthly])
 TestCountries  <- TestCountries[!TestCountries %in% c("TWN")] # permission probs
-working.path   <- "/hdir/0/hmd/HMDWORK"
+working.path   <- "/data/commons/hmd/HMDWORK"
 TestOutput     <- list()
 
-working.path   <- "/hdir/0/hmd/HMDWORK"
+working.path   <- "/data/commons/hmd/HMDWORK"
 TestCountries <- "ITA"
 
 for (.ctry in TestCountries){
@@ -31,15 +31,15 @@ for (.ctry in TestCountries){
         save.bin = FALSE, 
         MPVERSION = .v, #MPversion = 6
         test = TRUE,
-        Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly"
+        Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly"
       ))
     }
   }
   TestOutput[[.ctry]] <- ctry.list 
 }
 # save, to have a copy
-save(TestOutput, file = "/hdir/0/triffe/Desktop/TestOutput.Rdata")
-TO <- local(get(load("/hdir/0/triffe/Desktop/TestOutput.Rdata")))
+save(TestOutput, file = "/data/commons/triffe/Desktop/TestOutput.Rdata")
+TO <- local(get(load("/data/commons/triffe/Desktop/TestOutput.Rdata")))
 
 # if you want Mx estimates by version and sex
 Mxmv5 <- lapply(TO, function(x){ x[["m"]][["v5"]][["Deaths"]] / x[["m"]][["v5"]][["Exp"]]})
@@ -65,7 +65,7 @@ RExpf <- lapply(TO , function(x){
 colfun          <- grDevices:::colorRampPalette(RColorBrewer:::brewer.pal(9, "RdBu"), space = "Lab")
 
 # where 'path' is the folder to save diagnostics to
-plot.Rdiff <- function(R, ctry, sex = "m", path = "/hdir/0/triffe/Desktop/ExpDiagnostics"){
+plot.Rdiff <- function(R, ctry, sex = "m", path = "/data/commons/triffe/Desktop/ExpDiagnostics"){
   years           <- as.integer(colnames(R))
   ages            <- as.integer(rownames(R))
   Width           <- 7 * (length(years) + 1) / 131 + 3
@@ -117,13 +117,13 @@ for (i in 1:length(RExpm)){
 
 # -------------------------------------------------------------------
 # Lisa scanned the French monthly births data. Try to work with that now.
-#BM              <- read.table("/hdir/0/triffe/Desktop/HFDmonthly/FRATNPmonthly.txt",
+#BM              <- read.table("/data/commons/triffe/Desktop/HFDmonthly/FRATNPmonthly.txt",
 #                              header = TRUE, 
 #                              sep = ",", 
 #                              stringsAsFactors = FALSE, 
 #                              na.strings = ".")
 #head(BM)
-#BO <- read.csv("/hdir/0/triffe/Desktop/HFDmonthly/FRA.births.by-1861-1945.csv", stringsAsFactors = FALSE, )              
+#BO <- read.csv("/data/commons/triffe/Desktop/HFDmonthly/FRA.births.by-1861-1945.csv", stringsAsFactors = FALSE, )              
 #rownames(BO) <- as.character(1861:1945)
 #BO <- as.matrix(BO[, c(2, 5:16)])
 #colnames(BO) <- c(13, 1:12)
@@ -155,21 +155,21 @@ for (i in 1:length(RExpm)){
 #FRATNPmonthly <- removeDuplicates(FRATNPmonthly)
 #
 #write.table(FRATNPmonthly, 
-#  file = "/hdir/0/triffe/Desktop/HFDmonthly/FRATNPmonthly_add.txt", 
+#  file = "/data/commons/triffe/Desktop/HFDmonthly/FRATNPmonthly_add.txt", 
 #  sep = ",", 
 #  col.names = colnames(FRATNPmonthly), 
 #  row.names = FALSE,
 #  quote = FALSE)
 
-# now just read in /hdir/0/triffe/Desktop/HFDmonthly/FRATNPmonthly_add.txt for the France testing.
-working.path   <- "/hdir/0/hmd/HMDWORK"
+# now just read in /data/commons/triffe/Desktop/HFDmonthly/FRATNPmonthly_add.txt for the France testing.
+working.path   <- "/data/commons/hmd/HMDWORK"
 fem5 <- try(Exposures_per(WORKING = file.path(working.path, "ITA"), 
     sex = "f", 
     OPENAGE = 110, 
     save.bin = FALSE, 
     MPVERSION = 5, #MPversion = 6
     test = TRUE,
-    Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly"
+    Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly"
   ))
 fem6 <- try(Exposures_per(country.folder = file.path(working.path, "ITA"), 
     sex = "f", 
@@ -177,7 +177,7 @@ fem6 <- try(Exposures_per(country.folder = file.path(working.path, "ITA"),
     save.bin = FALSE, 
     MPversion = 6, #MPversion = 6
     test = TRUE,
-    Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly"
+    Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly"
   ))
 mal5 <- try(Exposures_per(country.folder = file.path(working.path, "FRATNP"), 
     sex = "m", 
@@ -185,7 +185,7 @@ mal5 <- try(Exposures_per(country.folder = file.path(working.path, "FRATNP"),
     save.bin = FALSE, 
     MPversion = 5, #MPversion = 6
     test = TRUE,
-    Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly"
+    Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly"
   ))
 mal6 <- try(Exposures_per(country.folder = file.path(working.path, "FRATNP"), 
     sex = "m", 
@@ -193,7 +193,7 @@ mal6 <- try(Exposures_per(country.folder = file.path(working.path, "FRATNP"),
     save.bin = FALSE, 
     MPversion = 6, #MPversion = 6
     test = TRUE,
-    Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly"
+    Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly"
   ))
 fR <- (fem6$Exp - fem5$Exp) / fem5$Exp
 mR <- (mal6$Exp - mal5$Exp) / mal5$Exp
@@ -213,7 +213,7 @@ Mxf6 <- (fem6$Deaths / fem6$Exp)[1:100,]
 colfun          <- grDevices:::colorRampPalette(RColorBrewer:::brewer.pal(9, "Spectral"), space = "Lab")
 
 # where 'path' is the folder to save diagnostics to
-plot.MxSurf <- function(Mx, ctry, v = 5, sex = "m", path = "/hdir/0/triffe/Desktop/ExpDiagnostics"){
+plot.MxSurf <- function(Mx, ctry, v = 5, sex = "m", path = "/data/commons/triffe/Desktop/ExpDiagnostics"){
   years           <- as.integer(colnames(Mx))
   ages            <- as.integer(rownames(Mx))
   Width           <- 7 * (length(years) + 1) / 131 + 3

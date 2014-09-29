@@ -2,7 +2,7 @@
 #' 
 #' @description this function is written in the name of modularity, since this otherwise takes place at the beginning of every function. When \code{XXX = NULL} (default). Clearly, if the last path element is for some reason NOT the HMD abbreviation, then \code{XXX} should be specified in the function arguments.
 #' 
-#' @param WORKING path to working directory, which typically ends with the HMD country abbreviation. For instance: \code{"/hdir/0/hmd/HMDWORK/ISL"}, though this function has no default.
+#' @param WORKING path to working directory, which typically ends with the HMD country abbreviation. For instance: \code{"/data/commons/hmd/HMDWORK/ISL"}, though this function has no default.
 #' 
 #' @return character vector of length 1" HMD letter code abbrevation for the country (inferred)
 #'

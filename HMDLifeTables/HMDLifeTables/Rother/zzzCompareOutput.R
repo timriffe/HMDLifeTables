@@ -10,7 +10,7 @@ source("/data/commons/triffe/git/HMD_Rlifetables_git/R/ltper_AxN.R")
 GetTestControl <- function(XXX = "ISL", sex = "f", A = 1, N = 1){
   # get R-generated lifetable
   test <- ltper_AxN(
-    country.folder = paste0("/hdir/0/hmd/HMDWORK/",XXX),
+    country.folder = paste0("/data/commons/hmd/HMDWORK/",XXX),
     sex = sex, 
     openage = 110, 
     radix = 1e+05, 
@@ -23,7 +23,7 @@ GetTestControl <- function(XXX = "ISL", sex = "f", A = 1, N = 1){
   
   # get current HMD table
   fname <- paste0(sex,"ltper_",A,"x",N,".txt")
-  fpath <- file.path("/hdir/0/hmd/HMDWORK",XXX,"STATS",fname)
+  fpath <- file.path("/data/commons/hmd/HMDWORK",XXX,"STATS",fname)
   control <- read.table(fpath, skip = 2, header = TRUE, stringsAsFactors = FALSE, as.is = TRUE)
   
  # slice off '+'
@@ -184,21 +184,21 @@ Make1x1mxcomparison <- function(XXX = "ISL", sex = "f"){
 #for (XXX in cntries){
 #  cat("\n\n", paste0(XXX, " lifetables running:\n"))
 #  cat("\nproducing period data objects..")
-#  test <- getPeriodComponents(country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX), 
+#  test <- getPeriodComponents(country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX), 
 #    sex = "f", openage = 110, save.bin = TRUE)
-#  test <- getPeriodComponents(country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX), 
+#  test <- getPeriodComponents(country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX), 
 #    sex = "m", openage = 110, save.bin = TRUE)
 #  cat("\nproducing cohort data objects..")
-#  test <- getCohortComponents(country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX), 
+#  test <- getCohortComponents(country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX), 
 #    sex = "f", openage = 110, save.bin = TRUE)
-#  test <- getCohortComponents(country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX), 
+#  test <- getCohortComponents(country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX), 
 #    sex = "m", openage = 110, save.bin = TRUE)
 #  for (N in c(1, 5, 10)){
 #    for (abridged in c(FALSE, TRUE)){
 #      for (sex in c("m","f")){
 #        # period tables, single sex 
 #        test <- ltper_AxN(
-#          country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX),
+#          country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX),
 #          sex = sex, 
 #          openage = 110, 
 #          radix = 1e+05, 
@@ -209,7 +209,7 @@ Make1x1mxcomparison <- function(XXX = "ISL", sex = "f"){
 #        cat("\n", paste0(XXX, "_", sex, "ltper_", ifelse(abridged, 5, 1), "x", N))
 #        # cohort tables, single sex (checked live if need to be run)
 #        test <- ltcoh_AxN(
-#          country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX),
+#          country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX),
 #          sex = sex, 
 #          openage = 110, 
 #          radix = 1e+05,
@@ -225,7 +225,7 @@ Make1x1mxcomparison <- function(XXX = "ISL", sex = "f"){
 #      }
 #      # both sex period tables, need to be done once both single sex tables are done
 #      test <- ltperBoth_AxN(
-#        country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX), 
+#        country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX), 
 #        openage = 110, 
 #        radix = 1e+05, 
 #        N = N, 
@@ -236,7 +236,7 @@ Make1x1mxcomparison <- function(XXX = "ISL", sex = "f"){
 #      cat("\n", paste0(XXX, "_bltper_", ifelse(abridged, 5, 1), "x", N))
 #      # both sex cohort tables
 #      test <- ltcohBoth_AxN(
-#        country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX), 
+#        country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX), 
 #        openage = 110, 
 #        CAGEEXTRP = 90,
 #        radix = 1e5, 
@@ -251,7 +251,7 @@ Make1x1mxcomparison <- function(XXX = "ISL", sex = "f"){
 #      }
 #    }
 #  }
-#  Write_lt(country.folder = paste0("/hdir/0/hmd/HMDWORK/", XXX))
+#  Write_lt(country.folder = paste0("/data/commons/hmd/HMDWORK/", XXX))
 #  cat("\n------------------------------------------------")
 #  cat("\n", paste0(XXX, " lifetables printed to txt in ",XXX,"/RSTATS/"))
 #  cat("\n------------------------------------------------\n\n")

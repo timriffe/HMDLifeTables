@@ -43,7 +43,7 @@ Exposures_per <- function(WORKING = getwd(),
   LDBPATH = NULL,
   IDBPATH = NULL,
   test = FALSE, # test <- TRUE
-  Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly" # only if Test == TRUE
+  Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly" # only if Test == TRUE
   ){
   # MPVERSION can only be 5 or 6
   if(!MPVERSION %in% c(5, 6)){

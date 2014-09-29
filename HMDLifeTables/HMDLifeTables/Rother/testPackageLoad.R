@@ -5,13 +5,13 @@
 # dynamically reload package, without prior build
 devtools::load_all("/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTables", TRUE)
 
-setwd("/hdir/0/hmd/HMDWORK/ITA")
+setwd("/data/commons/hmd/HMDWORK/ITA")
 RunHMDCountry()
 args(RunHMDCountry)
 
 
 # Run on a Country
-setwd("/hdir/0/hmd/HMDWORK/BEL")
+setwd("/data/commons/hmd/HMDWORK/BEL")
 RunHMDCountry()
 getwd()
 # compare against current installed version
@@ -33,31 +33,31 @@ NewestRLifeTablePackage()    # newest built, but not necessarily installed, buil
 InstalledRLifeTablePackage() # present installed version
 
 #library(RLifeTable) # updated less often
-RunHMDCountry(WORKING = "/hdir/0/hmd/HMDWORK/ITA")
+RunHMDCountry(WORKING = "/data/commons/hmd/HMDWORK/ITA")
 # testthat perhaps not necessary:
 # test output in STATS vs RSTATS
 
 source("/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTables/Rother/TestFunctions.R")
-test_Contents("/hdir/0/hmd/HMDWORK/BEL")
-test_ltper(WORKING = "/hdir/0/hmd/HMDWORK/SWE")
-test_ltcoh(WORKING = "/hdir/0/hmd/HMDWORK/ITA")
-test_file_nr_diff(WORKING = "/hdir/0/hmd/HMDWORK/ITA", "ltcoh")
-test_file_nr_diff(WORKING = "/hdir/0/hmd/HMDWORK/ITA", "Deaths_1")
-test_file_nr_diff(WORKING = "/hdir/0/hmd/HMDWORK/ITA", "Deaths_5")
-test_file_nr_diff(WORKING = "/hdir/0/hmd/HMDWORK/ITA", "Deaths_l")
-test_file_nr_diff(WORKING = "/hdir/0/hmd/HMDWORK/ITA", "Population.txt")
+test_Contents("/data/commons/hmd/HMDWORK/BEL")
+test_ltper(WORKING = "/data/commons/hmd/HMDWORK/SWE")
+test_ltcoh(WORKING = "/data/commons/hmd/HMDWORK/ITA")
+test_file_nr_diff(WORKING = "/data/commons/hmd/HMDWORK/ITA", "ltcoh")
+test_file_nr_diff(WORKING = "/data/commons/hmd/HMDWORK/ITA", "Deaths_1")
+test_file_nr_diff(WORKING = "/data/commons/hmd/HMDWORK/ITA", "Deaths_5")
+test_file_nr_diff(WORKING = "/data/commons/hmd/HMDWORK/ITA", "Deaths_l")
+test_file_nr_diff(WORKING = "/data/commons/hmd/HMDWORK/ITA", "Population.txt")
 
 # causes hangup:
 # (fix = allow for dimension mismatch by filling tadj object out to 130 years..)
-# A <- Population_A(WORKING = "/hdir/0/hmd/HMDWORK/ITA", OPENAGE = 111, save.bin = FALSE)
+# A <- Population_A(WORKING = "/data/commons/hmd/HMDWORK/ITA", OPENAGE = 111, save.bin = FALSE)
 # works, cuz tadj goes to age 110.
-#A <- Population_A(WORKING = "/hdir/0/hmd/HMDWORK/SWE", OPENAGE = 111, save.bin = FALSE)
+#A <- Population_A(WORKING = "/data/commons/hmd/HMDWORK/SWE", OPENAGE = 111, save.bin = FALSE)
 #tail(A)
 #A[A$Year == 2011, ]
 #
 
-list_files("/hdir/0/hmd/HMDWORK/SWE")
-#tkdiff_file(WORKING = "/hdir/0/hmd/HMDWORK/ITA", "Population.txt")
+list_files("/data/commons/hmd/HMDWORK/SWE")
+#tkdiff_file(WORKING = "/data/commons/hmd/HMDWORK/ITA", "Population.txt")
 
 
 #----------------------------------------------------------------------------|

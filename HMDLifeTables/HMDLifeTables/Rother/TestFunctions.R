@@ -20,7 +20,7 @@ test_Contents <- function(WORKING = getwd()){
     return(TRUE)
   }
 }
-# test_Contents("/hdir/0/hmd/HMDWORK/BEL")
+# test_Contents("/data/commons/hmd/HMDWORK/BEL")
 
 # tests ages 0-80 of the first 5 columns of any 'ltper' output
 test_ltper <- function(WORKING = getwd(), ignore.pattern = NULL){

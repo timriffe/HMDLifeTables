@@ -4,7 +4,7 @@
 devtools::load_all("/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTables", TRUE)
 
 args(ltper_AxN)
-setwd("/hdir/0/hmd/HMDWORK/SWE")
+setwd("/data/commons/hmd/HMDWORK/SWE")
 SWEv5    <- ltper_AxN(sex = "m", WORKING = "/data/wilmoth0/HMD/HMDWORK/SWE", 
   MPVERSION = 5, testa0v6 = FALSE, save.bin = FALSE)
 SWEv5a0v6 <- ltper_AxN(sex = "m", WORKING = "/data/wilmoth0/HMD/HMDWORK/SWE", 
