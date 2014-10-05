@@ -1,11 +1,32 @@
+#' @title \code{AKm02a0} estimates a0 using the Andreev-Kingkade rule of thumb.
+#'
+#' @description \code{AKm02a0} is an auxiliary function used by version 6 of the four HMD lifetable functions, \code{ltper_AxN()}, \code{ltcoh_AxN()}, \code{ltperBoth_AxN()}, \code{ltcohBoth_AxN()}. This is an approximation provided in an appendix by the authors. \code{AKm02a0_direct()} provides an analytical solution, which is overly precise and more laborious to explain in the MP. We prefer a separate table for m0 because it is only an approximation.
+#'
+#' @param m0 a value or vector of values of m0, the death probability for age 0 infants.
+#' @param sex either "m" or "f"
+#' 
+#' @return a0, the estimated average age at death of those dying in the first year of life, either a single value or a vector of a_0 values.
+#' 
+#' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
+#' 
+#' @export
 
-# Author: triffe
-###############################################################################
 
-#' @title \code{AKm02a0} estimates a0 using the Andreev-Kinkade rule of thumb.
+AKm02a0 <- function(m0, sex = "m"){
+  sex <- rep(sex, length(q0))
+  ifelse(sex == "m", 
+    ifelse(m0 < .0230, {0.14929 - 1.99545 * m0},
+      ifelse(m0 < 0.08307, {0.02832 + 3.26201 * m0},.29915)),
+    # f
+    ifelse(m0 < 0.01724, {0.14903 - 2.05527 * m0},
+      ifelse(m0 < 0.06891, {0.04667 + 3.88089 * m0}, 0.31411))
+  )
+}
+
+#' @title \code{AKm02a0_direct} estimates a0 using an analytic translation of the Andreev-Kinkade rule of thumb.
 #'
 #' @description
-#' \code{AKm02a0} is an auxiliary function used by version 6 of the four HMD lifetable functions, \code{ltper_AxN()}, \code{ltcoh_AxN()}, \code{ltperBoth_AxN()}, \code{ltcohBoth_AxN()}. This function calls \code{AKm02q0()} to help get the work done, since the HMD needed to adapt the Andreev-Kingkade formulas to work with the period lifetable flow.
+#' \code{AKm02a0_direct} is an auxiliary function that could be used by version 6 of the Methods Protocol. Instead we opt for a simple approximate solution. This function calls \code{AKm02q0()} (also deprecated) to help get the work done, since the HMD needed to adapt the Andreev-Kingkade formulas to work with the period lifetable flow.
 #'
 #' @param m0 a value or vector of values of m0, the death rate for age 0 infants.
 #' @param sex either "m" or "f"
@@ -16,7 +37,7 @@
 #' 
 #' @export
 
-AKm02a0 <- function(m0,sex="m"){
+AKm02a0_direct <- function(m0,sex="m"){
   sex <- rep(sex,length(m0))
   ifelse(sex == "m",
     ifelse(m0 < 0.02306737, 0.1493 - 2.0367 * AKm02q0(m0, 0.1493, -2.0367),
