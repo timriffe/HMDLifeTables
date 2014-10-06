@@ -13,7 +13,7 @@
 
 
 AKm02a0 <- function(m0, sex = "m"){
-  sex <- rep(sex, length(q0))
+  sex <- rep(sex, length(m0))
   ifelse(sex == "m", 
     ifelse(m0 < .0230, {0.14929 - 1.99545 * m0},
       ifelse(m0 < 0.08307, {0.02832 + 3.26201 * m0},.29915)),
