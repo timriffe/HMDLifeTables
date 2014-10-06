@@ -41,7 +41,7 @@ ltper_AxN <- function(
   XXX = NULL,
   LDBPATH = NULL,
   IDBPATH = NULL,
-  testa0v6 = FALSE){ # complete v5 before going too far with 6.
+  testa0 = FALSE){ # complete v5 before going too far with 6.
   
   if (is.null(XXX)){
     XXX          <- ExtractXXXfromWORKING(WORKING) # not sourced!
@@ -175,7 +175,7 @@ ltper_AxN <- function(
   if (MPVERSION >= 6){
     ax[1, ]   <- AKm02a0(m0 = mx[1, ], sex = sex)
   }
-  if (MPVERSION == direct6){
+  if (testa0){
     ax[1, ]   <- AKm02a0_direct(m0 = mx[1, ], sex = sex)
   }
 # multiplying 2 matrices using '*' does the hadamard product in R (elementwise).
