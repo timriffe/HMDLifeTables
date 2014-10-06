@@ -172,8 +172,11 @@ ltper_AxN <- function(
   if (MPVERSION == 5){
     ax[1, ]   <- CDa0(m0 = mx[1, ], sex = sex)                        # Eq 61 / 62 MPv5
   }
-  if (MPVERSION >= 6 | testa0v6){
+  if (MPVERSION >= 6){
     ax[1, ]   <- AKm02a0(m0 = mx[1, ], sex = sex)
+  }
+  if (MPVERSION == direct6){
+    ax[1, ]   <- AKm02a0_direct(m0 = mx[1, ], sex = sex)
   }
 # multiplying 2 matrices using '*' does the hadamard product in R (elementwise).
   qx        <- mx / (1 + (1 - ax) * mx)                             # Eq 60 MPv5
