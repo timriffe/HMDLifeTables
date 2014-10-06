@@ -7,7 +7,7 @@
     sex = "m", OPENAGE = 110, save.bin = TRUE,
     MPVERSION = 6, XXX = NULL, LDBPATH = NULL,
     IDBPATH = NULL, test = FALSE,
-    Monthly.folder = "/hdir/0/triffe/Desktop/HFDmonthly")
+    Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly")
 }
 \arguments{
   \item{WORKING}{path to working directory, which typically

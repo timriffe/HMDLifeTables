@@ -7,8 +7,8 @@
 \arguments{
   \item{WORKING}{path to working directory, which typically
   ends with the HMD country abbreviation. For instance:
-  \code{"/hdir/0/hmd/HMDWORK/ISL"}, though this function
-  has no default.}
+  \code{"/data/commons/hmd/HMDWORK/ISL"}, though this
+  function has no default.}
 }
 \value{
   character vector of length 1" HMD letter code abbrevation

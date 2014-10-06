@@ -33,7 +33,7 @@
 }
 \examples{
 \dontrun{
-   RunHMDCountry(WORKING = "/hdir/0/hmd/HMDWORK/ISL") # Does Iceland
+   RunHMDCountry(WORKING = "/data/commons/hmd/HMDWORK/ISL") # Does Iceland
 }
 Assuming the standard HMD folder structure, LexisDB and InputDB file formats, the
 entire body of HMD output will be generated. Intermediate files (unrounded) are also
