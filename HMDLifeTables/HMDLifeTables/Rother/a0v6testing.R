@@ -2,57 +2,135 @@
 # Author: triffe
 ###############################################################################
 devtools::load_all("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables", TRUE)
-
-
+source("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables/Rother/ltper_AxN_sensitivity.R")
+library(reshape2)
 CTRIES <- DemogBerkeley::getHMDcountries()
 
 #  females:
 XXX <- "AUT"
-a0tests <- do.call(rbind,parallel::mclapply(CTRIES, function(XXX){
+a0testsf <- do.call(rbind,parallel::mclapply(CTRIES, function(XXX){
       cat(XXX,"\n")
     WRKNG    <- paste0( "/data/wilmoth0/HMD/HMDWORK/",XXX)
-    v5       <- ltper_AxN(sex = "f", 
+    # no v6 exposure differences unless monthly present
+    monthlyTF <- any(grepl("monthly",list.files(file.path(WRKNG,"InputDB"))))
+    E5A5       <- ltper_AxN_sensitivity(
+                          sex = "f", 
                           WORKING = WRKNG, 
-                          MPVERSION = 5, 
-                          testa0 = FALSE, 
+                          MPVERSION = 5,        # only toggles mx smoothing
+                          exposureVersion = 5, 
+                          a0Version = 5,
                           save.bin = FALSE)
-    v5.d       <- ltper_AxN(sex = "f", 
+    E5A6       <- ltper_AxN_sensitivity(
+                          sex = "f", 
                           WORKING = WRKNG, 
-                          MPVERSION = 5, 
-                          testa0 = TRUE, 
+                          MPVERSION = 5,        # only toggles mx smoothing
+                          exposureVersion = 5, 
+                          a0Version = 6,
+                          save.bin = FALSE)       
+    E6A5       <- ltper_AxN_sensitivity(
+                          sex = "f", 
+                          WORKING = WRKNG, 
+                          MPVERSION = 5,        # only toggles mx smoothing
+                          exposureVersion = 6, 
+                          a0Version = 5,
                           save.bin = FALSE)
-    v6         <- ltper_AxN(sex = "f", 
+    E6A6       <- ltper_AxN_sensitivity(
+                          sex = "f", 
                           WORKING = WRKNG, 
-                          MPVERSION = 6, 
-                          testa0 = FALSE, 
+                          MPVERSION = 5,        # only toggles mx smoothing
+                          exposureVersion = 6, 
+                          a0Version = 6,
                           save.bin = FALSE)
-    v6.d       <- ltper_AxN(sex = "f", 
-                          WORKING = WRKNG, 
-                          MPVERSION = 6, 
-                          testa0 = TRUE, 
-                          save.bin = FALSE)                  
-    data.frame(PopName = XXX,
-       Sex = "f",
-       Year = with(v5,Year[Age == "0"]),
-       a0v5 = with(v5,ax[Age == "0"]),
-       a0v5.d = with(v5.d,ax[Age == "0"]),
-       a0v6 = with(v6,ax[Age == "0"]),
-       a0v6.d = with(v6.d,ax[Age == "0"]),
-       L0v5 = with(v5,Lx[Age == "0"]),
-       L0v5.d = with(v5.d,Lx[Age == "0"]),
-       L0v6 = with(v6,Lx[Age == "0"]),
-       L0v6.d = with(v6.d,Lx[Age == "0"]),
-       stringsAsFactors = FALSE
-       )
+    id <- E5A5$Age == 0
+    data.frame(
+      PopName = XXX, 
+      Year = E5A5$Year[id],
+      monthly = monthlyTF,
+      E5A5a0 = E5A5$ax[id],
+      E5A6a0 = E5A6$ax[id],
+      E6A5a0 = E6A5$ax[id],
+      E6A6a0 = E6A6$ax[id],
+      E5A5e0 = E5A5$ex[id],
+      E5A6e0 = E5A6$ex[id],
+      E6A5e0 = E6A5$ex[id],
+      E6A6e0 = E6A6$ex[id],
+      stringsAsFactors = FALSE)
   }, mc.cores = 8))
+a0testsm <- do.call(rbind,parallel::mclapply(CTRIES, function(XXX){
+      cat(XXX,"\n")
+      WRKNG    <- paste0( "/data/wilmoth0/HMD/HMDWORK/",XXX)
+      # no v6 exposure differences unless monthly present
+      monthlyTF <- any(grepl("monthly",list.files(file.path(WRKNG,"InputDB"))))
+      E5A5       <- ltper_AxN_sensitivity(
+        sex = "m", 
+        WORKING = WRKNG, 
+        MPVERSION = 5,        # only toggles mx smoothing
+        exposureVersion = 5, 
+        a0Version = 5,
+        save.bin = FALSE)
+      E5A6       <- ltper_AxN_sensitivity(
+        sex = "m", 
+        WORKING = WRKNG, 
+        MPVERSION = 5,        # only toggles mx smoothing
+        exposureVersion = 5, 
+        a0Version = 6,
+        save.bin = FALSE)       
+      E6A5       <- ltper_AxN_sensitivity(
+        sex = "m", 
+        WORKING = WRKNG, 
+        MPVERSION = 5,        # only toggles mx smoothing
+        exposureVersion = 6, 
+        a0Version = 5,
+        save.bin = FALSE)
+      E6A6       <- ltper_AxN_sensitivity(
+        sex = "m", 
+        WORKING = WRKNG, 
+        MPVERSION = 5,        # only toggles mx smoothing
+        exposureVersion = 6, 
+        a0Version = 6,
+        save.bin = FALSE)
+      id <- E5A5$Age == 0
+      data.frame(
+        PopName = XXX, 
+        Year = E5A5$Year[id],
+        monthly = monthlyTF,
+        E5A5a0 = E5A5$ax[id],
+        E5A6a0 = E5A6$ax[id],
+        E6A5a0 = E6A5$ax[id],
+        E6A6a0 = E6A6$ax[id],
+        E5A5e0 = E5A5$ex[id],
+        E5A6e0 = E5A6$ex[id],
+        E6A5e0 = E6A5$ex[id],
+        E6A6e0 = E6A6$ex[id],
+        stringsAsFactors = FALSE)
+    }, mc.cores = 8))
 
 
-hist((a0tests$L0v5- a0tests$L0v6)/1e5)
 
+    hist((a0testsf$E5A5e0 -  a0testsf$E6A6e0) -
+      ((a0testsf$E5A5e0 -  a0testsf$E6A5e0) + (a0testsf$E5A5e0 -  a0testsf$E5A6e0)))
+    
+  a0testsf$Sex <- "f"
+  a0testsm$Sex <- "m"
+  a0tests <- rbind(a0testsf,a0testsm)
+  setwd("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables/")
+  save(a0tests,file="Rother/a0tests.Rdata")
+NAind <- !is.na(a0tests$E6A6e0)
 
-
-
-# -------------------------------------------------------------
+  png("Rother/E6A6e0-E5A5e0.png")
+  plot(density(a0tests$E6A6e0[NAind] - a0tests$E5A5e0[NAind]), xlim=c(-.4,.4),
+    main = "e0, v6 - v5, both exposures and a0 changed")
+  dev.off()
+  png("Rother/E6A5e0-E5A5e0.png")
+  plot(density(a0tests$E6A5e0[NAind]  - a0tests$E5A5e0[NAind]), xlim=c(-.4,.4),
+    main = "e0, v6 - v5, only exposures changed")
+  dev.off()
+  png("Rother/E5A6e0-E5A5e0.png")
+  plot(density(a0tests$E5A6e0[NAind] - a0tests$E5A5e0[NAind]), xlim=c(-.4,.4),
+    main = "e0, v6 - v5, only a0 changed")
+  dev.off()
+  
+  # -------------------------------------------------------------
 # OLD TESTS
 
 #e0diff <- parallel::mclapply(CTRIES, function(XXX){

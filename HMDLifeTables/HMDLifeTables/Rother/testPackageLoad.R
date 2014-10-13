@@ -22,10 +22,10 @@ library(reshape2)
 library(compiler)
 
 # this builds the doc files, if they have been modified 
-devtools::document("/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTables")
+devtools::document("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables")
 
 # custom build functions
-source("/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTables/Rother/BuildUtils.R")
+source("/data/commons/triffe/gitHMDLifeTables/HMDLifeTables/Rother/BuildUtils.R")
 BuildRLifeTablePackage()     # definitive rebuild 
 
 NewestRLifeTablePackage()    # newest built, but not necessarily installed, build
