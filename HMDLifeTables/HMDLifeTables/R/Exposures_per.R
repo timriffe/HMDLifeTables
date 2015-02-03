@@ -99,7 +99,7 @@ Exposures_per <- function(WORKING = getwd(),
     }
   }
 # old exposures, considerably simpler :-)
-  if (MPVERSION == 5){
+  if (MPVERSION <= 5){
     Exp         <- (pop1 + pop2) / 2 + (dl - du) / 6
     
     # optional save out
