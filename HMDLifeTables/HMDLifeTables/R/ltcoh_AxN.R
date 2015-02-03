@@ -274,7 +274,7 @@ if (abridged){
   qx[cbind(extinct.i, 1:ncol(qx))] <- 1                           # impute 1 at these ages
   ax[i.openage, ]  <- 1 / mx[i.openage, ]                         # reciprocal of MP, same thing
  
-# TODO: note to self and CB: why do we assume exponential hazard for open age group
+# TODO: note to self and CB: why do we assume constant hazard for open age group
 #       when imputed? we make it 1/ax. Idea: why not pool all HMD data >1980 for ages
 #       105 to 115, say and estimate a rule of thumb for when we have to impute the 
 #       open age mx, ax? Here we actually do it the other way around, getting ax from

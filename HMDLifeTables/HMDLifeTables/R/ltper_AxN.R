@@ -157,10 +157,10 @@ ltper_AxN <- function(
   # ---------------------------------------------------------------------------------
   # call mx functions (smoothing outsourced to reduce clutter in ltper_AxN() 
   # so far just need Dx, Exp and extrap.ages.i to get back mx
-  if (MPVERSION == 5 | MPVERSION == 6){
+  if (MPVERSION >= 5 | MPVERSION <= 6){
     mx <- ltper_mx_v5(Dx = Dx, Exp = Exp, extrap.ages.i = extrap.ages.i)
   }
-  if (MPVERSION == 7){
+  if (MPVERSION >= 7){
     mx <- ltper_mx_v7(Dx = Dx, Exp = Exp, extrap.ages.i = extrap.ages.i)
   }
 
@@ -168,7 +168,7 @@ ltper_AxN <- function(
 # mx now defined, begin the lifetable calcs colnames(mx)
 # ---------------------------------------------------------------------------------
   ax        <- Dx * 0 + .5                                          # ax = .5, pg 38 MPv5
-  if (MPVERSION == 5){
+  if (MPVERSION < 6){
     ax[1, ]   <- CDa0(m0 = mx[1, ], sex = sex)                        # Eq 61 / 62 MPv5
   }
   if (MPVERSION >= 6){
