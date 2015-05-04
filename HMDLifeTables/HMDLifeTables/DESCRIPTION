@@ -1,7 +1,7 @@
-Package: RLifeTable
+Package: HMDLifeTables
 Type: Package
 Title: HMD Internal Lifetable Programs
-Version: 6.1.4262
+Version: 6.2.3379
 Date: 2012-11-06
 Author: Tim Riffe, Carl Boe
 Maintainer: Tim Riffe <tim.riffe@gmail.com>
