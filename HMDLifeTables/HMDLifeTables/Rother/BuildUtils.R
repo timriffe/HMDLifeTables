@@ -18,14 +18,14 @@ BuildRLifeTablePackage <- function(MPVERSION = 6, MPVERSION.origin = "2013-01-01
   pkg.vs    <- paste0("Version: ",MPVERSION, ".", as.character(round(increment / 365.25, digits = 4)))
   
   # update version in DESCRIPTION file:
-  DESC      <- readLines("/data/commons/triffe/HMDLifeTables/HMDLifeTables/HMDLifeTables/DESCRIPTION")
+  DESC      <- readLines("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables/DESCRIPTION")
   Version.i <- grep(DESC, pattern = "Version:")
   DESC[Version.i] <- pkg.vs
   writeLines(DESC, "/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables/DESCRIPTION")
   
   if (commit){
     # commit package changes automatically:
-    system(paste("cd /data/commons/triffe/COMMONS/git/HMDLifeTables/HMDLifeTables/HMDLifeTables \n git commit -m ","'Package rebuild ",pkg.vs, "'"))
+    system(paste("cd /data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables \n git commit -m ","'Package rebuild ",pkg.vs, "'"))
   }
   # build
   devtools::build(pkg = "/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables",
@@ -33,7 +33,7 @@ BuildRLifeTablePackage <- function(MPVERSION = 6, MPVERSION.origin = "2013-01-01
 }
 
 # what's the newest build available?
-NewestRLifeTablePackage <- function(build.folder = "/data/commons/triffe/git/HMD_Rlifetables_git/RLifeTablesBuilds"){
+NewestRLifeTablePackage <- function(build.folder = "/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables"){
   all.tar <- grep(list.files(build.folder),
     pattern = "tar.gz",value=TRUE)
   
@@ -44,5 +44,5 @@ NewestRLifeTablePackage <- function(build.folder = "/data/commons/triffe/git/HMD
 
 # what version do I have installed?
 InstalledRLifeTablePackage <- function(){
-  paste0("RLifeTable_",installed.packages()["RLifeTable","Version"])
+  paste0("RLifeTable_",installed.packages()["HMDLifeTables","Version"])
 }

@@ -25,13 +25,15 @@ library(compiler)
 devtools::document("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables")
 
 # custom build functions
-source("/data/commons/triffe/gitHMDLifeTables/HMDLifeTables/Rother/BuildUtils.R")
+source("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables/HMDLifeTables/Rother/BuildUtils.R")
 BuildRLifeTablePackage()     # definitive rebuild 
 
 NewestRLifeTablePackage()    # newest built, but not necessarily installed, build
 
 InstalledRLifeTablePackage() # present installed version
-
+setwd("/data/commons/triffe/git/HMDLifeTables/HMDLifeTables")
+install.packages("HMDLifeTables", repos = NULL, type="source")
+library(HMDLifeTables)
 #library(RLifeTable) # updated less often
 RunHMDCountry(WORKING = "/data/commons/hmd/HMDWORK/ITA")
 # testthat perhaps not necessary:
