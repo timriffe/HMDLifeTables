@@ -16,8 +16,6 @@
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' @param IDBPATH in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}
-#' @param test logical. Default \code{FALSE}. If in test mode, a separate folder can be specified for monthly births, and both \code{Dx} and \code{Exp} are returned.
-#' @param Monthly.folder if testing, a path to a folder containing the monthly births input object (i.e if it's not yet in the InputDB folder). only used if \code{test = TRUE}.
 #' 
 #' @return an 'age by year' matrix of exposures. if in test mode, a list with matrices of both deaths and exposures is returned.
 #' 
