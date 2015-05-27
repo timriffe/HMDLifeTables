@@ -39,9 +39,7 @@ Exposures_coh <- function(WORKING = getwd(),
   MPVERSION = 6, #MPVERSION = 6
   XXX = NULL,
   LDBPATH = NULL,
-  IDBPATH = NULL,
-  test = FALSE, # test <- TRUE
-  Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly" # only if Test == TRUE
+  IDBPATH = NULL
 ){
   
   # MPVERSION can only be 5 or 6
@@ -104,10 +102,9 @@ Exposures_coh <- function(WORKING = getwd(),
   du                <- du[1:i.openage, ]
   du[i.openage, openNas] <- NA
   # -------------------------------------------
-  births.monthly.root <- ifelse(test, Monthly.folder, IDBPATH)
-  # births.monthly.root <- IDBPATH; XXX<-"JPN"
+
+  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "monthly.txt"))
   if (MPVERSION > 5){
-    births.monthly.path <- file.path(births.monthly.root, paste0(XXX, "monthly.txt"))
     if (!file.exists(births.monthly.path)){
       MPVERSION   <- 5
       cat("\nMPVERSION was given as", MPVERSION, "but necessary file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
@@ -125,10 +122,6 @@ Exposures_coh <- function(WORKING = getwd(),
       #Sys.chmod(out.path0, mode = "2775", use_umask = FALSE)
       #system(paste0("chgrp hmdcalc ", out.path0))
     }
-    if (test){
-      return(list(Deaths = dl + du, Exp = Exp))
-    }
-    # exposures NOT cut down to relevant cohorts. Incomplete cohorts NOT extended.
     # YES cut off after open age
     return(Exp[1:i.openage, ]) 
   }
