@@ -62,7 +62,7 @@ Write_Exposures_Deaths_Mx <- function(
   Px.files          <- files.2.write[grep(files.2.write, pattern = "Population")]
   files.2.write     <- c(Deaths.files, Exposures.files, Mx.files, Px.files)
   
-# read in each file one at a time, and repeat this.file <- "Population.Rdata"
+# read in each file one at a time, and repeat
   for (this.file in files.2.write){
     # Rdata files can be read in with load()- each file is simply called 'output'
     output          <- local(get(load(file.path(Rbin.path, this.file))))
@@ -109,13 +109,15 @@ Write_Exposures_Deaths_Mx <- function(
     # period tables have smoothed final values 2,6
     Female          <- MatlabRoundFW(output$Female, digits = ifelse(this.file %in% Mx.files, 6, 2), totalL = ifelse(AgeCond, 16, 19))
     Female          <- gsub(Female, pattern = "NA", replacement = " .")
+    Female          <- gsub(Female, pattern = "NaN", replacement = " .")
     
     Male            <- MatlabRoundFW(output$Male, digits = ifelse(this.file %in% Mx.files, 6, 2), totalL = 16)
     Male            <- gsub(Male, pattern = "NA", replacement = " .")
+    Male            <- gsub(Male, pattern = "NaN", replacement = " .")
     
     Total           <- MatlabRoundFW(output$Total, digits = ifelse(this.file %in% Mx.files, 6, 2), totalL = 16)
     Total           <- gsub(Total, pattern = "NA", replacement = " .")
-    
+    Total           <- gsub(Total, pattern = "NaN", replacement = " .")
     # begin writing out
     cat(
       # metadata header
