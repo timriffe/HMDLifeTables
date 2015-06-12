@@ -5,7 +5,7 @@
   ltper_AxN(WORKING = getwd(), perComp = NULL, sex = "m",
     OPENAGE = 110, RADIX = 1e+05, N = 1, abridged = FALSE,
     MPVERSION = 5, save.bin = TRUE, XXX = NULL,
-    LDBPATH = NULL, IDBPATH = NULL, testa0v6 = FALSE)
+    LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
   \item{WORKING}{path to working directory, which typically

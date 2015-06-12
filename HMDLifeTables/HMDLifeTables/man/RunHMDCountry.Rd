@@ -5,7 +5,7 @@
   RunHMDCountry(WORKING = getwd(), OPENAGE = 110,
     RADIX = 1e+05, CAGEEXTRP = 90, MPVERSION = 5,
     STATSFOLDER = "RSTATS", XXX = NULL, LDBPATH = NULL,
-    IDBPATH = NULL)
+    IDBPATH = NULL, SAVEBIN = TRUE)
 }
 \arguments{
   \item{WORKING}{path to working directory, which typically
@@ -39,6 +39,12 @@
   \code{WORKING} (local testing), the full path to the
   LexisDB folder. If left as \code{NULL} it is assumed to
   be \code{file.path(WORKING, "InputDB")}}
+
+  \item{SAVEBIN}{logical. Default \code{TRUE}.  Should
+  interim \code{R} output be saved as e.g.,
+  \code{Rbin/ltper_1x1.Rdata} as well? Appropriate name is
+  derived systematically. In this case objects are saved
+  separately. This option can speed calculations.}
 }
 \value{
   Running this function has many side-effects, most
