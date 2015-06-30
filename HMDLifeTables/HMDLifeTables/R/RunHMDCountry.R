@@ -11,6 +11,7 @@
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' @param IDBPATH in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}
+#' @param SAVEBIN logical. Default \code{TRUE}.  Should interim \code{R} output be saved as e.g., \code{Rbin/ltper_1x1.Rdata} as well? Appropriate name is derived systematically. In this case objects are saved separately. This option can speed calculations.
 #' 
 #' @return Running this function has many side-effects, most notably, filling up a folder \code{WORKING/Rbin/} with unrounded R binary versions of all output objects, and then filling up a folder \code{WORKING/RSTATS} (name can be changed) with final .txt formatted output. 
 #' 
@@ -44,7 +45,7 @@ RunHMDCountry <- function(WORKING = getwd(),
   females.p <- getPeriodComponents(WORKING = WORKING, 
                                    sex = "f", 
                                    OPENAGE = 110, 
-                                   save.bin = TRUE, 
+                                   save.bin = SAVEBIN, 
                                    XXX = XXX, 
                                    LDBPATH = LDBPATH, 
                                    IDBPATH = IDBPATH)

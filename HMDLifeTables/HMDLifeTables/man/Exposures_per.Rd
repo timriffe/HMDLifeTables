@@ -6,8 +6,7 @@
     pop2 = NULL, dl = NULL, du = NULL, perComp = NULL,
     sex = "m", OPENAGE = 110, save.bin = TRUE,
     MPVERSION = 6, XXX = NULL, LDBPATH = NULL,
-    IDBPATH = NULL, test = FALSE,
-    Monthly.folder = "/data/commons/triffe/Desktop/HFDmonthly")
+    IDBPATH = NULL)
 }
 \arguments{
   \item{WORKING}{path to working directory, which typically
@@ -61,15 +60,6 @@
   \code{WORKING} (local testing), the full path to the
   LexisDB folder. If left as \code{NULL} it is assumed to
   be \code{file.path(WORKING, "InputDB")}}
-
-  \item{test}{logical. Default \code{FALSE}. If in test
-  mode, a separate folder can be specified for monthly
-  births, and both \code{Dx} and \code{Exp} are returned.}
-
-  \item{Monthly.folder}{if testing, a path to a folder
-  containing the monthly births input object (i.e if it's
-  not yet in the InputDB folder). only used if \code{test =
-  TRUE}.}
 }
 \value{
   an 'age by year' matrix of exposures. if in test mode, a
