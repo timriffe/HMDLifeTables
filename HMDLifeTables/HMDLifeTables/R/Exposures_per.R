@@ -210,9 +210,7 @@ Exposures_per <- function(WORKING = getwd(),
     #Sys.chmod(out.path0, mode = "2775", use_umask = FALSE)
     #system(paste0("chgrp hmdcalc ", out.path0))
   }
-  if (test){
-    return(list(Deaths = dl+du, Exp = Exp))
-  }
+  
   invisible(Exp)
 }
 
