@@ -10,3 +10,14 @@ RunHMDCountry(WORKING = WORKING)
 
 test <- ltper_AxN(WORKING)
 test[test$Year == 2009, ]
+
+
+library(devtools)
+library(TimUtils)
+IncrementVersion("/home/tim/git/HMDLifeTables/HMDLifeTables/HMDLifeTables", 
+		major.version = "6", package.origin = "2013-01-01")
+build("/home/tim/git/HMDLifeTables/HMDLifeTables/HMDLifeTables", "/home/tim/git/HMDLifeTables/HMDLifeTables")
+?build
+
+#######################################
+#
