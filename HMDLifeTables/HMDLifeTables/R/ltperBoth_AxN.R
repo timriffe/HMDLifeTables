@@ -1,26 +1,63 @@
-#' @title \code{ltperBoth_AxN} calculates both-sex period lifetables in various time intervals given LDB inputs
+#' @title \code{ltperBoth_AxN} calculates both-sex period lifetables
+#' in various time intervals given LDB inputs
 #' 
-#' @description \code{ltperBoth_AxN()} is a top-level function intended to be called by users directly. All HMD countries calculate period lifetables. This function has not yet been adapted for Belgium.
+#' @description \code{ltperBoth_AxN()} is a top-level function
+#' intended to be called by users directly. All HMD countries
+#' calculate period lifetables. This function has not yet been adapted
+#' for Belgium.
 #' 
-#' @param WORKING path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.
-#' @param males optional. Output from \code{getPeriodComponents()} for males. If \code{males} is already in memory it's faster to supply this argument, otherwise \code{getPeriodComponents()} is called internally.
-#' @param females optional. Output from \code{getPeriodComponents()} for females. If \code{females} is already in memory it's faster to supply this argument, otherwise \code{getPeriodComponents()} is called internally.
+#' @param WORKING path to working directory, which typically ends with
+#' the HMD country abbreviation. Default \code{getwd()}.
+#' @param males optional. Output from \code{getPeriodComponents()} for
+#' males. If \code{males} is already in memory it's faster to supply
+#' this argument, otherwise \code{getPeriodComponents()} is called
+#' internally.
+#' @param females optional. Output from \code{getPeriodComponents()}
+#' for females. If \code{females} is already in memory it's faster to
+#' supply this argument, otherwise \code{getPeriodComponents()} is
+#' called internally.
 #' @param sex \code{"m"} or \code{"f"}.
 #' @param OPENAGE the desired open age. Default value is 110
 #' @param RADIX the lifetable radix (l_0). Default 1e5
 #' @param N year interval: 1, 5 or 10. Other intervals would also work in theory.
-#' @param abridged logical. Default \code{FALSE}. Should the lifetable by in single ages or abridged ages (0,1,5,10, ...)
-#' @param save.bin logical. Default \code{TRUE}.  Should the output be saved as e.g. \code{Rbin/ltper_1x1.Rdata} as well. Appropriate name is derived systematically. In this case both objects are saved separately.
-#' @param MPVERSION 5 or 6 (or 7). Version 5 exposures assume uniformity, v6 allows for non-uniformity across birthdays in the death distribution by taking information from monthly birth distributions. Differences are negligible. Version 7 uses a different mx smoothing technique.
-#' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
-#' @param LDBPATH LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
-#' @param IDBPATH in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}
+#' @param abridged logical. Default \code{FALSE}. Should the lifetable
+#' by in single ages or abridged ages (0,1,5,10, ...)
+#' @param save.bin logical. Default \code{TRUE}.  Should the output be
+#' saved as e.g. \code{Rbin/ltper_1x1.Rdata} as well. Appropriate name
+#' is derived systematically. In this case both objects are saved
+#' separately.
+#' @param MPVERSION 5 or 6 (or 7). Version 5 exposures assume
+#' uniformity, v6 allows for non-uniformity across birthdays in the
+#' death distribution by taking information from monthly birth
+#' distributions. Differences are negligible. Version 7 uses a
+#' different mx smoothing technique.
+#' @param XXX the HMD country abbreviation. If left \code{NULL}, this
+#' is extracted from \code{WORKING} as the last path part.
+#' @param LDBPATH LDBPATH in case the LexisDB is not in \code{WORKING}
+#' (local testing), the full path to the LexisDB folder. If left as
+#' \code{NULL} it is assumed to be \code{file.path(WORKING,
+#' "LexisDB")}
+#' @param IDBPATH in case the InputDB is not in \code{WORKING} (local
+#' testing), the full path to the LexisDB folder. If left as
+#' \code{NULL} it is assumed to be \code{file.path(WORKING,
+#' "InputDB")}
 #' 
-#' @details In the case of multiyear cohorts, the first year is always determined by year modulo \code{N} = 0. The minimum number of years for a cohort to be included for any N > 1 is 2. Thus the first and last cohorts of 5 or 10 year cohort data might be 2, 3 or 4-year cohorts, depending on the start and end dates. 
+#' @details In the case of multiyear cohorts, the first year is always
+#' determined by year modulo \code{N} = 0. The minimum number of years
+#' for a cohort to be included for any N > 1 is 2. Thus the first and
+#' last cohorts of 5 or 10 year cohort data might be 2, 3 or 4-year
+#' cohorts, depending on the start and end dates.
 #' 
-#' This function calls several functions, including \code{getPeriodComponents()}, \code{ltper_getDx100()}, \code{ltper_mx_v5()} or \code{ltper_mx_v6()}, \code{Abrdige()}, \code{CDa0()} and indirectly \code{perTadj()}. It is either used directly or called by \code{RunHMDCountry()}. 
+#' This function calls several functions, including
+#' \code{getPeriodComponents()}, \code{ltper_getDx100()},
+#' \code{ltper_mx_v5()} or \code{ltper_mx_v6()}, \code{Abrdige()},
+#' \code{CDa0()} and indirectly \code{perTadj()}. It is either used
+#' directly or called by \code{RunHMDCountry()}.
 #' 
-#' @return a \code{data.frame} of output, unrounded in long (stacked) format. Columns for \code{"Year"}, \code{"Age"}, \code{"mx"}, \code{"qx"}, \code{"ax"}, \code{"lx"}, \code{"dx"}, \code{"Lx"}, \code{"Tx"}, \code{"ex"}
+#' @return a \code{data.frame} of output, unrounded in long (stacked)
+#' format. Columns for \code{"Year"}, \code{"Age"}, \code{"mx"},
+#' \code{"qx"}, \code{"ax"}, \code{"lx"}, \code{"dx"}, \code{"Lx"},
+#' \code{"Tx"}, \code{"ex"}
 #' 
 #' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
 #' 
@@ -200,7 +237,8 @@ ltperBoth_AxN <- function(
         coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2))$coef # Eq 57
         
         z.i          <- coefs.i[1] + (coefs.i[2] * age.mid) + (coefs.i[3] * age.mid ^ 2) # Eq 58
-        pi.mat[, i]  <- exp(z.i) / (1 + exp(z.i))
+##        pi.mat[, i]  <- exp(z.i) / (1 + exp(z.i))
+        pi.mat[, i]  <- ifelse( age.mid < (extrap.ages.i[i] - 1), w.f[, i], exp(z.i) / (1 + exp(z.i)) ) #use obs values below extrap age
       }
     }
     # i.e. in the matlab code ALL ages are used to fit and ALL ages are blended together thusly
@@ -214,12 +252,12 @@ ltperBoth_AxN <- function(
     for (i in 1:ncol (w.f)){ #
       if (!all(is.na(Exp.f[, i]))){ # clause added for BEL
         # different from v5 because only ages 80+ are used to fit
-        sm.ind       <- extrap.ages.i[i]:i.openage
+        sm.ind       <- extrap.ages.i[i]:i.openage 
         keep.i       <- !(Exp.f[, i] <= eps | Exp.m[, i] <= eps) & (0:110) >= 80
         w.f.i        <- w.f[keep.i, i]
         age.mid.i    <- age.mid[keep.i]
-        # also, approximate weights are used (log() would mean we need to discard exposures <= 1)
-        coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2), weights = sqrt(Exp.f[keep.i, i]))$coef # Eq 57
+        # also, approximate weights are used (log() would mean we need to discard exposures <= 1); CAB: change Exp.f to Exp.t
+        coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2), weights = sqrt(Exp.t[keep.i, i]))$coef # Eq 57
         z.i          <- coefs.i[1] + (coefs.i[2] * age.mid[sm.ind]) + 
           (coefs.i[3] * age.mid[sm.ind] ^ 2) # Eq 58
         pi.vec       <- exp(z.i) / (1 + exp(z.i))   

@@ -250,6 +250,7 @@ RunHMDCountry <- function(WORKING = getwd(),
   Write_Births(             WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             LDBPATH = LDBPATH,
+                            IDBPATH = IDBPATH,
                             XXX = XXX, 
                             MPVERSION = MPVERSION)
   Write_e0(                 WORKING = WORKING, 
