@@ -31,7 +31,7 @@ Exposures_coh <- function(WORKING = getwd(),
   dl = NULL,
   du = NULL, 
   cohComp = NULL,
-  sex = "m", 
+  sex,   #CB, no defaults or ambiguous arg
   OPENAGE = 110, 
   save.bin = TRUE, 
   MPVERSION = 6, #MPVERSION = 6
@@ -166,7 +166,7 @@ Exposures_coh <- function(WORKING = getwd(),
   # --------------------------------------------------------------
   # John's formula, per nov 12, 2012 email:        
   f.i                       <- t(t(Bmat) / colSums(Bmat))
-  BM                        <- apply(monthDurations, 2, cumsum)
+  BM                        <- apply(monthDurations, 2, cumsum) # cum number at the end of each month
   b.i                       <- rbind(0, t(t(BM) / colSums(monthDurations)))
   b.bar                     <- colSums(f.i * (b.i[1:12, ] + b.i[2:13, ]) / 2)
   b.bar.full                <- rep(.5, Ncohs)
@@ -205,9 +205,9 @@ Exposures_coh <- function(WORKING = getwd(),
     #Sys.chmod( out.path0, mode = "2775", use_umask = FALSE)
     #system(paste0("chgrp hmdcalc ", out.path0))
   }
-  if (test){
-    return(list(Deaths = dl + du, Exp = Exp))
-  }
+  # if (test){
+  #   return(list(Deaths = dl + du, Exp = Exp))
+  # }
   invisible(Exp)
 }
 

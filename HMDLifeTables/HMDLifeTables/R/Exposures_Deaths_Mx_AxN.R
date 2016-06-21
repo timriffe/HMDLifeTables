@@ -95,9 +95,9 @@ Exposures_Deaths_Mx_AxN <- function(
                                 pop2 = pop2.f,
                                 dl = dl.f,
                                 du = du.f, 
-                                sex = sex, 
+                                sex = "f", 
                                 OPENAGE = OPENAGE, 
-                                save.bin = FALSE, 
+                                save.bin = TRUE, 
                                 MPVERSION = MPVERSION
                               )
   Exp.m       <- Exposures_per(WORKING = WORKING, 
@@ -105,9 +105,9 @@ Exposures_Deaths_Mx_AxN <- function(
                                 pop2 = pop2.m,
                                 dl = dl.m,
                                 du = du.m, 
-                                sex = sex, 
+                                sex = "m", 
                                 OPENAGE = OPENAGE, 
-                                save.bin = FALSE, 
+                                save.bin = TRUE, 
                                 MPVERSION = MPVERSION
                               )
   # ---------------------------------------------------------------------------------

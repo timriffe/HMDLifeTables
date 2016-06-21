@@ -125,6 +125,7 @@ ltperBoth_AxN <- function(
   du.m        <- acast(males, Age ~ Year, value.var = "du")  
 # ---------------------------------------------------------------------------------  
 # calculate exposure  
+## exposures were previously calculated, in all likelihood and so these calls just look up and load
 # Exp.f       <- (pop1.f + pop2.f) / 2 + (dl.f - du.f) / 6                    # Eq 49
 # Exp.m       <- (pop1.m + pop2.m) / 2 + (dl.m - du.m) / 6     
   Exp.f       <- Exposures_per(WORKING = WORKING, 
@@ -132,7 +133,7 @@ ltperBoth_AxN <- function(
                                 pop2 = pop2.f,
                                 dl = dl.f,
                                 du = du.f, 
-                                sex = sex, 
+                                sex = "f",   # CAB was undefined sex = sex
                                 OPENAGE = OPENAGE, 
                                 save.bin = FALSE, 
                                 MPVERSION = MPVERSION,
@@ -145,7 +146,7 @@ ltperBoth_AxN <- function(
                                  pop2 = pop2.m,
                                  dl = dl.m,
                                  du = du.m, 
-                                 sex = sex, 
+                                 sex = "m", 
                                  OPENAGE = OPENAGE, 
                                  save.bin = FALSE, 
                                  MPVERSION = MPVERSION,

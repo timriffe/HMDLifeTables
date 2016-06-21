@@ -33,7 +33,7 @@ Exposures_per <- function(WORKING = getwd(),
   dl = NULL,
   du = NULL, 
   perComp = NULL,
-  sex = "m", 
+  sex ,   # CAB: should not have a default
   OPENAGE = 110, 
   save.bin = TRUE, 
   MPVERSION = 6, #MPVERSION = 6
@@ -210,9 +210,9 @@ Exposures_per <- function(WORKING = getwd(),
     #Sys.chmod(out.path0, mode = "2775", use_umask = FALSE)
     #system(paste0("chgrp hmdcalc ", out.path0))
   }
-  if (test){
-    return(list(Deaths = dl+du, Exp = Exp))
-  }
+  # if (test){
+  #   return(list(Deaths = dl+du, Exp = Exp))
+  # }
   invisible(Exp)
 }
 

@@ -12,6 +12,7 @@
 #' 
 #' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
 #'
+#' @import reshape2 
 #' @export
 # Author: triffe
 ###############################################################################
