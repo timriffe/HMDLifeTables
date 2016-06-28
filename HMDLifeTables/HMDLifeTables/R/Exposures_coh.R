@@ -25,6 +25,11 @@
 #' 
 #' @export
 # Author: triffe
+
+## TODO: CAB - restructure to handle empty XYZmonthly.txt monthly birth files and 
+##             require its presence under V6.  Change logic so that immutable parameter
+##             MPVERSION does not need to be reassigned
+
 ###############################################################################
 Exposures_coh <- function(WORKING = getwd(),
   pop = NULL,    
@@ -104,8 +109,8 @@ Exposures_coh <- function(WORKING = getwd(),
   births.monthly.path <- file.path(IDBPATH, paste0(XXX, "monthly.txt"))
   if (MPVERSION > 5){
     if (!file.exists(births.monthly.path)){
-      MPVERSION   <- 5
-      cat("\nMPVERSION was given as", MPVERSION, "but necessary file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
+      MPVERSION   <- 5  # CAB: return to change.  Parameters should be immutable, never reset
+      cat("\nMPVERSION was given as", MPVERSION, "but monthly births file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
     }
   }
   

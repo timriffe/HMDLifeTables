@@ -1,6 +1,10 @@
 #' @title \code{Exposures_per} a function to prepare either v5 or v6 period exposures.
 #'
-#' @description This function is meant to be internal. It is called by \code{Exposures_Deaths_Mx_AxN()}, \code{ltper_AxN()} and \code{ltperBoth_AxN()}. If necessary, it calls \code{getPeriodComponents()}. Exposures from the appropriate MP version are returned in an 'age by year' matrix already cut down to \code{OPENAGE}.
+#' @description This function is meant to be internal. It is called by
+#'   \code{Exposures_Deaths_Mx_AxN()}, \code{ltper_AxN()} and
+#'   \code{ltperBoth_AxN()}. If necessary, it calls
+#'   \code{getPeriodComponents()}. Exposures from the appropriate MP version are
+#'   returned in an 'age by year' matrix already cut down to \code{OPENAGE}.
 #'
 #' @details This function can take data arguments in-memory, from the \code{/Rbin/} folder, or else derive them by calling \code{getPeriodComponents()}. This function is separate because using monthly birth data for v6 exposures is a fair amount of code. Since a few functions need these exposures it's best to modularize and call where needed. This function uses a package dataset \code{monthDurations.rda} in order to save having to recompute it on each run- this is a matrix with the number of days in each month every year across several centuries, reaching way beyond the potential of the HMD to as to avoid future bugs. It gets cut to size as needed. This function also calls \code{AC2AP()}.
 #'
@@ -26,6 +30,11 @@
 #' 
 #' @export
 # Author: triffe
+
+## TODO: CAB - restructure to handle empty XYZmonthly.txt monthly birth files and 
+##             require its presence under V6.  Change logic so that immutable parameter
+##             MPVERSION does not need to be reassigned
+
 ###############################################################################
 Exposures_per <- function(WORKING = getwd(), 
   pop1 = NULL,    
@@ -87,8 +96,8 @@ Exposures_per <- function(WORKING = getwd(),
   births.monthly.path <- file.path(IDBPATH, paste0(XXX, "monthly.txt"))
   if (MPVERSION > 5){
       if (!file.exists(births.monthly.path)){
-        cat("\nMPVERSION was given as", MPVERSION, "but necessary file was missing:\n", IDBPATH, "\nreverted to MPVERSION 5 exposures\n")
-        MPVERSION   <- 5
+        cat("\nMPVERSION was given as", MPVERSION, "but monthly births file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
+        MPVERSION   <- 5    # CAB: return to change.  Parameters should be immutable, never reset
     }
   }
 # old exposures, considerably simpler :-)
@@ -115,6 +124,7 @@ Exposures_per <- function(WORKING = getwd(),
   Nages   <- length(ages)
 # TODO: check for monthly in Rbin, as LDB can save this,
 # be sure to use optional LDBPATH
+  
   BM              <- read.table(births.monthly.path,
                       header = TRUE, 
                       sep = ",", 
