@@ -16,16 +16,19 @@
 #' #bo <- readIDBcurrent("SWE","birth")
 #' #bo <- resortBirths(bo)
 #' 
-readIDBcurrent <- function(XXX = "SWE", item = "death", old = FALSE, full.path = NULL){
+readIDBcurrent <- function(XXX , item , old = FALSE, full.path = NULL){
   
-  stopifnot(item %in% c(c("death","pop","birth","tadj","monthly")))
+  stopifnot(item %in% c(c("death","pop","birth","tadj","birthbymonth")))
   
   this.path <- ifelse(is.null(full.path), 
                       ifelse(old,
                         file.path("~/HMDWORK", paste0(XXX,"_Old"), "InputDB", paste0(XXX, item, ".txt")), 
                         file.path("~/HMDWORK", XXX, "InputDB", paste0(XXX, item, ".txt"))), 
                       full.path)
-  
+  ## CAB: separate call for tadj file will go here (developed in Rother/ for now)
+  ## CAB: should have general tests for duplicate items once LDB is taken into account
+  ## CAB: replace below with item-specific reads and implement tests for column headers - we have no checks
+  ## CAB: that the correct columns are being read in and labeled correctly
   obj <- read.table(this.path, 
              sep = ",", 
              na.strings = ".", 
