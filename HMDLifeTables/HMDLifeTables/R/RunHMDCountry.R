@@ -263,6 +263,15 @@ RunHMDCountry <- function(WORKING = getwd(),
                             XXX = XXX, 
                             LDBPATH = LDBPATH,
                             MPVERSION = MPVERSION)
+  
+  Write_csv(                WORKING = WORKING, 
+                            STATSFOLDER = STATSFOLDER, 
+                            MPVERSION = MPVERSION,
+                            OldStyle = TRUE,
+                            XXX = XXX 
+                            )  
+  
+ 
 } # end function definition
 
 ###############################################################################
