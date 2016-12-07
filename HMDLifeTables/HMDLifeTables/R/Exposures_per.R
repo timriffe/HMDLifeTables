@@ -174,8 +174,11 @@ Exposures_per <- function(WORKING = getwd(),
   b.bar                     <- colSums(f.i * (b.i[1:12, ] + b.i[2:13, ]) / 2)
   b.bar.full                <- rep(.5, Ncohs)
   names(b.bar.full)         <- cohs
-  b.bar.full[names(b.bar)]  <- b.bar # my fav way to do variable recoding...
-# an AC B.bar matrix
+  
+  ## name-based substitution
+  b.bar.full[ names(b.bar)[names(b.bar) %in% names(b.bar.full)] ] <- b.bar[names(b.bar) %in% names(b.bar.full) ]
+  
+  #an AC B.bar matrix
   b.bar.mat                 <- matrix(b.bar.full, 
     nrow = Nages, 
     ncol = Ncohs, 
