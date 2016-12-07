@@ -106,16 +106,19 @@ Exposures_coh <- function(WORKING = getwd(),
   du[i.openage, openNas] <- NA
   # -------------------------------------------
 
-  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "monthly.txt"))
+  use.old.exposure.formula <- TRUE
+  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "birthbymonth.txt"))
   if (MPVERSION > 5){
+    use.old.exposure.formula <- FALSE 
+    
     if (!file.exists(births.monthly.path)){
-      MPVERSION   <- 5  # CAB: return to change.  Parameters should be immutable, never reset
       cat("\nMPVERSION was given as", MPVERSION, "but monthly births file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
-    }
+      use.old.exposure.formula <- TRUE
+    } 
   }
   
   # old exposures, considerably simpler :-)
-  if (MPVERSION == 5){
+  if (use.old.exposure.formula){
     Exp       <- pop + (1 / 3) * (dl - du)
     # optional save out
     if (save.bin){

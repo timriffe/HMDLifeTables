@@ -31,7 +31,7 @@
 #' @export
 # Author: triffe
 
-## TODO: CAB - restructure to handle empty XYZmonthly.txt monthly birth files and 
+## TODO: CAB - restructure to handle empty XYZbirthbymonth.txt monthly birth files and 
 ##             require its presence under V6.  Change logic so that immutable parameter
 ##             MPVERSION does not need to be reassigned
 
@@ -45,7 +45,7 @@ Exposures_per <- function(WORKING = getwd(),
   sex ,   # CAB: should not have a default
   OPENAGE = 110, 
   save.bin = TRUE, 
-  MPVERSION = 6, #MPVERSION = 6
+  MPVERSION,  # version must be explicit
   XXX = NULL,
   LDBPATH = NULL,
   IDBPATH = NULL
@@ -93,15 +93,21 @@ Exposures_per <- function(WORKING = getwd(),
   }
 
   # ---------------------------------------------------------------------------
-  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "monthly.txt"))
+  use.old.exposure.formula <- TRUE
+  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "birthbymonth.txt"))
   if (MPVERSION > 5){
-      if (!file.exists(births.monthly.path)){
-        cat("\nMPVERSION was given as", MPVERSION, "but monthly births file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
-        MPVERSION   <- 5    # CAB: return to change.  Parameters should be immutable, never reset
-    }
+    use.old.exposure.formula <- FALSE 
+    
+    if (!file.exists(births.monthly.path)){
+      cat("\nMPVERSION was given as", MPVERSION, "but monthly births file was missing:\n", 
+            births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
+        
+      use.old.exposure.formula <- TRUE
+        
+      } 
   }
 # old exposures, considerably simpler :-)
-  if (MPVERSION <= 5){
+  if (use.old.exposure.formula){
     Exp         <- (pop1 + pop2) / 2 + (dl - du) / 6
     
     # optional save out
