@@ -132,6 +132,14 @@ Exposures_coh <- function(WORKING = getwd(),
     return(Exp[1:i.openage, ]) 
   }
   
+  # -------------------------------------
+  nameBasedRecode<- function(.x,.y){  #substitute y into x based on names attribute of x, y
+    stopifnot( !is.null(attributes(.x)[["names"]]) & !is.null(attributes(.y)[["names"]]))
+    .x[ names(.y)[names(.y) %in% names(.x)] ] <- .y[ names(.y) %in% names(.x)]
+    return(.x)
+  }
+  # -------------------------------------  
+  
 #  cohs              <- as.integer(colnames(pop))
 #  Ncohs             <- length(cohs)
   ages              <- 0:OPENAGE
@@ -181,7 +189,8 @@ Exposures_coh <- function(WORKING = getwd(),
   names(b.bar.full)         <- cohs
   
   ## name-based substitution
-  b.bar.full[ names(b.bar)[names(b.bar) %in% names(b.bar.full)] ] <- b.bar[names(b.bar) %in% names(b.bar.full) ]
+  b.bar.full <- nameBasedRecode(b.bar.full, b.bar)
+#  b.bar.full[ names(b.bar)[names(b.bar) %in% names(b.bar.full)] ] <- b.bar[names(b.bar) %in% names(b.bar.full) ]
   
 # an AC B.bar matrix
   b.bar.mat                 <- matrix(b.bar.full, 
@@ -193,7 +202,8 @@ Exposures_coh <- function(WORKING = getwd(),
   sigmasq                       <- colSums(f.i * ((b.i[1:12, ] ^ 2 + b.i[2:13, ] * b.i[1:12, ] + b.i[2:13, ] ^ 2) / 3)) - b.bar ^ 2
   sigmasq.full                  <- rep(1 / 12, Ncohs) # default uniform distribution
   names(sigmasq.full)           <- cohs
-  sigmasq.full[names(sigmasq)]  <- sigmasq
+  #sigmasq.full[names(sigmasq)]  <- sigmasq # broken
+  sigmasq.full <- nameBasedRecode(sigmasq.full, sigmasq)
   sigmasq.mat                   <- matrix(sigmasq.full, 
                                     nrow = Nages, 
                                     ncol = Ncohs, 
