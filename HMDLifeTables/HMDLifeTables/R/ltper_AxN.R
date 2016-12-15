@@ -31,7 +31,7 @@
 ltper_AxN <- function(
   WORKING = getwd(), 
   perComp = NULL,
-  sex = "m", 
+  sex, 
   OPENAGE = 110, 
   RADIX = 1e5, 
   N = 1,                
@@ -127,9 +127,9 @@ ltper_AxN <- function(
                               du = du, 
                               sex = sex, 
                               OPENAGE = OPENAGE, 
-                              save.bin = FALSE, 
+                              save.bin = TRUE, 
                               MPVERSION = MPVERSION,
-                              XXX = NULL,
+                              XXX = XXX,
                               LDBPATH = LDBPATH,
                               IDBPATH = IDBPATH
                              )
