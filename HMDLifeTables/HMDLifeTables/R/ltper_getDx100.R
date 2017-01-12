@@ -1,3 +1,9 @@
+
+### the perComp arg is missing when called, yet the function does not spew its guts.  Why not?
+
+### called by ltper_AxN.R with N=1,5,10 and things fail when N=5,10
+
+
 #' @title \code{ltper_GetDx100} determines the age at which Kannisto smoothed mx values should be imputed over the raw Mx for each year of data.
 #' 
 #' @description Smoothed mx values are imputed starting at the lowest age where male or female deaths drop to at most 100 with a minimum age of 80 and a maximum age of 95. The same age is used for both males and females.
@@ -11,7 +17,7 @@
 #' 
 #' @return a vector with the age index (age + 1) for each year where smoothed mx values should be imputed.
 #' 
-#' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
+#' @author Tim Riffe \email{triffe@@demog.berkeley.edu},Carl Boe \email{boe@@demog.berkeley.edu}
 #' 
 #' @importFrom reshape2 acast
 #' 
@@ -54,6 +60,8 @@ ltper_GetDx100 <- function(WORKING = getwd(),
     dl        <- acast(perComp, Age ~ Year, value.var = "dl")
     du        <- acast(perComp, Age ~ Year, value.var = "du")
     Dx        <- dl + du
+    ## CAB: when N > 1, need to aggregate across years and compute smoothing ages based on aggregated data
+    Dx        <- YearAgg(Dx, N=N)
 # ---------------------------------------------------------------------------------
 # matlab does x <= 100 head(Dx)
     extrap.ages.i <- apply(Dx, 2, function(x, ages = 0:OPENAGE){                      
