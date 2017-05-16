@@ -38,7 +38,11 @@ Exposures_per(WORKING = getwd(), pop1 = NULL, pop2 = NULL, dl = NULL,
 an 'age by year' matrix of exposures. if in test mode, a list with matrices of both deaths and exposures is returned.
 }
 \description{
-This function is meant to be internal. It is called by \code{Exposures_Deaths_Mx_AxN()}, \code{ltper_AxN()} and \code{ltperBoth_AxN()}. If necessary, it calls \code{getPeriodComponents()}. Exposures from the appropriate MP version are returned in an 'age by year' matrix already cut down to \code{OPENAGE}.
+This function is meant to be internal. It is called by
+  \code{Exposures_Deaths_Mx_AxN()}, \code{ltper_AxN()} and
+  \code{ltperBoth_AxN()}. If necessary, it calls
+  \code{getPeriodComponents()}. Exposures from the appropriate MP version are
+  returned in an 'age by year' matrix already cut down to \code{OPENAGE}.
 }
 \details{
 This function can take data arguments in-memory, from the \code{/Rbin/} folder, or else derive them by calling \code{getPeriodComponents()}. This function is separate because using monthly birth data for v6 exposures is a fair amount of code. Since a few functions need these exposures it's best to modularize and call where needed. This function uses a package dataset \code{monthDurations.rda} in order to save having to recompute it on each run- this is a matrix with the number of days in each month every year across several centuries, reaching way beyond the potential of the HMD to as to avoid future bugs. It gets cut to size as needed. This function also calls \code{AC2AP()}.

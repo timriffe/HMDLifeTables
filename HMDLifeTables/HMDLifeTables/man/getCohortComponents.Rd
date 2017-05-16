@@ -4,8 +4,8 @@
 \alias{getCohortComponents}
 \title{\code{getCohortComponents} a function to read in and prepare basic data components for cohort calculations}
 \usage{
-getCohortComponents(WORKING = getwd(), sex = "f", save.bin = TRUE,
-  XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
+getCohortComponents(WORKING = getwd(), sex, save.bin = TRUE, XXX = NULL,
+  LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}

@@ -36,6 +36,7 @@ Collate:
     'Write_Exposures_Deaths_Mx.R'
     'Write_e0.R'
     'Write_lt.R'
+    'Write_csv.R'
     'YearAgg.R'
     'cExposures_and_cMx_AxN.R'
     'checkRuncoh.R'

@@ -4,7 +4,7 @@
 \alias{getPeriodComponents}
 \title{\code{getPeriodComponents} a function to read in and prepare basic data components for period calculations}
 \usage{
-getPeriodComponents(WORKING = getwd(), sex = "f", OPENAGE = 110,
+getPeriodComponents(WORKING = getwd(), sex, OPENAGE = 110,
   save.bin = TRUE, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/YearAgg.R
 \name{YearAgg}
 \alias{YearAgg}
-\title{\code{YearAgg} Aggregate an 'age by year' matrix into N-year groups}
+\title{Aggregate an age by year matrix \code{YearAgg} into N-year groups}
 \usage{
 YearAgg(mat, years = as.integer(colnames(mat)), N = 1)
 }
@@ -16,7 +16,10 @@ YearAgg(mat, years = as.integer(colnames(mat)), N = 1)
 \value{
 an 'age by year' matrix with columns. Column labls will now specify hyphen-separated year ranges.
 }
+\description{
+this function takes any 'age by year' matrix, ideally with columns and row appropriately labeled, and aggregates it into year groups. The first year of each group are years where \code{year \%\% N == 0}. if \code{N = 1}, nothing happens, for any \code{N > 1} the minimum number of years for a year group is 2. That is to say, for 5-year groupings, the first and last year-groups might not have divided evenly into 5. These are included if they have at least 2 years in them..
+}
 \author{
-Tim Riffe \email{triffe@demog.berkeley.edu}
+Tim Riffe \email{triffe@demog.berkeley.edu}, Carl Boe \email{boe@demog.berkeley.edu}
 }
 
