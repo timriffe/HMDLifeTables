@@ -172,7 +172,7 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i){
       
       par.est[i, ] <- ab.j    
       se.est[i,]   <- se.j
-      cat(paste(i, ab.j,"\n"))
+      cat(paste(i, ab.j[1], ab.j[2], "\n"))
     } #i
   
   # fitted values over entire age range
