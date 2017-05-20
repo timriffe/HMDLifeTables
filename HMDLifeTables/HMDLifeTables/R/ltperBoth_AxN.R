@@ -41,6 +41,7 @@
 #' testing), the full path to the LexisDB folder. If left as
 #' \code{NULL} it is assumed to be \code{file.path(WORKING,
 #' "InputDB")}
+#' @param reproduce.matlab logical. Default \code{FALSE}. Should we reproduce all aspects of the matlab code? 
 #' 
 #' @details In the case of multiyear cohorts, the first year is always
 #' determined by year modulo \code{N} = 0. The minimum number of years
@@ -65,6 +66,8 @@
 #' 
 #' @export
 
+## CAB clarify V5 
+
 ltperBoth_AxN <- function(
   WORKING = getwd(), 
   males = NULL,
@@ -77,7 +80,8 @@ ltperBoth_AxN <- function(
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,
-  IDBPATH = NULL
+  IDBPATH = NULL, 
+  reproduce.matlab=FALSE
 ){
   if (is.null(XXX)){
     XXX          <- ExtractXXXfromWORKING(WORKING) # not sourced!
@@ -225,17 +229,26 @@ ltperBoth_AxN <- function(
     LDBPATH = LDBPATH, 
     IDBPATH = IDBPATH)
   
-  if (MPVERSION == 5){
+  if (MPVERSION <= 6){
     # loop over years
     eps <- 1e-8 # eps from matlab
     for (i in 1:ncol (w.f)){ #
       if (!all(is.na(Exp.f[, i]))){ # clause added for BEL
         keep.i       <- !(Exp.f[, i] <= eps | Exp.m[, i] <= eps)
-        #reg.weights  <- Exp.t[keep.i, i]
+        reg.weights  <- Exp.t[keep.i, i]
         w.f.i        <- w.f[keep.i, i]
         age.mid.i    <- age.mid[keep.i]
-        #coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2), weights = reg.weights)$coef # Eq 57
-        coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2))$coef # Eq 57
+        if(reproduce.matlab){
+          ## CAB: matlab implementation via the call 
+          ##   pihatF=fweightest(drf(:,1),rawweightf)  
+          ## with rawweightf just Ef/(Et), never actually used any weights, so matlab has unweighted regression
+          ## estimate, contrary to the MP beginning in V4.
+          coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2))$coef # Eq 57
+        } else
+        {
+          coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2), weights = reg.weights)$coef # Eq 57, true MP 4,5
+        }
+        
         
         z.i          <- coefs.i[1] + (coefs.i[2] * age.mid) + (coefs.i[3] * age.mid ^ 2) # Eq 58
 ##        pi.mat[, i]  <- exp(z.i) / (1 + exp(z.i))
@@ -244,7 +257,7 @@ ltperBoth_AxN <- function(
     }
     # i.e. in the matlab code ALL ages are used to fit and ALL ages are blended together thusly
   }
-  if (MPVERSION > 5){
+  if (MPVERSION > 6){  # 2 differences: (1) sqrt of weights in regression, (2) choice of ages in fit limited to above extrap age
     # first get raw:
     D.all      <- dl.f + dl.m + du.f + du.m
     mx         <-  D.all / Exp.t
