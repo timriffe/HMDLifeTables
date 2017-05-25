@@ -241,8 +241,10 @@ ltperBoth_AxN <- function(
         if(reproduce.matlab){
           ## CAB: matlab implementation via the call 
           ##   pihatF=fweightest(drf(:,1),rawweightf)  
-          ## with rawweightf just Ef/(Et), never actually used any weights, so matlab has unweighted regression
-          ## estimate, contrary to the MP beginning in V4.
+          ## Contrary to name, fweightest does not perform weighted regression estimation, but 
+          ## simple unweighted OLS using age, age^2 and w.f
+          ## This is contrary to the MP beginning in V4,
+          ## which says to use Total exposures as weights.  True V5 is the default here.
           coefs.i      <- lm(log(w.f.i / (1 - w.f.i)) ~ age.mid.i + I(age.mid.i ^ 2))$coef # Eq 57
         } else
         {
@@ -259,13 +261,13 @@ ltperBoth_AxN <- function(
   }
   if (MPVERSION > 6){  # 2 differences: (1) sqrt of weights in regression, (2) choice of ages in fit limited to above extrap age
     # first get raw:
-    D.all      <- dl.f + dl.m + du.f + du.m
-    mx         <-  D.all / Exp.t
+    #D.all      <- dl.f + dl.m + du.f + du.m
+    #mx         <-  D.all / Exp.t
     # loop over years
     eps <- 1e-8 # eps from matlab
     for (i in 1:ncol (w.f)){ #
       if (!all(is.na(Exp.f[, i]))){ # clause added for BEL
-        # different from v5 because only ages 80+ are used to fit
+        # different from v5 because only ages 80+ are used to fit...not sure that this is a fabulous idea, better to use a real smoother
         sm.ind       <- extrap.ages.i[i]:i.openage 
         keep.i       <- !(Exp.f[, i] <= eps | Exp.m[, i] <= eps) & (0:110) >= 80
         w.f.i        <- w.f[keep.i, i]
