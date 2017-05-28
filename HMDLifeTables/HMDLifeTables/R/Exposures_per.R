@@ -1,6 +1,10 @@
 #' @title \code{Exposures_per} a function to prepare either v5 or v6 period exposures.
 #'
-#' @description This function is meant to be internal. It is called by \code{Exposures_Deaths_Mx_AxN()}, \code{ltper_AxN()} and \code{ltperBoth_AxN()}. If necessary, it calls \code{getPeriodComponents()}. Exposures from the appropriate MP version are returned in an 'age by year' matrix already cut down to \code{OPENAGE}.
+#' @description This function is meant to be internal. It is called by
+#'   \code{Exposures_Deaths_Mx_AxN()}, \code{ltper_AxN()} and
+#'   \code{ltperBoth_AxN()}. If necessary, it calls
+#'   \code{getPeriodComponents()}. Exposures from the appropriate MP version are
+#'   returned in an 'age by year' matrix already cut down to \code{OPENAGE}.
 #'
 #' @details This function can take data arguments in-memory, from the \code{/Rbin/} folder, or else derive them by calling \code{getPeriodComponents()}. This function is separate because using monthly birth data for v6 exposures is a fair amount of code. Since a few functions need these exposures it's best to modularize and call where needed. This function uses a package dataset \code{monthDurations.rda} in order to save having to recompute it on each run- this is a matrix with the number of days in each month every year across several centuries, reaching way beyond the potential of the HMD to as to avoid future bugs. It gets cut to size as needed. This function also calls \code{AC2AP()}.
 #'
@@ -26,6 +30,11 @@
 #' 
 #' @export
 # Author: triffe
+
+## TODO: CAB - restructure to handle empty XYZbirthbymonth.txt monthly birth files and 
+##             require its presence under V6.  Change logic so that immutable parameter
+##             MPVERSION does not need to be reassigned
+
 ###############################################################################
 Exposures_per <- function(WORKING = getwd(), 
   pop1 = NULL,    
@@ -33,10 +42,10 @@ Exposures_per <- function(WORKING = getwd(),
   dl = NULL,
   du = NULL, 
   perComp = NULL,
-  sex = "m", 
+  sex ,   # CAB: should not have a default
   OPENAGE = 110, 
   save.bin = TRUE, 
-  MPVERSION = 6, #MPVERSION = 6
+  MPVERSION,  # version must be explicit
   XXX = NULL,
   LDBPATH = NULL,
   IDBPATH = NULL
@@ -84,15 +93,21 @@ Exposures_per <- function(WORKING = getwd(),
   }
 
   # ---------------------------------------------------------------------------
-  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "monthly.txt"))
+  use.old.exposure.formula <- TRUE
+  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "birthbymonth.txt"))
   if (MPVERSION > 5){
-      if (!file.exists(births.monthly.path)){
-        cat("\nMPVERSION was given as", MPVERSION, "but necessary file was missing:\n", IDBPATH, "\nreverted to MPVERSION 5 exposures\n")
-        MPVERSION   <- 5
-    }
+    use.old.exposure.formula <- FALSE 
+    
+    if (!file.exists(births.monthly.path)){
+      cat("\nMPVERSION was given as", MPVERSION, "but monthly births file was missing:\n", 
+            births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
+        
+      use.old.exposure.formula <- TRUE
+        
+      } 
   }
 # old exposures, considerably simpler :-)
-  if (MPVERSION <= 5){
+  if (use.old.exposure.formula){
     Exp         <- (pop1 + pop2) / 2 + (dl - du) / 6
     
     # optional save out
@@ -107,6 +122,12 @@ Exposures_per <- function(WORKING = getwd(),
   }
   
 # -------------------------------------
+  nameBasedRecode<- function(.x,.y){  #substitute y into x based on names attribute of x, y
+    stopifnot( !is.null(attributes(.x)[["names"]]) & !is.null(attributes(.y)[["names"]]))
+    .x[ names(.y)[names(.y) %in% names(.x)] ] <- .y[ names(.y) %in% names(.x)]
+    return(.x)
+  }
+  # -------------------------------------  
 # set up dims, names used throughout
   yrs     <- as.integer(colnames(pop1))
   cohs    <- (min(yrs) - nrow(pop1) - 1):(max(yrs) + 1)
@@ -115,6 +136,7 @@ Exposures_per <- function(WORKING = getwd(),
   Nages   <- length(ages)
 # TODO: check for monthly in Rbin, as LDB can save this,
 # be sure to use optional LDBPATH
+  
   BM              <- read.table(births.monthly.path,
                       header = TRUE, 
                       sep = ",", 
@@ -158,8 +180,12 @@ Exposures_per <- function(WORKING = getwd(),
   b.bar                     <- colSums(f.i * (b.i[1:12, ] + b.i[2:13, ]) / 2)
   b.bar.full                <- rep(.5, Ncohs)
   names(b.bar.full)         <- cohs
-  b.bar.full[names(b.bar)]  <- b.bar # my fav way to do variable recoding...
-# an AC B.bar matrix
+ 
+  ## name-based substitution
+  b.bar.full <- nameBasedRecode(b.bar.full, b.bar)
+  #b.bar.full[ names(b.bar)[names(b.bar) %in% names(b.bar.full)] ] <- b.bar[names(b.bar) %in% names(b.bar.full) ]
+  
+  #an AC B.bar matrix
   b.bar.mat                 <- matrix(b.bar.full, 
     nrow = Nages, 
     ncol = Ncohs, 
@@ -169,7 +195,9 @@ Exposures_per <- function(WORKING = getwd(),
   sigmasq                     <- colSums(f.i * ((b.i[1:12, ] ^ 2 + b.i[2:13, ] * b.i[1:12, ] + b.i[2:13, ] ^ 2) / 3)) - b.bar ^ 2
   sigmasq.full                <- rep(1 / 12, Ncohs) # default uniform distribution
   names(sigmasq.full)         <- cohs
-  sigmasq.full[names(sigmasq)]  <- sigmasq
+
+  #sigmasq.full[names(sigmasq)]  <- sigmasq
+  sigmasq.full <- nameBasedRecode(sigmasq.full, sigmasq)
   sigmasq.mat                 <- matrix(sigmasq.full, 
                                 nrow = Nages, 
                                 ncol = Ncohs, 
@@ -210,7 +238,7 @@ Exposures_per <- function(WORKING = getwd(),
     #Sys.chmod(out.path0, mode = "2775", use_umask = FALSE)
     #system(paste0("chgrp hmdcalc ", out.path0))
   }
-  
+
   invisible(Exp)
 }
 

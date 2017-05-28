@@ -1,0 +1,13 @@
+List of changes needed in this package
+
+6/27/2016:  The Exposures* routines read monthly birth files with each pass.  There are probably several other
+   cases like this where data files are read repeatedly.  Restructure so that InputDB files
+   are read only a single time and saved in Rbin   
+
+6/27/2016:  related to above, make sure that data input to a country run occurs a single step, with 
+   needed checks.  --> add XYZmonthly.txt  to the read inputDB routine, including head check.
+   An error encountered was 'LexisDB' instead of 'LDB' as the last column name in the csv file.
+
+6/27/2016: Dima wishes a tightening of defaults, e.g. when v6 applies, the monthly.txt file is not optional
+
+

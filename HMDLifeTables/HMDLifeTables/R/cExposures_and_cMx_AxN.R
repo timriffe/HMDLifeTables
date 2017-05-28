@@ -91,7 +91,7 @@ cExposures_and_cMx_AxN <- function(
                       du = du.f, 
                       sex = "f", 
                       OPENAGE = OPENAGE, 
-                      save.bin = FALSE, 
+                      save.bin = TRUE,   # CAB test
                       MPVERSION = MPVERSION,
                       XXX = NULL,
                       LDBPATH = LDBPATH,
@@ -102,22 +102,25 @@ cExposures_and_cMx_AxN <- function(
                       du = du.m, 
                       sex = "m", 
                       OPENAGE = OPENAGE, 
-                      save.bin = FALSE, 
+                      save.bin = TRUE, 
                       MPVERSION = MPVERSION,
                       XXX = NULL,
                       LDBPATH = LDBPATH,
                       IDBPATH = IDBPATH)
 # ---------------------------------------------------------------------------------
 # imputeNAsfrom du          # this incidentally is the non-intuitive step
+
     dl.f[is.na(du.f)]   <- NA     # that was necessary to replicate original
     pop.f[is.na(du.f)]  <- NA     # matlab results, and that is not spelled out 
     dl.m[is.na(du.m)]   <- NA     
     pop.m[is.na(du.m)]  <- NA     
     
-    # makes sense after looking at MP diagram for a while
+    # makes sense after looking at MP diagram for a while; 
+    # ?? cut back partial cohort parallelogram 
 # ---------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------
+# CAB revisit this logic and see if can be found in MP
 # Roll everything back to open age at this step
     i.OPENAGE <- OPENAGE + 1
 # sum to age 110+, in case there are later events   
@@ -136,7 +139,8 @@ cExposures_and_cMx_AxN <- function(
     du.m                    <- du.m[1:i.OPENAGE, ]
     pop.m                   <- pop.m[1:i.OPENAGE, ]
     
-# keep age 110 NAs in tact    
+# keep age 110 NAs in tact   
+## CAB: why is age 110 forced to NA iff dl.f was NA ?    
     dl.f[i.OPENAGE, NA110]  <- NA
     du.f[i.OPENAGE, NA110]  <- NA
     pop.f[i.OPENAGE, NA110] <- NA
@@ -152,7 +156,10 @@ cExposures_and_cMx_AxN <- function(
       # generally these give the same results, e.g. for Iceland. It's also reasonable, and 
       # perhaps worth keeping, since such ages would only be from early cohorts where old
       # ages are often composed of broken open age groups.
-      c.keep                  <- colSums(!(is.na(pop.f[1:101, ])), na.rm = TRUE) >= min.years
+      # CAB: various changes here do not match up exactly with matlab, which has a slightly different 
+      # criterion for choosing candidate cohorts (not just based on pop.f)
+      c.keep                  <- colSums(!(is.na(pop.f[1:109, ])), na.rm = TRUE) >= min.years
+      # c.keep                  <- colSums(!(is.na(pop.f[1:101, ])), na.rm = TRUE) >= min.years
     } else {
       c.keep                  <- colSums(!(is.na(pop.f) | (pop.f + pop.m + dl.f + dl.m + du.f + du.m) == 0), na.rm = TRUE) >= min.years
     }

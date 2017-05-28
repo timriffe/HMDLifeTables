@@ -9,7 +9,8 @@
 #' @return a \code{ACmatrix} a matrix in age-cohort format, with correctly labeled dimensions. It will also have an attribute \code{Lexis}, used for automatic Lexis argument detection in the case that the matrix is placed back into \code{AC2AP()}.
 #' 
 #' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
-#' 
+#' @importFrom reshape2 acast
+#' @importFrom reshape2 melt
 #' @export
 # Author: triffe
 ###############################################################################

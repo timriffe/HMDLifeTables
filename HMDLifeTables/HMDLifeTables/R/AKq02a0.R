@@ -11,7 +11,7 @@
 #' 
 #' @export
 
-AKq02a0 <- function(q0, sex = "m"){
+AKq02a0 <- function(q0, sex ){
   sex <- rep(sex, length(q0))
   ifelse(sex == "m", 
     ifelse(q0 < .0226, {0.1493 - 2.0367 * q0},
