@@ -12,6 +12,7 @@
 #' 
 #' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
 #'
+#' @import reshape2 
 #' @export
 # Author: triffe
 ###############################################################################
@@ -19,6 +20,7 @@ Write_Births <- function(
   WORKING = getwd(),
   STATSFOLDER = "RSTATS",
   LDBPATH = NULL,
+  IDBPATH = NULL,
   MPVERSION = 5,
   XXX = NULL){
   
@@ -27,6 +29,9 @@ Write_Births <- function(
   }
   if (is.null(LDBPATH)){
     LDBPATH       <- file.path(WORKING, "LexisDB")
+  }
+    if (is.null(IDBPATH)){
+    IDBPATH       <- file.path(WORKING, "InputDB")
   }
   # Lexis DB object
   ldb.path.f      <- file.path(LDBPATH, paste0("f", XXX, ".txt"))
@@ -40,7 +45,42 @@ Write_Births <- function(
   Bm              <- with(LDBobj.m, Population[Age == 0 & Lexis == 1 & Population > -1])
   Bt              <- Bf + Bm
   Year            <- with(LDBobj.m, Year[Age == 0 & Lexis == 1 & Population > -1])
+
+
+  ## CAB: override the above and take Births from InputDB, since that will give the full span of
+  ## available birth data.  
+  ## births from InputDB XXXbirths.txt file
+  ## TODO: reconstruct LexisDB have "wide" structure, containing full span of data and BOY, EOY values (implicit
+  ## territorial adjustment factors)
+  
+  idb.path      <- file.path(IDBPATH, paste0(XXX, "birth.txt"))
+  idb.births <- read.csv(idb.path, header=TRUE)
+
+  ## working subset
+  idb.births <- idb.births[, c("Sex", "Year", "Births", "Access","LDB")]
+  ## set year as factor with complete recorded year range, to impute any missing entries 
+  idb.births$Year <- factor(idb.births$Year, levels=min(idb.births$Year):max(idb.births$Year))
  
+  idb.births.m <- melt(idb.births, id.vars=c("Sex", "Year", "Access", "LDB") )
+  idb.births.c <- dcast(idb.births.m, Year + Sex + Access + LDB  ~ variable , drop=FALSE, fill=NULL)
+
+  ## remove duplicates where there are identical Year,Sex, Access entries and prefer
+  ## cases where LDB=1 over LDB=0.  Warn here because this situation is very confusing
+  idb.births.dups <- duplicated(idb.births.c[,1:3], fromLast=TRUE) # fromLast chooses LDB=1
+  if( any(idb.births.dups) ){
+    warning(paste("*** ", XXX, ": There are duplicate/conflicting entries for Births; preferring cases where LDB==1"))
+    idb.births.c <- idb.births.c[ !idb.births.dups,]
+  }
+  Bf <- idb.births.c$Births[ idb.births.c$Sex=='f' ]
+  Bm <- idb.births.c$Births[ idb.births.c$Sex=='m' ]
+  Year <-  as.character( idb.births.c$Year[ idb.births.c$Sex=='f' ] ) #was factor
+  Year <- as.integer(Year)
+  if( length(Bf) != length(Bm) || length(Bf) != length(Year) ){
+    warning(paste("*** ", XXX, ": Unequal Male, Female births lengths") )
+  }
+  Bt <- Bf + Bm  
+
+  
   # for the metadata header: country long name
   # country.lookup should load; if throws error, try data(country.lookup)
   CountryLong     <- country.lookup[country.lookup[,1] == XXX,2]
@@ -57,7 +97,8 @@ Write_Births <- function(
     #Sys.chmod(STATS.path, mode = "2775", use_umask = FALSE)
   }
   write.out.file  <- file.path(STATS.path, "Births.txt")
-  
+
+ 
   cat(
     # metadata header
     paste0(CountryLong, DataType, DateMod, MPvers,"\n"),
@@ -65,13 +106,45 @@ Write_Births <- function(
     "Year          Female      Male     Total",
     # the data, rounded and formatted in place- no tabbing
     paste(
-      sprintf(paste0("%-", 10, "s"), Year),
-      sprintf(paste0("%", 10, "s"), Bf),
-      sprintf(paste0("%", 10, "s"), Bm),
-      sprintf(paste0("%", 10, "s"), Bt),
+      sprintf(paste0("%-", 10, "i"), Year),
+      ifelse(is.na(Bf), "         .", sprintf(paste0("%", 10, "i"), Bf) ),
+      ifelse(is.na(Bm), "         .", sprintf(paste0("%", 10, "i"), Bm) ),
+      ifelse(is.na(Bt), "         .", sprintf(paste0("%", 10, "i"), Bt) ),
       sep = ""), 
     file = write.out.file, sep = "\n")
   #Sys.chmod(write.out.file, mode = "2775", use_umask = FALSE)
-  #system(paste0("chgrp hmdcalc ", write.out.file))
-}
+  #system(paste0("chgrp hmdcalc ", write.out.file));
+
+} #end of function Write_Births()
+
+  
+  ## idb.births.out <- data.frame(Year = Years, Female = Bf,  Male = Bm, Total = Bt)
+  ## fmt.births.out <- "%10s%10i%10i%10i"
+  ## fmt.births.header <- "%10s%10s%10s%10s"
+  ## idb.births.header <- sprintf(fmt.births.header, c("Year", "Female", "Male", "Total"))
+  
+  ## ## http://stackoverflow.com/questions/28058501/split-data-frame-for-passing-to-sprintf-in-r#28059117
+  ## writeData <- function(DataSet,FirstLine, FmtString,fName){
+  ##   outLines <- do.call("sprintf", c(FmtString, DataSet))
+  ##   if (nchar(FirstLine) > 0){
+  ##     writeLines(FirstLine, fName)
+  ##   }
+    
+  ##   writeLines(outLines,fName)
+  ##   return(0)
+  ## }
+
+
+  ## }
+
+
+## mb<-data.frame(Year=c(1900,1900, 1901, 1903, 1903),
+##                Sex= c("M","F","F","M","F"),
+##                Births=c(100,101,102,103,104))
+## year.f <- factor(mb$Year, levels=min(mb$Year):max(mb$Year))
+## sex.f  <- factor(mb$Sex, levels=c("M","F"))
+## mb$Year <- year.f
+## mb$Sex  <- sex.f
+## mb.m <- melt(mb, id.vars=c("Sex", "Year" ) )
+## mb.c <- dcast(mb.m, Year + Sex ~ variable , drop=FALSE,fill=NULL)
 

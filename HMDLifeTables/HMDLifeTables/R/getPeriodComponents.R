@@ -22,7 +22,7 @@
 ###############################################################################
 getPeriodComponents <- function(
   WORKING = getwd(), 
-  sex = "f",
+  sex ,  # no defaults, this is a required parameter
   OPENAGE = 110,
   save.bin = TRUE,
   XXX = NULL,

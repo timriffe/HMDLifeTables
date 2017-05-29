@@ -13,7 +13,7 @@
 #' @export
 # Author: triffe
 ###############################################################################
-CDa0 <- function(m0, sex = "f"){
+CDa0 <- function(m0, sex ){
   sex <- rep(sex, length(m0))
   ifelse(sex == "m", 
     ifelse(m0 >= 0.107, 0.330, {0.045 + 2.684 * m0}), # males

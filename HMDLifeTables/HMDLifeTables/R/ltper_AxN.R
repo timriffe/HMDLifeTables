@@ -31,7 +31,7 @@
 ltper_AxN <- function(
   WORKING = getwd(), 
   perComp = NULL,
-  sex = "m", 
+  sex, 
   OPENAGE = 110, 
   RADIX = 1e5, 
   N = 1,                
@@ -127,9 +127,9 @@ ltper_AxN <- function(
                               du = du, 
                               sex = sex, 
                               OPENAGE = OPENAGE, 
-                              save.bin = FALSE, 
+                              save.bin = TRUE, 
                               MPVERSION = MPVERSION,
-                              XXX = NULL,
+                              XXX = XXX,
                               LDBPATH = LDBPATH,
                               IDBPATH = IDBPATH
                              )
@@ -148,6 +148,10 @@ ltper_AxN <- function(
   # find age at which to begin imputing, based on male (or female) Dx <= 100
   # MP says male, but matlab apparently uses male or female
   # source the function until packaged
+  
+  ## CAB: return here for cleanup: follow Matlab and make 2 calls to get the ages,
+  ##   explicitly passing perComp for m then f.  Modify ltper_GetDx100 to remove all magic. 
+  ##   extrap.ages.i is then the vector min of m,f values.
   extrap.ages.i <- ltper_GetDx100(WORKING = WORKING, 
                                   OPENAGE = OPENAGE, 
                                   N = N, 

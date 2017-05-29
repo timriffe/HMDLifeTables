@@ -12,7 +12,7 @@
 #' @export
 
 
-AKm02a0 <- function(m0, sex = "m"){
+AKm02a0 <- function(m0, sex ){
   sex <- rep(sex, length(m0))
   ifelse(sex == "m", 
     ifelse(m0 < .0230, {0.14929 - 1.99545 * m0},
@@ -37,7 +37,7 @@ AKm02a0 <- function(m0, sex = "m"){
 #' 
 #' @export
 
-AKm02a0_direct <- function(m0,sex="m"){
+AKm02a0_direct <- function(m0, sex){
   sex <- rep(sex,length(m0))
   ifelse(sex == "m",
     ifelse(m0 < 0.02306737, 0.1493 - 2.0367 * AKm02q0(m0, 0.1493, -2.0367),

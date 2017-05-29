@@ -61,6 +61,8 @@ Write_Exposures_Deaths_Mx <- function(
   Mx.files          <- files.2.write[grep(files.2.write, pattern = "Mx")]
   Px.files          <- files.2.write[grep(files.2.write, pattern = "Population")]
   files.2.write     <- c(Deaths.files, Exposures.files, Mx.files, Px.files)
+  ## CAB: Raw binary files have no outputs and so will crash the output loop 
+  files.2.write     <- files.2.write[  grep(pattern="Raw", files.2.write, invert=TRUE)]
   
 # read in each file one at a time, and repeat
   for (this.file in files.2.write){
