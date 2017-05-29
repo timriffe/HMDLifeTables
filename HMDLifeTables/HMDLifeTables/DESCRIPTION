@@ -36,6 +36,7 @@ Collate:
     'Write_Exposures_Deaths_Mx.R'
     'Write_e0.R'
     'Write_lt.R'
+    'Write_csv.R'
     'YearAgg.R'
     'cExposures_and_cMx_AxN.R'
     'checkRuncoh.R'
@@ -55,3 +56,4 @@ Collate:
     'AKq02a0.R'
     'readIDBcurrent.R'
     'readLDB.R'
+RoxygenNote: 5.0.1

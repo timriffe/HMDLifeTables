@@ -23,7 +23,7 @@
 ###############################################################################
 getCohortComponents <- function(
   WORKING = getwd(), 
-  sex = "f",
+  sex,
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,

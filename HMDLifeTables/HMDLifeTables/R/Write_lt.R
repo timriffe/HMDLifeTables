@@ -97,17 +97,18 @@ Write_lt <- function(
       
     # replace NAs, NaNs with ".": this appears to only come up with cohort tables, since
     # period tables have smoothed final values
+    # CAB: both Nan and NA can occur so replace both
     mx <- MatlabRoundFW(output$mx, digits = 5, totalL = ifelse(AgeCond, 8, 11))
-    mx <- gsub(mx, pattern = "NA", replacement = " .")
+    mx <- gsub(mx, pattern = "NA|NaN", replacement = " .")
     
     qx <- MatlabRoundFW(output$qx, digits = 5, totalL = 9)
-    qx <- gsub(qx, pattern = "NA", replacement = " .")
+    qx <- gsub(qx, pattern = "NA|NaN", replacement = " .")
     
     ax <- MatlabRoundFW(output$ax, digits = 2, totalL = 6)
-    ax <- gsub(ax, pattern = "NA", replacement = " .")
+    ax <- gsub(ax, pattern = "NA|NaN", replacement = " .")
     
     ex <- MatlabRoundFW(output$ex, digits = 2, totalL = 7)
-    ex <- gsub(ex, pattern = "NaN", replacement = "  .")
+    ex <- gsub(ex, pattern = "NA|NaN", replacement = "  .")
     # begin writing out
     cat(
       # metadata header

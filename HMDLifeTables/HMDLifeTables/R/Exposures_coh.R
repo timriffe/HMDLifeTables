@@ -25,13 +25,18 @@
 #' 
 #' @export
 # Author: triffe
+
+## TODO: CAB - restructure to handle empty XYZmonthly.txt monthly birth files and 
+##             require its presence under V6.  Change logic so that immutable parameter
+##             MPVERSION does not need to be reassigned
+
 ###############################################################################
 Exposures_coh <- function(WORKING = getwd(),
   pop = NULL,    
   dl = NULL,
   du = NULL, 
   cohComp = NULL,
-  sex = "m", 
+  sex,   #CB, no defaults or ambiguous arg
   OPENAGE = 110, 
   save.bin = TRUE, 
   MPVERSION = 6, #MPVERSION = 6
@@ -101,16 +106,19 @@ Exposures_coh <- function(WORKING = getwd(),
   du[i.openage, openNas] <- NA
   # -------------------------------------------
 
-  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "monthly.txt"))
+  use.old.exposure.formula <- TRUE
+  births.monthly.path <- file.path(IDBPATH, paste0(XXX, "birthbymonth.txt"))
   if (MPVERSION > 5){
+    use.old.exposure.formula <- FALSE 
+    
     if (!file.exists(births.monthly.path)){
-      MPVERSION   <- 5
-      cat("\nMPVERSION was given as", MPVERSION, "but necessary file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
-    }
+      cat("\nMPVERSION was given as", MPVERSION, "but monthly births file was missing:\n", births.monthly.path, "\nreverted to MPVERSION 5 exposures\n")
+      use.old.exposure.formula <- TRUE
+    } 
   }
   
   # old exposures, considerably simpler :-)
-  if (MPVERSION == 5){
+  if (use.old.exposure.formula){
     Exp       <- pop + (1 / 3) * (dl - du)
     # optional save out
     if (save.bin){
@@ -123,6 +131,14 @@ Exposures_coh <- function(WORKING = getwd(),
     # YES cut off after open age
     return(Exp[1:i.openage, ]) 
   }
+  
+  # -------------------------------------
+  nameBasedRecode<- function(.x,.y){  #substitute y into x based on names attribute of x, y
+    stopifnot( !is.null(attributes(.x)[["names"]]) & !is.null(attributes(.y)[["names"]]))
+    .x[ names(.y)[names(.y) %in% names(.x)] ] <- .y[ names(.y) %in% names(.x)]
+    return(.x)
+  }
+  # -------------------------------------  
   
 #  cohs              <- as.integer(colnames(pop))
 #  Ncohs             <- length(cohs)
@@ -166,12 +182,16 @@ Exposures_coh <- function(WORKING = getwd(),
   # --------------------------------------------------------------
   # John's formula, per nov 12, 2012 email:        
   f.i                       <- t(t(Bmat) / colSums(Bmat))
-  BM                        <- apply(monthDurations, 2, cumsum)
+  BM                        <- apply(monthDurations, 2, cumsum) # cum number at the end of each month
   b.i                       <- rbind(0, t(t(BM) / colSums(monthDurations)))
   b.bar                     <- colSums(f.i * (b.i[1:12, ] + b.i[2:13, ]) / 2)
   b.bar.full                <- rep(.5, Ncohs)
   names(b.bar.full)         <- cohs
-  b.bar.full[names(b.bar)]  <- b.bar # my fav way to do variable recoding...
+  
+  ## name-based substitution
+  b.bar.full <- nameBasedRecode(b.bar.full, b.bar)
+#  b.bar.full[ names(b.bar)[names(b.bar) %in% names(b.bar.full)] ] <- b.bar[names(b.bar) %in% names(b.bar.full) ]
+  
 # an AC B.bar matrix
   b.bar.mat                 <- matrix(b.bar.full, 
     nrow = Nages, 
@@ -182,7 +202,8 @@ Exposures_coh <- function(WORKING = getwd(),
   sigmasq                       <- colSums(f.i * ((b.i[1:12, ] ^ 2 + b.i[2:13, ] * b.i[1:12, ] + b.i[2:13, ] ^ 2) / 3)) - b.bar ^ 2
   sigmasq.full                  <- rep(1 / 12, Ncohs) # default uniform distribution
   names(sigmasq.full)           <- cohs
-  sigmasq.full[names(sigmasq)]  <- sigmasq
+  #sigmasq.full[names(sigmasq)]  <- sigmasq # broken
+  sigmasq.full <- nameBasedRecode(sigmasq.full, sigmasq)
   sigmasq.mat                   <- matrix(sigmasq.full, 
                                     nrow = Nages, 
                                     ncol = Ncohs, 
@@ -205,9 +226,9 @@ Exposures_coh <- function(WORKING = getwd(),
     #Sys.chmod( out.path0, mode = "2775", use_umask = FALSE)
     #system(paste0("chgrp hmdcalc ", out.path0))
   }
-  if (test){
-    return(list(Deaths = dl + du, Exp = Exp))
-  }
+  # if (test){
+  #   return(list(Deaths = dl + du, Exp = Exp))
+  # }
   invisible(Exp)
 }
 

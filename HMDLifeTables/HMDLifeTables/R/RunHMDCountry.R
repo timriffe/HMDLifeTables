@@ -12,7 +12,10 @@
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' @param IDBPATH in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}
 #' @param SAVEBIN logical. Default \code{TRUE}.  Should interim \code{R} output be saved as e.g., \code{Rbin/ltper_1x1.Rdata} as well? Appropriate name is derived systematically. In this case objects are saved separately. This option can speed calculations.
-#' 
+#' @param reproduce.matlab logical. Default \code{FALSE}. Should we reproduce all aspects of the matlab code?  
+#'
+#' @details reproduce.matlab only has effect in ltperBoth_AxN.R  All implementations of Matlab lifetable code had discrepancies with 
+#' V4, V5 of the HMD Methods Protocol.  When \code{TRUE}, then the discrepancies will be reproduced.  Affects V5 and V6.
 #' @return Running this function has many side-effects, most notably, filling up a folder \code{WORKING/Rbin/} with unrounded R binary versions of all output objects, and then filling up a folder \code{WORKING/RSTATS} (name can be changed) with final .txt formatted output. 
 #' 
 #' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
@@ -28,7 +31,8 @@ RunHMDCountry <- function(WORKING = getwd(),
   XXX = NULL,
   LDBPATH = NULL,
   IDBPATH = NULL,
-  SAVEBIN = TRUE){
+  SAVEBIN = TRUE,
+  reproduce.matlab=FALSE){
   if (is.null(XXX)){
     XXX           <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
@@ -170,7 +174,8 @@ RunHMDCountry <- function(WORKING = getwd(),
                         save.bin = SAVEBIN, 
                         XXX = XXX, 
                         LDBPATH = LDBPATH, 
-                        IDBPATH = IDBPATH))
+                        IDBPATH = IDBPATH,
+                        reproduce.matlab=reproduce.matlab ))
       if (class(test) == "try-error"){
         stop("problem in ltperBoth_AxN()", paste0(ifelse(.abridged, 5, 1), "x", N))
       }
@@ -250,6 +255,7 @@ RunHMDCountry <- function(WORKING = getwd(),
   Write_Births(             WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             LDBPATH = LDBPATH,
+                            IDBPATH = IDBPATH,
                             XXX = XXX, 
                             MPVERSION = MPVERSION)
   Write_e0(                 WORKING = WORKING, 
@@ -262,6 +268,15 @@ RunHMDCountry <- function(WORKING = getwd(),
                             XXX = XXX, 
                             LDBPATH = LDBPATH,
                             MPVERSION = MPVERSION)
+  
+  Write_csv(                WORKING = WORKING, 
+                            STATSFOLDER = STATSFOLDER, 
+                            MPVERSION = MPVERSION,
+                            OldStyle = TRUE,
+                            XXX = XXX 
+                            )  
+  
+ 
 } # end function definition
 
 ###############################################################################
