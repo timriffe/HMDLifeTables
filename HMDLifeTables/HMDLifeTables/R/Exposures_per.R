@@ -93,6 +93,7 @@ Exposures_per <- function(WORKING = getwd(),
   }
 
   # ---------------------------------------------------------------------------
+  # TR: I intuit that this has been modified by CB. And that the monthly file name has changed??
   use.old.exposure.formula <- TRUE
   births.monthly.path <- file.path(IDBPATH, paste0(XXX, "birthbymonth.txt"))
   if (MPVERSION > 5){
