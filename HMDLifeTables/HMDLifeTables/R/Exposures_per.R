@@ -108,7 +108,10 @@ Exposures_per <- function(WORKING = getwd(),
   }
 # old exposures, considerably simpler :-)
   if (use.old.exposure.formula){
-    Exp         <- (pop1 + pop2) / 2 + (dl - du) / 6
+    Eu          <- (pop1 / 2) -  (du / 6)
+    El          <- (pop1 / 2) +  (dl / 6)
+    Exp         <- El + Eu
+    #Exp         <- (pop1 + pop2) / 2 + (dl - du) / 6
     
     # optional save out
     if (save.bin){
@@ -208,14 +211,20 @@ Exposures_per <- function(WORKING = getwd(),
 # next part stays same after sigma formula determined.
 # --------------------------------------------------------------------
 # convert to AP, large dimensions, will need to extract relevant years
-  b.bar.AP                  <- AC2AP(b.bar.mat, Lexis = 2)
-  sigmasq.AP                <- AC2AP(sigmasq.mat, 2)
+# AP1 and AP2 are numerically equal, but have different Year indexing, used
+# for correct alignment of triangles
+  b.bar.AP1                  <- AC2AP(b.bar.mat, Lexis = 1)
+  sigmasq.AP1                <- AC2AP(sigmasq.mat, 1)
+  b.bar.AP2                  <- AC2AP(b.bar.mat, Lexis = 2)
+  sigmasq.AP2                <- AC2AP(sigmasq.mat, 2)
 # sigma1 is the time at birth for cohort t-x-1. b2.bar for cohort t-x. These are PERIOD matrices, yay
-  sigmasq1                  <- sigmasq.AP[1:nrow(pop1), colnames(pop1)]
-  sigmasq2                  <- sigmasq.AP[1:nrow(pop2), colnames(pop2)]
+# NB: 1 is for upper triangle here, contra everywhere else in HMD, so be careful!
+
+  sigmasq1                  <- sigmasq.AP1[1:nrow(pop1), colnames(pop1)]
+  sigmasq2                  <- sigmasq.AP2[1:nrow(pop2), colnames(pop2)]
 # b.bar is the mean time at birth (proportion of year completed) 
-  b1.bar                    <- b.bar.AP[1:nrow(pop1), colnames(pop1)] # for cohort t-x-1
-  b2.bar                    <- b.bar.AP[1:nrow(pop2), colnames(pop2)] # for cohort t-x
+  b1.bar                    <- b.bar.AP1[1:nrow(pop1), colnames(pop1)] # for cohort t-x-1
+  b2.bar                    <- b.bar.AP2[1:nrow(pop2), colnames(pop2)] # for cohort t-x
 # -----------------------------------------------------------
 # now the actual formulas, per the memo and Dima's correction
 # l1,l2 changed to s1, s2
