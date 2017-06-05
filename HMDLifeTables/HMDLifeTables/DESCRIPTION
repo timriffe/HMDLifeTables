@@ -1,8 +1,8 @@
 Package: HMDLifeTables
 Type: Package
 Title: HMD Internal Lifetable Programs
-Version: 6.2.3379
-Date: 2012-11-06
+Version: 6.2.4752
+Date: 2015-06-23
 Author: Tim Riffe, Carl Boe
 Maintainer: Tim Riffe <tim.riffe@gmail.com>
 Description: The full set of lifetable programs up to MP v5, as well as some
