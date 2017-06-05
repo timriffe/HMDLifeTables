@@ -34,7 +34,7 @@ cExposures_and_cMx_AxN <- function(
   N = 1,
   OPENAGE = 110,
   min.years = 30,
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,

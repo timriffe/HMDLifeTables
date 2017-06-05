@@ -75,7 +75,7 @@ ltperBoth_AxN <- function(
   RADIX = 1e5, 
   N = 1,                
   abridged = FALSE,     
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,

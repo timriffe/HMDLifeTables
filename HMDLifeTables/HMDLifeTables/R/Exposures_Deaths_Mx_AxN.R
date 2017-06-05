@@ -32,7 +32,7 @@ Exposures_Deaths_Mx_AxN <- function(
   abridged = FALSE, 
   N = 1,
   OPENAGE = 110,
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,

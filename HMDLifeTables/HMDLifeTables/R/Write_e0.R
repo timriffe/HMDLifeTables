@@ -17,7 +17,7 @@
 Write_e0 <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS",
-  MPVERSION = 5,
+  MPVERSION ,
   XXX = NULL){
   
   # define rounded function
