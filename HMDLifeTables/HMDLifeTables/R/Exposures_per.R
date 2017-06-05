@@ -110,9 +110,9 @@ Exposures_per <- function(WORKING = getwd(),
 # old exposures, considerably simpler :-)
   if (use.old.exposure.formula){
     Eu          <- (pop1 / 2) -  (du / 6)
-    El          <- (pop1 / 2) +  (dl / 6)
-    Exp         <- El + Eu
-    #Exp         <- (pop1 + pop2) / 2 + (dl - du) / 6
+    El          <- (pop2 / 2) +  (dl / 6)
+    #Exp         <- El + Eu
+    Exp         <- (pop1 + pop2) / 2 + (dl - du) / 6
     
     # optional save out
     if (save.bin){
