@@ -22,7 +22,7 @@
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' @param IDBPATH in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}
 #'  
-#' @return an 'age by year' matrix of exposures. if in test mode, a list with matrices of both deaths and exposures is returned.
+#' @return a list of 'age by year' matrices of exposures: \code{Exp, Eu, El}, corresponding to total exposures, upper triangle exposures, and lower triangle exposures.
 #' 
 #' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
 #'
@@ -117,11 +117,15 @@ Exposures_per <- function(WORKING = getwd(),
     if (save.bin){
       out.path0   <- file.path(WORKING, "Rbin",  paste0(sex, "perExposuresRaw.Rdata"))
       save(Exp, file = out.path0)
+      out.pathL   <- file.path(WORKING, "Rbin",  paste0(sex, "perExposuresLRaw.Rdata"))
+      save(El, file = out.pathL)
+      out.pathU   <- file.path(WORKING, "Rbin",  paste0(sex, "perExposuresURaw.Rdata"))
+      save(Eu, file = out.pathU)
       # now save mx
       #Sys.chmod(out.path0, mode = "2775", use_umask = FALSE)
       #system(paste0("chgrp hmdcalc ", out.path0))
     }
-    return(Exp)
+    return(list(Exp=Exp, Exp.u=Eu, Exp.l=El) )
   }
   
 # -------------------------------------
@@ -243,12 +247,16 @@ Exposures_per <- function(WORKING = getwd(),
   if (save.bin){
     out.path0   <- file.path(WORKING, "Rbin",  paste0(sex, "perExposuresRaw.Rdata"))
     save(Exp, file = out.path0)
+    out.pathL   <- file.path(WORKING, "Rbin",  paste0(sex, "perExposuresLRaw.Rdata"))
+    save(El, file = out.pathL)
+    out.pathU   <- file.path(WORKING, "Rbin",  paste0(sex, "perExposuresURaw.Rdata"))
+    save(Eu, file = out.pathU)
     # now save mx
     #Sys.chmod(out.path0, mode = "2775", use_umask = FALSE)
     #system(paste0("chgrp hmdcalc ", out.path0))
   }
 
-  invisible(Exp)
+  invisible(return(list(Exp=Exp, Exp.u=Eu, Exp.l=El)) )
 }
 
 
