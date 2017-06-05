@@ -1,5 +1,12 @@
 List of changes needed in this package
 
+
+5/30/2017:  smoothing using quadratic for pi.hat in ltperBoth_AxN needs replacing so that there is no downturn in percentage female
+5/30/2017:  MPVERSION should be of the form N.MM  that is support minor revisions.  Yet code treats as integer. Systematically
+            change throughout to allow for this, i.e. no MPVERSION == 5.  This could be floor(MPVERSION)==5
+5/30/2017:  modify Exposures calcs and output to do triangles in addition to squares.
+5/30/2017:  perform experiment to determine problems with V6 monthly birth estimations, under situation of range of neonatal/perinatal mortality
+5/30/2017:  add friendly CSV output and/or sqlite or postgresql.  Refer users to HFD for monthly births
 6/27/2016:  The Exposures* routines read monthly birth files with each pass.  There are probably several other
    cases like this where data files are read repeatedly.  Restructure so that InputDB files
    are read only a single time and saved in Rbin   
