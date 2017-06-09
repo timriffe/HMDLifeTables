@@ -32,7 +32,7 @@ Exposures_Deaths_Mx_AxN <- function(
   abridged = FALSE, 
   N = 1,
   OPENAGE = 110,
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,
@@ -90,7 +90,7 @@ Exposures_Deaths_Mx_AxN <- function(
   
   # calculate exposure
   # externalize exposure calculation
-  Exp.f       <- Exposures_per(WORKING = WORKING, 
+  Exp.f.list       <- Exposures_per(WORKING = WORKING, 
                                 pop1 = pop1.f,    
                                 pop2 = pop2.f,
                                 dl = dl.f,
@@ -100,7 +100,8 @@ Exposures_Deaths_Mx_AxN <- function(
                                 save.bin = TRUE, 
                                 MPVERSION = MPVERSION
                               )
-  Exp.m       <- Exposures_per(WORKING = WORKING, 
+  Exp.f <- Exp.f.list[["Exp"]]
+  Exp.m.list       <- Exposures_per(WORKING = WORKING, 
                                 pop1 = pop1.m,    
                                 pop2 = pop2.m,
                                 dl = dl.m,
@@ -110,6 +111,7 @@ Exposures_Deaths_Mx_AxN <- function(
                                 save.bin = TRUE, 
                                 MPVERSION = MPVERSION
                               )
+  Exp.m <- Exp.m.list[["Exp"]]
   # ---------------------------------------------------------------------------------
   # Aggregate years if necessary: (if N = 1, does nothing)
   Exp.f        <- YearAgg(Exp.f, N = N)

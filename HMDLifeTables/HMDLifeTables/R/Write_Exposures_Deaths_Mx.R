@@ -17,7 +17,7 @@
 Write_Exposures_Deaths_Mx <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS", 
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   XXX = NULL){
 # -------------------------------------------------------------------
 # MatlabRound() is for rounding output, should give same result as matlab, 

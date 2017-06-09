@@ -22,7 +22,7 @@ Write_Deaths_lexis <- function(
   females = NULL,
   STATSFOLDER = "RSTATS",
   OPENAGE = 110,
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   XXX = NULL,
   LDBPATH = LDBPATH){
   

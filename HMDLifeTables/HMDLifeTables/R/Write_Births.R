@@ -21,7 +21,7 @@ Write_Births <- function(
   STATSFOLDER = "RSTATS",
   LDBPATH = NULL,
   IDBPATH = NULL,
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   XXX = NULL){
   
   if (is.null(XXX)){

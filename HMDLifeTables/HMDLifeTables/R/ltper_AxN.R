@@ -36,7 +36,7 @@ ltper_AxN <- function(
   RADIX = 1e5, 
   N = 1,                
   abridged = FALSE,     
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,
@@ -120,7 +120,7 @@ ltper_AxN <- function(
 # Exp       <- (pop1 + pop2[, 2:ncol(pop2)]) / 2 + (dl - du) / 6
 # Exp       <- (pop1 + pop2) / 2 + (dl - du) / 6                    # Eq 49 MPv5
 # Exposure calculations now generalized 
-  Exp       <- Exposures_per(WORKING = WORKING, 
+  Exp.list       <- Exposures_per(WORKING = WORKING, 
                               pop1 = pop1,    
                               pop2 = pop2,
                               dl = dl,
@@ -133,6 +133,7 @@ ltper_AxN <- function(
                               LDBPATH = LDBPATH,
                               IDBPATH = IDBPATH
                              )
+  Exp <- Exp.list[["Exp"]]  # Exp.l, Exp.u also contained in return
 # ---------------------------------------------------------------------------------
 # Aggregate years if necessary: (if N = 1, does nothing)
   dl        <- YearAgg(dl, N = N)

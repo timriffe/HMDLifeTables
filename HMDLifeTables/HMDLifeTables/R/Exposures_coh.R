@@ -39,7 +39,7 @@ Exposures_coh <- function(WORKING = getwd(),
   sex,   #CB, no defaults or ambiguous arg
   OPENAGE = 110, 
   save.bin = TRUE, 
-  MPVERSION = 6, #MPVERSION = 6
+  MPVERSION , # explicit, no default
   XXX = NULL,
   LDBPATH = NULL,
   IDBPATH = NULL

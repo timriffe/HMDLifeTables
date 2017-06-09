@@ -37,7 +37,7 @@
 Write_csv <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS", 
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   OldStyle=TRUE,  # compatible with SAS diagnostics
   XXX = NULL){
   

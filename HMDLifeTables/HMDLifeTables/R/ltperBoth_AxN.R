@@ -75,7 +75,7 @@ ltperBoth_AxN <- function(
   RADIX = 1e5, 
   N = 1,                
   abridged = FALSE,     
-  MPVERSION = 5,
+  MPVERSION , # explicit, no default
   save.bin = TRUE,
   XXX = NULL,
   LDBPATH = NULL,
@@ -131,7 +131,7 @@ ltperBoth_AxN <- function(
 ## exposures were previously calculated, in all likelihood and so these calls just look up and load
 # Exp.f       <- (pop1.f + pop2.f) / 2 + (dl.f - du.f) / 6                    # Eq 49
 # Exp.m       <- (pop1.m + pop2.m) / 2 + (dl.m - du.m) / 6     
-  Exp.f       <- Exposures_per(WORKING = WORKING, 
+  Exp.f.list      <- Exposures_per(WORKING = WORKING, 
                                 pop1 = pop1.f,    
                                 pop2 = pop2.f,
                                 dl = dl.f,
@@ -144,7 +144,8 @@ ltperBoth_AxN <- function(
                                 LDBPATH = LDBPATH,
                                 IDBPATH = IDBPATH
                                )
-  Exp.m       <- Exposures_per(WORKING = WORKING, 
+  Exp.f <- Exp.f.list[["Exp"]]
+  Exp.m.list       <- Exposures_per(WORKING = WORKING, 
                                  pop1 = pop1.m,    
                                  pop2 = pop2.m,
                                  dl = dl.m,
@@ -157,6 +158,7 @@ ltperBoth_AxN <- function(
                                  LDBPATH = LDBPATH,
                                  IDBPATH = IDBPATH
                                )
+  Exp.m <- Exp.m.list[["Exp"]]
 # ---------------------------------------------------------------------------------  
 # Aggregate years if necessary: (if N = 1, does nothing)
   Exp.f       <- YearAgg(Exp.f, N = N)

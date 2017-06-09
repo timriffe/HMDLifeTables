@@ -44,7 +44,7 @@ ltcoh_AxN <- function(
   N = 1, 
   abridged = FALSE, 
   save.bin = TRUE,
-  MPVERSION = 5,
+  MPVERSION ,  #  version must be explicit
   run.condition = sex, # can be this sex, "either" or "both"
   warn.if.not.run = TRUE,
   XXX = NULL,
