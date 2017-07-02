@@ -120,10 +120,16 @@ Exposures_coh <- function(WORKING = getwd(),
   # old exposures, considerably simpler :-)
   if (use.old.exposure.formula){
     Exp       <- pop + (1 / 3) * (dl - du)
+    Exp.L     <- pop/2 + (1/3) * dl
+    Exp.U     <- pop/2 - (1/3) * du
     # optional save out
     if (save.bin){
       out.path0   <- file.path(WORKING, "Rbin",  paste0(sex, "cohExposuresRaw.Rdata"))
       save(Exp, file = out.path0)
+      out.pathL   <- file.path(WORKING, "Rbin",  paste0(sex, "cohExposuresLRaw.Rdata"))
+      save(Exp.L, file = out.pathL)
+      out.pathU   <- file.path(WORKING, "Rbin",  paste0(sex, "cohExposuresURaw.Rdata"))
+      save(Exp.U, file = out.pathU)
       # now save mx
       #Sys.chmod(out.path0, mode = "2775", use_umask = FALSE)
       #system(paste0("chgrp hmdcalc ", out.path0))
@@ -217,11 +223,19 @@ Exposures_coh <- function(WORKING = getwd(),
   zU            <- zU[, colnames(du)]
   
   # exposure calcs (cohorts NOT cut down to required size)
+  ## CAB: the MPv6 eq.E.18, p. 71 does not discuss exposure by triangle, but it can be inferred that
+  ## the contributions to Exp are 
+  Exp.L  <- pop/2 + zL * dl
+  Exp.U  <- pop/2 - zU * du
   Exp           <- pop + zL * dl - zU * du
   
   if (save.bin){
     out.path0   <- file.path(WORKING, "Rbin",  paste0(sex, "cohExposuresRaw.Rdata"))
     save(Exp, file = out.path0)
+    out.pathL   <- file.path(WORKING, "Rbin",  paste0(sex, "cohExposuresLRaw.Rdata"))
+    save(Exp.L, file = out.pathL)
+    out.pathU   <- file.path(WORKING, "Rbin",  paste0(sex, "cohExposuresURaw.Rdata"))
+    save(Exp.U, file = out.pathU)
     # now save mx
     #Sys.chmod( out.path0, mode = "2775", use_umask = FALSE)
     #system(paste0("chgrp hmdcalc ", out.path0))
