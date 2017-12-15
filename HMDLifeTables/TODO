@@ -1,5 +1,15 @@
 List of changes needed in this package
 
+* Output of Lexis triangles for Exposures
+
+12/14/2017:  GBR_NP presents problems of aggregation for V6 in that monthly births have different shapes for the subpopulations.  Solution for now is to treat it as a stand-alone country that is not the aggregation of the pieces.  Thus, it has its own monthly brth series.  I am not sure how the LexisDB is created in this case.  InputDB does not have 'Births' nor 'Deaths' nor 'Popultion' -- these are derived from the LexisDB.  In particular, Births need to come from the LexisDB.  Need to modify the Births routine to pull from LexisDB in this case. FIXED.
+
+        * note in Write_Births that intent was to adopt a better format for LexisDB, i.e. to use a wide format which
+          contains the implicit tadj values as well as exposures by Lexis triangle.  
+          This is the internal form used throughout the lifetable routines
+          
+
+
 6/2/2017:   See https://stackoverflow.com/questions/20596433/how-to-divide-each-row-of-a-matrix-by-elements-of-a-vector-in-r
             Of the equivalent ways to calculate a swept matrix:
                 microbenchmark(times=100L,

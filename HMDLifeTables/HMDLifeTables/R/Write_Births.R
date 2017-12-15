@@ -41,10 +41,10 @@ Write_Births <- function(
   LDBobj.m        <- read.table(ldb.path.m, header = FALSE, sep = ",", 
                         col.names = c("Year", "Age", "Lexis", "Cohort", "Population", "Deaths"))
   
-  Bf              <- with(LDBobj.f, Population[Age == 0 & Lexis == 1 & Population > -1])
-  Bm              <- with(LDBobj.m, Population[Age == 0 & Lexis == 1 & Population > -1])
-  Bt              <- Bf + Bm
-  Year            <- with(LDBobj.m, Year[Age == 0 & Lexis == 1 & Population > -1])
+  Bf.ldb              <- with(LDBobj.f, Population[Age == 0 & Lexis == 1 & Population > -1])
+  Bm.ldb              <- with(LDBobj.m, Population[Age == 0 & Lexis == 1 & Population > -1])
+  Bt.ldb              <- Bf.ldb + Bm.ldb
+  Year.ldb            <- with(LDBobj.m, Year[Age == 0 & Lexis == 1 & Population > -1])
 
 
   ## CAB: override the above and take Births from InputDB, since that will give the full span of
@@ -58,28 +58,46 @@ Write_Births <- function(
 
   ## working subset
   idb.births <- idb.births[, c("Sex", "Year", "Births", "Access","LDB")]
-  ## set year as factor with complete recorded year range, to impute any missing entries 
-  idb.births$Year <- factor(idb.births$Year, levels=min(idb.births$Year):max(idb.births$Year))
- 
-  idb.births.m <- melt(idb.births, id.vars=c("Sex", "Year", "Access", "LDB") )
-  idb.births.c <- dcast(idb.births.m, Year + Sex + Access + LDB  ~ variable , drop=FALSE, fill=NULL)
-
-  ## remove duplicates where there are identical Year,Sex, Access entries and prefer
-  ## cases where LDB=1 over LDB=0.  Warn here because this situation is very confusing
-  idb.births.dups <- duplicated(idb.births.c[,1:3], fromLast=TRUE) # fromLast chooses LDB=1
-  if( any(idb.births.dups) ){
-    warning(paste("*** ", XXX, ": There are duplicate/conflicting entries for Births; preferring cases where LDB==1"))
-    idb.births.c <- idb.births.c[ !idb.births.dups,]
+  
+  # for some aggregates, the Births file consists of a Header only or a Header and a line of missing values
+  # in which case we skip IDB
+  
+  if( length(unique(idb.births$Year) ) <= 1 && unique(idb.births$Year) == "."){ # use LDB as Births source
+    isEmptyIDBBirths <- TRUE
+    warning("*** Empty InputDB Births file -- using LexisDB for Births")
+    Bf <- Bf.ldb
+    Bm <- Bm.ldb
+    Bt <- Bt.ldb
+    Year <- Year.ldb
+    
+    
+  } else {  # use IDB as Births source
+    
+    isEmptyIDBBirths <- FALSE
+    ## set year as factor with complete recorded year range, to impute any missing entries 
+    idb.births$Year <- factor(idb.births$Year, levels=min(idb.births$Year):max(idb.births$Year))
+    
+    idb.births.m <- melt(idb.births, id.vars=c("Sex", "Year", "Access", "LDB") )
+    idb.births.c <- dcast(idb.births.m, Year + Sex + Access + LDB  ~ variable , drop=FALSE, fill=NULL)
+    
+    ## remove duplicates where there are identical Year,Sex, Access entries and prefer
+    ## cases where LDB=1 over LDB=0.  Warn here because this situation is very confusing
+    idb.births.dups <- duplicated(idb.births.c[,1:3], fromLast=TRUE) # fromLast chooses LDB=1
+    if( any(idb.births.dups) ){
+      warning(paste("*** ", XXX, ": There are duplicate/conflicting entries for Births; preferring cases where LDB==1"))
+      idb.births.c <- idb.births.c[ !idb.births.dups,]
+    }
+    Bf <- idb.births.c$Births[ idb.births.c$Sex=='f' ]
+    Bm <- idb.births.c$Births[ idb.births.c$Sex=='m' ]
+    Year <-  as.character( idb.births.c$Year[ idb.births.c$Sex=='f' ] ) #was factor
+    Year <- as.integer(Year)
+    if( length(Bf) != length(Bm) || length(Bf) != length(Year) ){
+      warning(paste("*** ", XXX, ": Unequal Male, Female births lengths") )
+    }
+    Bt <- Bf + Bm  
+    
   }
-  Bf <- idb.births.c$Births[ idb.births.c$Sex=='f' ]
-  Bm <- idb.births.c$Births[ idb.births.c$Sex=='m' ]
-  Year <-  as.character( idb.births.c$Year[ idb.births.c$Sex=='f' ] ) #was factor
-  Year <- as.integer(Year)
-  if( length(Bf) != length(Bm) || length(Bf) != length(Year) ){
-    warning(paste("*** ", XXX, ": Unequal Male, Female births lengths") )
-  }
-  Bt <- Bf + Bm  
-
+  
   
   # for the metadata header: country long name
   # country.lookup should load; if throws error, try data(country.lookup)
