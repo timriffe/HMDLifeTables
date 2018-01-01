@@ -272,6 +272,12 @@ RunHMDCountry <- function(WORKING = getwd(),
                             LDBPATH = LDBPATH,
                             MPVERSION = MPVERSION)
   
+  Write_Exposures_lexis(    WORKING = WORKING, 
+                            STATSFOLDER = STATSFOLDER, 
+                            OPENAGE = OPENAGE,
+                            XXX = XXX, 
+                            MPVERSION = MPVERSION)
+  
   Write_csv(                WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             MPVERSION = MPVERSION,

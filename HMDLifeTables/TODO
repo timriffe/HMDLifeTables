@@ -1,6 +1,15 @@
 List of changes needed in this package
 
 * Output of Lexis triangles for Exposures
+* Output of full "user friendly" CSV format that contains everything in period view.  This includes Jan1 and Dec31 Pop and Births
+  as well as Deaths and Exposures by Lexis Triangle
+* output to database of complete records, tie in to password system  
+* move Matlab rounding function to its own place in a utilities.R group   It is used in many different routines and should
+  have the same structure and use in each case (correct calls for digits)
+
+* Move Lexis triangle exposure code from LT to LexisDB so that LexisDB exposures are correct.  This means adjusting the format of the LexisDB which would be good in any case.  
+  
+* all LT calcs now begin with truncating information at OPENAGE.  Ideally, full age detail available from the InputDB would be carried through all the calculations, only invoking an OPENAGE setting at the end.  This would involve recoding everything.
 
 12/14/2017:  GBR_NP presents problems of aggregation for V6 in that monthly births have different shapes for the subpopulations.  Solution for now is to treat it as a stand-alone country that is not the aggregation of the pieces.  Thus, it has its own monthly brth series.  I am not sure how the LexisDB is created in this case.  InputDB does not have 'Births' nor 'Deaths' nor 'Popultion' -- these are derived from the LexisDB.  In particular, Births need to come from the LexisDB.  Need to modify the Births routine to pull from LexisDB in this case. FIXED.
 

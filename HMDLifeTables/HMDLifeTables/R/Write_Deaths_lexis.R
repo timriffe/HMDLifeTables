@@ -18,16 +18,16 @@
 ###############################################################################
 Write_Deaths_lexis <- function(
   WORKING = getwd(),
-  males = NULL,
-  females = NULL,
   STATSFOLDER = "RSTATS",
   OPENAGE = 110,
-  MPVERSION , # explicit, no default
   XXX = NULL,
-  LDBPATH = LDBPATH){
+  LDBPATH = NULL,
+  MPVERSION # explicit, no default
+  ){
   
   # MatlabRound() is for rounding output, should give same result as matlab, assuming that's important
   # by CB, updated by TR to take digits as arg.
+  
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
     
     # this 1) rounds, and
@@ -92,7 +92,7 @@ Write_Deaths_lexis <- function(
   years       <- as.integer(rep(yr, each = i.OPENAGE))
   ages.offset <- rep(as.integer(rownames(Male)) + c(rep(c(0,1),OPENAGE),0), length(yr))
   cohorts     <- years - ages.offset 
-  age         <- c(rep(0:(OPENAGE - 1), each = 2), paste0(OPENAGE, "+"))
+  age         <- c(rep(0:(OPENAGE - 1), each = 2), paste0(OPENAGE, "+"))  # CAB, cast as string, then back cast in Matlab to number, etc.
   cohorts[age == paste0(OPENAGE, "+")] <- "   ."
 
   # set up paths
