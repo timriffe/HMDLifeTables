@@ -72,7 +72,7 @@ Write_e0 <- function(
   }
   # some header info
   DateMod       <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
-  MPvers        <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (in development)\n")
+  MPvers        <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (Nov17)\n")
   # year groups
   
   # begin loop over N

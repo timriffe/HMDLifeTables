@@ -29,8 +29,11 @@ Write_Exposures_lexis <- function(
   
   # MatlabRound() is for rounding output, should give same result as matlab, assuming that's important
   # by CB, updated by TR to take digits as arg.
+  # by CB, updated to cleaner coding, no overtyping source, handling of NA to set as "."
+  
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
-    
+    NAsmatch <- paste0( substr("                   ", 1, totalL - 2), "NA" )
+    NAsreplace <- paste0( substr("                   ", 1, totalL - 1), "." )
     # this 1) rounds, and
     # 2) makes sure that the zeros stay on the end of the number string to the specified number of digits
     if (is.numeric(x)){
@@ -46,7 +49,8 @@ Write_Exposures_lexis <- function(
     }
     # add optional left padding to specify total character width
     x         <- sprintf(paste0("%", totalL, "s"), x)
-    x
+    x         <- ifelse( x == NAsmatch, NAsreplace, x)  # replace string NAs with string "."
+    return(x)
   }
   
   if (is.null(XXX)){
@@ -89,8 +93,8 @@ Write_Exposures_lexis <- function(
   Exp.UL.f <- with(local(mget(load(bin.path.f.UL))), Exp)
   Exp.UL.m <- with(local(mget(load(bin.path.m.UL))), Exp)
   
-  stopifnot( max( abs(Exp.L.f + Exp.U.f - Exp.UL.f ) ) < 1e-8)  # sum tests L+U is total Lexis square, all conformable
-  stopifnot( max( abs(Exp.L.m + Exp.U.m - Exp.UL.m ) ) < 1e-8)
+  stopifnot( max( abs(Exp.L.f + Exp.U.f - Exp.UL.f ), na.rm=TRUE) < 1e-8)  # sum tests L+U is total Lexis square, all conformable
+  stopifnot( max( abs(Exp.L.m + Exp.U.m - Exp.UL.m ), na.rm=TRUE ) < 1e-8)
   
   # not sure why the binary matrices were stored without good dimnames, fix here
   # the following function creates Year,Age,Triangle Exposure structures which can be merge()'ed

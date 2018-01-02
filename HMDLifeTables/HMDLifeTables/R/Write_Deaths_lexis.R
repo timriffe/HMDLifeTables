@@ -32,6 +32,8 @@ Write_Deaths_lexis <- function(
     
     # this 1) rounds, and
     # 2) makes sure that the zeros stay on the end of the number string to the specified number of digits
+    NAsmatch <- paste0( substr("                   ", 1, totalL - 2), "NA" )
+    NAsreplace <- paste0( substr("                   ", 1, totalL - 1), "." )
     if (is.numeric(x)){
       fac     <- rep(10 ^ digits, length(x))
       x       <- sprintf(paste0("%.", digits, "f"), floor(x * fac + sign(x) * 0.5) / fac)
@@ -45,7 +47,9 @@ Write_Deaths_lexis <- function(
     }
     # add optional left padding to specify total character width
     x         <- sprintf(paste0("%", totalL, "s"), x)
-    x
+    x         <- ifelse( x == NAsmatch, NAsreplace, x)  # replace string NAs with string "."
+    return(x)
+
   }
   
   if (is.null(XXX)){
@@ -75,6 +79,11 @@ Write_Deaths_lexis <- function(
   
   Male        <- LDBobj.m$Deaths
   Female      <- LDBobj.f$Deaths
+  
+  ## CAB: fix BEL which has NAs for some years, e.g. 1917 and where LDB has -1 for Population, Deaths
+  Male <- ifelse( Male == -1, NA, Male)
+  Female <- ifelse( Female == -1, NA, Female)
+  
   # --------------------------
   # silly thing to sum open age group:
   Male        <- matrix(Male, ncol = length(yr), dimnames = list(rep(0:130, each = 2), yr))
@@ -107,7 +116,7 @@ Write_Deaths_lexis <- function(
   CountryLong    <- country.lookup[country.lookup[,1] == XXX, 2]
   DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
   # Methods Protocol version
-  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (in development)\n")
+  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", " MPv6 (Nov17)\n")
   DataType       <- ",  Deaths (Lexis triangle)"
   
   # write it out!
