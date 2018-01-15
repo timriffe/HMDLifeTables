@@ -5,7 +5,7 @@
 \title{\code{Write_Exposures_Deaths_Mx} function to write formatted .txt files for all period Mx, Exposures and Deaths objects.}
 \usage{
 Write_Exposures_Deaths_Mx(WORKING = getwd(), STATSFOLDER = "RSTATS",
-  MPVERSION = 5, XXX = NULL)
+  MPVERSION, XXX = NULL, CountryLong = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -15,6 +15,8 @@ Write_Exposures_Deaths_Mx(WORKING = getwd(), STATSFOLDER = "RSTATS",
 \item{MPVERSION}{5 or 6. Default 5. Here this only affects file headers.}
 
 \item{XXX}{the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.}
+
+\item{CountryLong}{the HMD country full name.}
 }
 \value{
 function called for its side effect of creating the files \code{Exposures_1x1.txt} or \code{Deaths_1x1.txt}, etc. Time intervals are detected from the \code{.Rdata} file names. No value returned.
@@ -25,4 +27,3 @@ This function requires that all pertinent data objects (i.e. suffix \code{.Rdata
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

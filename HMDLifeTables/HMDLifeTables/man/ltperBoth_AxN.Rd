@@ -6,9 +6,9 @@
 in various time intervals given LDB inputs}
 \usage{
 ltperBoth_AxN(WORKING = getwd(), males = NULL, females = NULL,
-  OPENAGE = 110, RADIX = 1e+05, N = 1, abridged = FALSE,
-  MPVERSION = 5, save.bin = TRUE, XXX = NULL, LDBPATH = NULL,
-  IDBPATH = NULL)
+  OPENAGE = 110, RADIX = 1e+05, N = 1, abridged = FALSE, MPVERSION,
+  save.bin = TRUE, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL,
+  reproduce.matlab = FALSE)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with
@@ -57,6 +57,8 @@ testing), the full path to the LexisDB folder. If left as
 \code{NULL} it is assumed to be \code{file.path(WORKING,
 "InputDB")}}
 
+\item{reproduce.matlab}{logical. Default \code{FALSE}. Should we reproduce all aspects of the matlab code?}
+
 \item{sex}{\code{"m"} or \code{"f"}.}
 }
 \value{
@@ -87,4 +89,3 @@ directly or called by \code{RunHMDCountry()}.
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

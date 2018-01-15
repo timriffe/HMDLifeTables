@@ -27,6 +27,5 @@ a vector with the age index (age + 1) for each year where smoothed mx values sho
 Smoothed mx values are imputed starting at the lowest age where male or female deaths drop to at most 100 with a minimum age of 80 and a maximum age of 95. The same age is used for both males and females.
 }
 \author{
-Tim Riffe \email{triffe@demog.berkeley.edu}
+Tim Riffe \email{triffe@demog.berkeley.edu},Carl Boe \email{boe@demog.berkeley.edu}
 }
-

@@ -4,8 +4,7 @@
 \alias{readIDBcurrent}
 \title{\code{readIDBcurrent()} read in any IDB file to a data.frame}
 \usage{
-readIDBcurrent(XXX = "SWE", item = "death", old = FALSE,
-  full.path = NULL)
+readIDBcurrent(XXX, item, old = FALSE, full.path = NULL)
 }
 \arguments{
 \item{XXX}{character string; HMD country short code}
@@ -27,4 +26,3 @@ Character columns are read in as character. Missing values are assumed to be ind
 #bo <- resortBirths(bo)
 
 }
-

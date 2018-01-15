@@ -27,4 +27,3 @@ the \code{ax} method was not documented in MPv5, but was gleaned from the previo
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

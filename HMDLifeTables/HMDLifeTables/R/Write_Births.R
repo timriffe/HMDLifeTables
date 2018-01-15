@@ -7,6 +7,7 @@
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' @param PVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' 
 #' @return function called for its side effect of creating the file \code{Births.txt}. No value returned.
 #' 
@@ -22,11 +23,19 @@ Write_Births <- function(
   LDBPATH = NULL,
   IDBPATH = NULL,
   MPVERSION , # explicit, no default
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
   
   if (is.null(XXX)){
     XXX           <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
+  
+  # for the metadata header: country long name
+  
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
+  
   if (is.null(LDBPATH)){
     LDBPATH       <- file.path(WORKING, "LexisDB")
   }
@@ -99,9 +108,6 @@ Write_Births <- function(
   }
   
   
-  # for the metadata header: country long name
-  # country.lookup should load; if throws error, try data(country.lookup)
-  CountryLong     <- country.lookup[country.lookup[,1] == XXX,2]
   DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
   # Methods Protocol version
   MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (Nov17)\n")

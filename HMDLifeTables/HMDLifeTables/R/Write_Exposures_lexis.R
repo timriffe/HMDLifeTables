@@ -7,6 +7,7 @@
 #' @param OPENAGE the desired open age. Default value is 110.
 #' @param MPVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' 
 #' @return function called for its side effect of creating the files \code{exposures_lexis.txt}. No value returned.
 #' 
@@ -24,7 +25,8 @@ Write_Exposures_lexis <- function(
   BINPATH = NULL,  # optional override to location of binary files
   OPENAGE = 110,
   MPVERSION , # explicit, no default
-  XXX = NULL
+  XXX = NULL,
+  CountryLong = NULL
   ){
   
   # MatlabRound() is for rounding output, should give same result as matlab, assuming that's important
@@ -56,6 +58,12 @@ Write_Exposures_lexis <- function(
   if (is.null(XXX)){
     XXX          <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
+  
+  # for the metadata header: country long name
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
+  
   if ( is.null(BINPATH)){
     BINPATH <- file.path(WORKING, BINFOLDER)
   }
@@ -151,7 +159,6 @@ Write_Exposures_lexis <- function(
   }
   write.out.file <- file.path(STATS.path, "Exposures_lexis.txt")
   
-  CountryLong    <- country.lookup[country.lookup[,1] == XXX, 2]
   DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
   # Methods Protocol version
   MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", " MPv6 (Nov17)")

@@ -22,4 +22,3 @@ Derive m0 from q0 according to the relevant segment of the Andreeve-Kingkade for
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

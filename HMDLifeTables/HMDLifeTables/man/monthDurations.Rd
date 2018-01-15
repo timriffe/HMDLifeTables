@@ -11,4 +11,3 @@ Months (1-12) are in rows and years (1700-2100) are in columns. This \code{matri
 MPv6 exposure calculations only.
 }
 \keyword{datasets}
-

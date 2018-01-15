@@ -4,7 +4,7 @@
 \alias{AKm02a0_direct}
 \title{\code{AKm02a0_direct} estimates a0 using an analytic translation of the Andreev-Kinkade rule of thumb.}
 \usage{
-AKm02a0_direct(m0, sex = "m")
+AKm02a0_direct(m0, sex)
 }
 \arguments{
 \item{m0}{a value or vector of values of m0, the death rate for age 0 infants.}
@@ -20,4 +20,3 @@ a0, the estimated average age at death of those dying in the first year of life,
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

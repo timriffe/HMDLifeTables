@@ -16,4 +16,3 @@ A \code{data.frame} containing HMD country abbreviations and their full names.
 }
 }
 \keyword{datasets}
-

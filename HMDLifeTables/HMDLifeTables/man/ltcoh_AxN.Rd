@@ -6,8 +6,8 @@
 \usage{
 ltcoh_AxN(WORKING = getwd(), cohComp = NULL, sex = "f", OPENAGE = 110,
   CAGEEXTRP = 90, RADIX = 1e+05, N = 1, abridged = FALSE,
-  save.bin = TRUE, MPVERSION = 5, run.condition = sex,
-  warn.if.not.run = TRUE, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
+  save.bin = TRUE, MPVERSION, run.condition = sex, warn.if.not.run = TRUE,
+  XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -56,4 +56,3 @@ This function calls several other functions, including \code{getCohortComponents
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

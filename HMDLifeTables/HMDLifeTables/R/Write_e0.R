@@ -6,6 +6,7 @@
 #' @param STATSFOLDER the folder name where output is to be written to (not a full path). Default \code{"RSTATS"}.
 #' @param MPVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' 
 #' @return function called for its side effect of creating the files \code{E0per.txt}, \code{E0per_1x5.txt} and \code{E0per_1x10.txt}. No value returned.
 #' 
@@ -18,7 +19,8 @@ Write_e0 <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS",
   MPVERSION ,
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
   
   # define rounded function
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
@@ -44,7 +46,11 @@ Write_e0 <- function(
   if (is.null(XXX)){
     XXX         <- ExtractXXXfromWORKING(WORKING) 
   }
-  CountryLong   <- country.lookup[country.lookup[,1] == XXX, 2]
+  # for the metadata header: country long name
+  
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
   
   # define, create stats path if necessary (should never be necessary)
   STATS.path    <- file.path(WORKING, STATSFOLDER)

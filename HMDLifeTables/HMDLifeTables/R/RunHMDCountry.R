@@ -9,6 +9,7 @@
 #' @param MPVERSION 5 or 6. See individual functions for descriptions of differences
 #' @param STATSFOLDER the folder name where output is to be written to (not a full path). Default \code{"RSTATS"}.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryName the HMD full country name. If left \code{NULL}, this is either looked up \code{country.lookup} table or set to \code{XXX}.
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' @param IDBPATH in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}
 #' @param SAVEBIN logical. Default \code{TRUE}.  Should interim \code{R} output be saved as e.g., \code{Rbin/ltper_1x1.Rdata} as well? Appropriate name is derived systematically. In this case objects are saved separately. This option can speed calculations.
@@ -29,6 +30,7 @@ RunHMDCountry <- function(WORKING = getwd(),
   MPVERSION = 5,
   STATSFOLDER = "RSTATS",
   XXX = NULL,
+  CountryName = NULL,
   LDBPATH = NULL,
   IDBPATH = NULL,
   SAVEBIN = TRUE,
@@ -42,6 +44,11 @@ RunHMDCountry <- function(WORKING = getwd(),
   if (is.null(IDBPATH)){
     IDBPATH       <- file.path(WORKING, "InputDB")
   }
+  if(is.null(CountryName)){
+    CountryName <- country.lookup[country.lookup[,1] == XXX, 2]
+    CountryName <- ifelse( length(CountryName) > 0, CountryName, XXX) #use abbrev if unknown country 
+  }
+  
   # fresh start XXX <- "SWE"
   CleanRstuff(WORKING = WORKING)
   # country folder:
@@ -250,25 +257,30 @@ RunHMDCountry <- function(WORKING = getwd(),
   Write_lt(                 WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             XXX = XXX, 
+                            CountryLong = CountryName,
                             MPVERSION = MPVERSION)
   Write_Exposures_Deaths_Mx(WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             XXX = XXX, 
+                            CountryLong = CountryName,
                             MPVERSION = MPVERSION)
   Write_Births(             WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             LDBPATH = LDBPATH,
                             IDBPATH = IDBPATH,
                             XXX = XXX, 
+                            CountryLong = CountryName,
                             MPVERSION = MPVERSION)
   Write_e0(                 WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             XXX = XXX, 
+                            CountryLong = CountryName,
                             MPVERSION = MPVERSION)
   Write_Deaths_lexis(       WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             OPENAGE = OPENAGE,
                             XXX = XXX, 
+                            CountryLong = CountryName,
                             LDBPATH = LDBPATH,
                             MPVERSION = MPVERSION)
   
@@ -276,13 +288,15 @@ RunHMDCountry <- function(WORKING = getwd(),
                             STATSFOLDER = STATSFOLDER, 
                             OPENAGE = OPENAGE,
                             XXX = XXX, 
+                            CountryLong = CountryName,
                             MPVERSION = MPVERSION)
   
   Write_csv(                WORKING = WORKING, 
                             STATSFOLDER = STATSFOLDER, 
                             MPVERSION = MPVERSION,
                             OldStyle = TRUE,
-                            XXX = XXX 
+                            XXX = XXX,
+                            CountryLong = CountryName
                             )  
   
  

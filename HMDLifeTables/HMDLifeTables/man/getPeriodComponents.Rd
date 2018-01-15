@@ -32,4 +32,3 @@ This function is called by \code{ltper_Axn()}, \code{ltperBoth_AxN()} and \code{
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

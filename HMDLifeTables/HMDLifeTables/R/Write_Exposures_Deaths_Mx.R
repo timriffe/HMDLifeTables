@@ -6,6 +6,7 @@
 #' @param STATSFOLDER the folder name where output is to be written to (not a full path). Default \code{"RSTATS"}.
 #' @param MPVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' 
 #' @return function called for its side effect of creating the files \code{Exposures_1x1.txt} or \code{Deaths_1x1.txt}, etc. Time intervals are detected from the \code{.Rdata} file names. No value returned.
 #' 
@@ -18,7 +19,8 @@ Write_Exposures_Deaths_Mx <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS", 
   MPVERSION , # explicit, no default
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
 # -------------------------------------------------------------------
 # MatlabRound() is for rounding output, should give same result as matlab, 
 # assuming that's important by CB, updated by TR to take digits as arg.
@@ -44,6 +46,12 @@ Write_Exposures_Deaths_Mx <- function(
   if (is.null(XXX)){
     XXX             <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
+  
+  # for the metadata header: country long name
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
+  
   # -----------------------------------------------------------
   Rbin.path         <- file.path(WORKING, "Rbin")
   # save formatted .txt out to this folder, make sure exists
@@ -86,8 +94,6 @@ Write_Exposures_Deaths_Mx <- function(
                        )
     }
 
-    # get country long name
-    CountryLong     <- country.lookup[country.lookup[, 1] == XXX, 2]
     # time stamp (perhaps make more precise sometime)
     DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
     # Methods Protocol version

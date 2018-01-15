@@ -15,4 +15,3 @@ data.frame LexisDB object, with columns in a useable form and a column for Sex a
 \description{
 This function reads in a given LexisDB file, imputing NAs properly (but not removing them), converting the Lexis column to character, and appending a Sex column, inferred from the first letter of the file name, per HMD conventions.
 }
-

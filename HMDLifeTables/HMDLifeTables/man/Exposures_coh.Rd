@@ -5,7 +5,7 @@
 \title{\code{Exposures_coh} a function to prepare either v5 or v6 cohort exposures.}
 \usage{
 Exposures_coh(WORKING = getwd(), pop = NULL, dl = NULL, du = NULL,
-  cohComp = NULL, sex, OPENAGE = 110, save.bin = TRUE, MPVERSION = 6,
+  cohComp = NULL, sex, OPENAGE = 110, save.bin = TRUE, MPVERSION,
   XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
@@ -45,4 +45,3 @@ This function can take data arguments in-memory, from the \code{/Rbin/} folder, 
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

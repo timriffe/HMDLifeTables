@@ -42,4 +42,3 @@ this function checks to see whether any cohorts have been observed from birth un
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

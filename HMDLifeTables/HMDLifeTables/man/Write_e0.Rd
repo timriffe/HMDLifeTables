@@ -4,8 +4,8 @@
 \alias{Write_e0}
 \title{\code{Write_e0} a function to write formatted .txt files for period life expectancy values.}
 \usage{
-Write_e0(WORKING = getwd(), STATSFOLDER = "RSTATS", MPVERSION = 5,
-  XXX = NULL)
+Write_e0(WORKING = getwd(), STATSFOLDER = "RSTATS", MPVERSION, XXX = NULL,
+  CountryLong = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -15,6 +15,8 @@ Write_e0(WORKING = getwd(), STATSFOLDER = "RSTATS", MPVERSION = 5,
 \item{MPVERSION}{5 or 6. Default 5. Here this only affects file headers.}
 
 \item{XXX}{the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.}
+
+\item{CountryLong}{the HMD country full name.}
 }
 \value{
 function called for its side effect of creating the files \code{E0per.txt}, \code{E0per_1x5.txt} and \code{E0per_1x10.txt}. No value returned.
@@ -25,4 +27,3 @@ This function requires that all pertinent \code{ltper_AxN.Rdata} data objects be
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

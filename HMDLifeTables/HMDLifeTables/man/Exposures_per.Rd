@@ -6,7 +6,7 @@
 \usage{
 Exposures_per(WORKING = getwd(), pop1 = NULL, pop2 = NULL, dl = NULL,
   du = NULL, perComp = NULL, sex, OPENAGE = 110, save.bin = TRUE,
-  MPVERSION = 6, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
+  MPVERSION, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -35,7 +35,7 @@ Exposures_per(WORKING = getwd(), pop1 = NULL, pop2 = NULL, dl = NULL,
 \item{IDBPATH}{in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}}
 }
 \value{
-an 'age by year' matrix of exposures. if in test mode, a list with matrices of both deaths and exposures is returned.
+a list of 'age by year' matrices of exposures: \code{Exp, Eu, El}, corresponding to total exposures, upper triangle exposures, and lower triangle exposures.
 }
 \description{
 This function is meant to be internal. It is called by
@@ -50,4 +50,3 @@ This function can take data arguments in-memory, from the \code{/Rbin/} folder, 
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

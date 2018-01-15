@@ -40,6 +40,40 @@ While this is the only necessary function for typical country updates, all other
 are directly available to users, such that one could dynamically change arguments to produce 
 different output. Imagine for instance that you wanted cohort lifetables for a wider range of 
 years than the default; you could specify:
+\dontrun{
+   ISLfclt <- ltcoh_AxN(WORKING = "/data/commons/hmd/HMDWORK/ISL",
+                        sex = "f",
+                        OPENAGE = 95,   # default 110
+                        CAGEEXTRP = 80, # default 90
+                        save.bin = FALSE,
+                        MPVERSION = 5) 
+} 
+This would give something like 25 more cohorts than the default, albeit under stronger assumptions.
+One could also avoid reference to a hard working directory by using LexisDB data in-memory:
+In this case, one would use the \\code{cohComp} argument, which refers to the standard output
+of \\code{getCohortComponents()}
+ @examples \dontrun{
+ISLcohComp <- getCohortComponents(
+                        WORKING = "/data/commons/hmd/HMDWORK/ISL", 
+                        OPENAGE = 95, 
+                        sex = "f")
+head(ISLcohComp) # if you had data from some non-HMD source or test-source
+                 # and wanted to use HMD lifetables on it, then it must be
+                 # in a \\code{data.frame} whose structure mirrors this one.
+# lifetable using in-memory data:
+ISLfclt <- ltcoh_AxN(cphComp = ISLcohComp,
+                        sex = "f",
+                        OPENAGE = 95,
+                        CAGEEXTRP = 80,
+                        save.bin = FALSE,
+                        MPVERSION = 5) 
+}
+in this way you can use the same data object for repeated function calls, which speeds functions up.
+It also opens up functions for use with data that did not necessarily originate in the HMD input files.
+As long as, in this case, \\code{cohComp} has the correct columns, classes, dimensions and data, it 
+should work just fine (except for version 6 exposures, which draw on monthly births). Those will be 
+moved in-memory at a later date.
+
 }
 \references{
 Wilmoth, J.R. and Andreev, K. and Jdanov, D. and Glei, DA (2007). 
@@ -47,4 +81,3 @@ Methods protocol for the human mortality database. University of California,
 Berkeley, and Max Planck Institute for Demographic Research, Rostock, 
 [version 31/05/2007] \url{http://mortality.org}.
 }
-
