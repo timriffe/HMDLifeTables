@@ -24,7 +24,8 @@ Write_e0 <- function(
   
   # define rounded function
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
-    
+    NAsmatch <- paste0( substr("                   ", 1, totalL - 2), "NA" )
+    NAsreplace <- paste0( substr("                   ", 1, totalL - 1), "." )
     # this 1) rounds, and
     # 2) makes sure that the zeros stay on the end of the number string to the specified number of digits
     if (is.numeric(x)){
@@ -40,7 +41,9 @@ Write_e0 <- function(
     }
     # add optional left padding to specify total character width
     x       <- sprintf(paste0("%", totalL, "s"), x)
-    x
+    x         <- ifelse( x == NAsmatch, NAsreplace, x)  # replace string NAs with string "."
+    
+    return(x)
   }
   # get country long name
   if (is.null(XXX)){

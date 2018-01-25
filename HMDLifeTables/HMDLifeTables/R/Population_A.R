@@ -83,14 +83,29 @@ Population_A <- function(
     pop.m                     <- pop.m[, order(colnames(pop.m))]
   } else {
     # otherwise still need pop2's
+    ## CAB ??  Revisit.  NB: pop2 assignment does not look correct, looks identical to pop1, so if no tadj file, pop2 == pop1
+    ## in addition pop2 is not used subsequent to this assignment.  Should just remove this else{} clause
     pop2.f            <- acast(LDBobj.f[LDBobj.f$Lexis == 2, ], Age ~ Year, value.var = "Population")
     pop2.m            <- acast(LDBobj.m[LDBobj.m$Lexis == 2, ], Age ~ Year, value.var = "Population") 
   }
   
+  ## NAs are coded as -1 for pop and for deaths, recode
+  pop.f[ pop.f == -1] <- NA
+  pop.m[ pop.m == -1] <- NA
+  
   # sum open age, cut down
   i.OPENAGE           <- OPENAGE + 1
+  ## CAB: fix for BEL case of entire missing years of data, in which case i.OPENAGE gets NA as well, rather than 0
+  isallNA.f <- apply(pop.f,2, function(x){ all( is.na(x) ) })
+  isallNA.m <- apply(pop.m,2, function(x){ all( is.na(x) ) })
+  
   pop.f[i.OPENAGE, ]  <- colSums(pop.f[i.OPENAGE:nrow(pop.f), ], na.rm = TRUE)
   pop.m[i.OPENAGE, ]  <- colSums(pop.m[i.OPENAGE:nrow(pop.m), ], na.rm = TRUE)
+  
+  ## CAB: apply fix
+  pop.f[i.OPENAGE, ] <- ifelse(isallNA.f, NA, pop.f[i.OPENAGE, ] )
+  pop.m[i.OPENAGE, ] <- ifelse(isallNA.m, NA, pop.m[i.OPENAGE, ] )
+  
   pop.f               <- pop.f[1:i.OPENAGE, ]
   pop.m               <- pop.m[1:i.OPENAGE, ]
   
