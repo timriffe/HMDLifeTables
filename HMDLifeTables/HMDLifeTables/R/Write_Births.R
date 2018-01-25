@@ -67,7 +67,7 @@ Write_Births <- function(
 
   ## working subset
   idb.births <- idb.births[, c("Sex", "Year", "Births", "Access","LDB")]
-  
+  idb.births <- idb.births[ idb.births$LDB == 1, ]
   # for some aggregates, the Births file consists of a Header only or a Header and a line of missing values
   # in which case we skip IDB
   
@@ -84,14 +84,14 @@ Write_Births <- function(
     
     isEmptyIDBBirths <- FALSE
     ## set year as factor with complete recorded year range, to impute any missing entries 
-    idb.births$Year <- factor(idb.births$Year, levels=min(idb.births$Year):max(idb.births$Year))
+    idbbirthsExpectedYears <- seq(from=min(idb.births$Year), to=max(idb.births$Year), by=1)
     
     idb.births.m <- melt(idb.births, id.vars=c("Sex", "Year", "Access", "LDB") )
     idb.births.c <- dcast(idb.births.m, Year + Sex + Access + LDB  ~ variable , drop=FALSE, fill=NULL)
     
-    ## remove duplicates where there are identical Year,Sex, Access entries and prefer
-    ## cases where LDB=1 over LDB=0.  Warn here because this situation is very confusing
-    idb.births.dups <- duplicated(idb.births.c[,1:3], fromLast=TRUE) # fromLast chooses LDB=1
+    ## remove duplicates where there are identical Year,Sex, Access entries   
+    ## Warn here because this situation is very confusing
+    idb.births.dups <- duplicated(idb.births.c[,1:3]) 
     if( any(idb.births.dups) ){
       warning(paste("*** ", XXX, ": There are duplicate/conflicting entries for Births; preferring cases where LDB==1"))
       idb.births.c <- idb.births.c[ !idb.births.dups,]
@@ -101,7 +101,14 @@ Write_Births <- function(
     Year <-  as.character( idb.births.c$Year[ idb.births.c$Sex=='f' ] ) #was factor
     Year <- as.integer(Year)
     if( length(Bf) != length(Bm) || length(Bf) != length(Year) ){
-      warning(paste("*** ", XXX, ": Unequal Male, Female births lengths") )
+      warning(paste("*** ", XXX, ": Unequal Male, Female births lengths in IDB") )
+    }
+    
+    if( length( c( setdiff(Year, Year.ldb), setdiff(Year.ldb, Year) )) > 0 ){
+      warning(paste("*** ", XXX, ": Different Birth Years between IDB, LDB:",  setdiff(Year, Year.ldb), setdiff(Year.ldb, Year) , collapse=" ") )
+    }
+    if( length(setdiff(idbbirthsExpectedYears, Year)) > 0 ){
+      warning( paste("*** Fewer Birth years than expected in IDB -- missing data for years", setdiff(idbbirthsExpectedYears, Year), collapse=" ") )
     }
     Bt <- Bf + Bm  
     
