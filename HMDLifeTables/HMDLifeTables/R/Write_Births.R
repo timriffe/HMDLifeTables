@@ -117,7 +117,7 @@ Write_Births <- function(
   
   DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
   # Methods Protocol version
-  MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (Nov17)\n")
+  MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", " MPv6 (Nov17)\n")
   DataType        <- ",  Births (1-year)"
  
   # save formatted .txt out to this folder, make sure exists
