@@ -105,7 +105,7 @@ Write_Births <- function(
     }
     
     if( length( c( setdiff(Year, Year.ldb), setdiff(Year.ldb, Year) )) > 0 ){
-      warning(paste("*** ", XXX, ": Different Birth Years between IDB, LDB:",  setdiff(Year, Year.ldb), setdiff(Year.ldb, Year) , collapse=" ") )
+      warning(paste("*** ", XXX, ": Different Birth Years between IDB, LDB:",  paste(setdiff(Year, Year.ldb), setdiff(Year.ldb, Year) , collapse=" ")) )
     }
     if( length(setdiff(idbbirthsExpectedYears, Year)) > 0 ){
       warning( paste("*** Fewer Birth years than expected in IDB -- missing data for years", setdiff(idbbirthsExpectedYears, Year), collapse=" ") )
