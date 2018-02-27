@@ -91,7 +91,7 @@ Write_Exposures_Deaths_Mx <- function(
                            ifelse(any(grep(this.file, pattern = "Mx")), "Death rates"," Population")
                           )
                        )
-    DataType        <- paste0(", ", EorDorMorP, " (", PorC," ", dims, "), ")
+    DataType        <- paste0(EorDorMorP, " (", PorC," ", dims, "), ")
     if (any(grep(dims, pattern = "Pop"))){
       DataType      <- ifelse(any(grep(this.file, pattern = "5")),
                           "Population size (1-year)", "Population size (abridged)"
@@ -133,7 +133,7 @@ Write_Exposures_Deaths_Mx <- function(
     # begin writing out
     cat(
       # metadata header
-      paste0(CountryLong, DataType, DateMod, MPvers,"\n"),
+      paste0(CountryLong, ", ", DataType, DateMod, MPvers,"\n"),
       # column headers, copied and pasted
       "  Year          Age             Female            Male           Total",
       # the data, rounded and formatted in place- no tabbing
