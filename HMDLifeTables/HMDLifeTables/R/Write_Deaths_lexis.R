@@ -121,9 +121,9 @@ Write_Deaths_lexis <- function(
   }
   write.out.file <- file.path(STATS.path, "Deaths_lexis.txt")
   
-  DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
+  DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
   # Methods Protocol version
-  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", " MPv6 (Nov17)\n")
+  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
   DataType       <- ",  Deaths (Lexis triangle)"
   
   # write it out!

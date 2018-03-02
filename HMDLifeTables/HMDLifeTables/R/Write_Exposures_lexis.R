@@ -159,9 +159,9 @@ Write_Exposures_lexis <- function(
   }
   write.out.file <- file.path(STATS.path, "Exposures_lexis.txt")
   
-  DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
+  DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
   # Methods Protocol version
-  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", " MPv6 (Nov17)")
+  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)")
   DataType       <- ",  Exposures (Lexis triangle)"
   
   # special formatting for OPENAGE entries of Age and Cohort

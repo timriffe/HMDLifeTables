@@ -80,8 +80,8 @@ Write_e0 <- function(
     stop("in finding e0 estimates to write out, it looks like something is missing")
   }
   # some header info
-  DateMod       <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
-  MPvers        <- ifelse(MPVERSION == 5, " MPv5 (May07)", " MPv6 (Nov17)\n")
+  DateMod       <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
+  MPvers        <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
   # year groups
   
   # begin loop over N
