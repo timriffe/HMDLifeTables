@@ -7,6 +7,7 @@
 #' @param OPENAGE the desired open age. Default value is 110.
 #' @param MPVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' 
 #' @return function called for its side effect of creating the files \code{Population.txt} or \code{Population5.txt}. No value returned.
@@ -18,20 +19,23 @@
 ###############################################################################
 Write_Deaths_lexis <- function(
   WORKING = getwd(),
-  males = NULL,
-  females = NULL,
   STATSFOLDER = "RSTATS",
   OPENAGE = 110,
-  MPVERSION , # explicit, no default
   XXX = NULL,
-  LDBPATH = LDBPATH){
+  CountryLong = NULL,
+  LDBPATH = NULL,
+  MPVERSION # explicit, no default
+  ){
   
   # MatlabRound() is for rounding output, should give same result as matlab, assuming that's important
   # by CB, updated by TR to take digits as arg.
+  
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
     
     # this 1) rounds, and
     # 2) makes sure that the zeros stay on the end of the number string to the specified number of digits
+    NAsmatch <- paste0( substr("                   ", 1, totalL - 2), "NA" )
+    NAsreplace <- paste0( substr("                   ", 1, totalL - 1), "." )
     if (is.numeric(x)){
       fac     <- rep(10 ^ digits, length(x))
       x       <- sprintf(paste0("%.", digits, "f"), floor(x * fac + sign(x) * 0.5) / fac)
@@ -45,12 +49,20 @@ Write_Deaths_lexis <- function(
     }
     # add optional left padding to specify total character width
     x         <- sprintf(paste0("%", totalL, "s"), x)
-    x
+    x         <- ifelse( x == NAsmatch, NAsreplace, x)  # replace string NAs with string "."
+    return(x)
+
   }
   
   if (is.null(XXX)){
     XXX          <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
+  
+  # for the metadata header: country long name
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
+  
   if (is.null(LDBPATH)){
     LDBPATH <- file.path(WORKING, "LexisDB")
   }
@@ -75,6 +87,11 @@ Write_Deaths_lexis <- function(
   
   Male        <- LDBobj.m$Deaths
   Female      <- LDBobj.f$Deaths
+  
+  ## CAB: fix BEL which has NAs for some years, e.g. 1917 and where LDB has -1 for Population, Deaths
+  Male <- ifelse( Male == -1, NA, Male)
+  Female <- ifelse( Female == -1, NA, Female)
+  
   # --------------------------
   # silly thing to sum open age group:
   Male        <- matrix(Male, ncol = length(yr), dimnames = list(rep(0:130, each = 2), yr))
@@ -92,7 +109,7 @@ Write_Deaths_lexis <- function(
   years       <- as.integer(rep(yr, each = i.OPENAGE))
   ages.offset <- rep(as.integer(rownames(Male)) + c(rep(c(0,1),OPENAGE),0), length(yr))
   cohorts     <- years - ages.offset 
-  age         <- c(rep(0:(OPENAGE - 1), each = 2), paste0(OPENAGE, "+"))
+  age         <- c(rep(0:(OPENAGE - 1), each = 2), paste0(OPENAGE, "+"))  # CAB, cast as string, then back cast in Matlab to number, etc.
   cohorts[age == paste0(OPENAGE, "+")] <- "   ."
 
   # set up paths
@@ -104,10 +121,9 @@ Write_Deaths_lexis <- function(
   }
   write.out.file <- file.path(STATS.path, "Deaths_lexis.txt")
   
-  CountryLong    <- country.lookup[country.lookup[,1] == XXX, 2]
-  DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
+  DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
   # Methods Protocol version
-  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (in development)\n")
+  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
   DataType       <- ",  Deaths (Lexis triangle)"
   
   # write it out!

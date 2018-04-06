@@ -18,4 +18,3 @@ Only used when doing testing. Function not to be included in shared package. Bef
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

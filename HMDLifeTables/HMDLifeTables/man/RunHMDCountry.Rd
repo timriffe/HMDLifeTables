@@ -6,7 +6,8 @@
 \usage{
 RunHMDCountry(WORKING = getwd(), OPENAGE = 110, RADIX = 1e+05,
   CAGEEXTRP = 90, MPVERSION = 5, STATSFOLDER = "RSTATS", XXX = NULL,
-  LDBPATH = NULL, IDBPATH = NULL, SAVEBIN = TRUE)
+  CountryName = NULL, LDBPATH = NULL, IDBPATH = NULL, SAVEBIN = TRUE,
+  reproduce.matlab = FALSE)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -23,11 +24,15 @@ RunHMDCountry(WORKING = getwd(), OPENAGE = 110, RADIX = 1e+05,
 
 \item{XXX}{the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.}
 
+\item{CountryName}{the HMD full country name. If left \code{NULL}, this is either looked up \code{country.lookup} table or set to \code{XXX}.}
+
 \item{LDBPATH}{in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}}
 
 \item{IDBPATH}{in case the InputDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "InputDB")}}
 
 \item{SAVEBIN}{logical. Default \code{TRUE}.  Should interim \code{R} output be saved as e.g., \code{Rbin/ltper_1x1.Rdata} as well? Appropriate name is derived systematically. In this case objects are saved separately. This option can speed calculations.}
+
+\item{reproduce.matlab}{logical. Default \code{FALSE}. Should we reproduce all aspects of the matlab code?}
 }
 \value{
 Running this function has many side-effects, most notably, filling up a folder \code{WORKING/Rbin/} with unrounded R binary versions of all output objects, and then filling up a folder \code{WORKING/RSTATS} (name can be changed) with final .txt formatted output.
@@ -35,7 +40,10 @@ Running this function has many side-effects, most notably, filling up a folder \
 \description{
 This function is the highest-level function, calling all other lifetable functions in the tree either directly or indirectly. Some defaults are not controllable via arguments, though these may be incorporated as this function comes into use, especially those arguments that control whether or not cohort lifetables are to be run- right now it's set to automatic detection. This function can take around 30 seconds to run completely, though this may get faster in future edits.
 }
+\details{
+reproduce.matlab only has effect in ltperBoth_AxN.R  All implementations of Matlab lifetable code had discrepancies with 
+V4, V5 of the HMD Methods Protocol.  When \code{TRUE}, then the discrepancies will be reproduced.  Affects V5 and V6.
+}
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

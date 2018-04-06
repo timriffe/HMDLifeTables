@@ -18,4 +18,3 @@ this function is written in the name of modularity, since this otherwise takes p
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

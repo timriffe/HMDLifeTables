@@ -6,6 +6,7 @@
 #' @param STATSFOLDER the folder name where output is to be written to (not a full path). Default \code{"RSTATS"}.
 #' @param MPVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' 
 #' @return function called for its side effect of creating the files \code{E0per.txt}, \code{E0per_1x5.txt} and \code{E0per_1x10.txt}. No value returned.
 #' 
@@ -18,11 +19,13 @@ Write_e0 <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS",
   MPVERSION ,
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
   
   # define rounded function
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
-    
+    NAsmatch <- paste0( substr("                   ", 1, totalL - 2), "NA" )
+    NAsreplace <- paste0( substr("                   ", 1, totalL - 1), "." )
     # this 1) rounds, and
     # 2) makes sure that the zeros stay on the end of the number string to the specified number of digits
     if (is.numeric(x)){
@@ -38,13 +41,19 @@ Write_e0 <- function(
     }
     # add optional left padding to specify total character width
     x       <- sprintf(paste0("%", totalL, "s"), x)
-    x
+    x         <- ifelse( x == NAsmatch, NAsreplace, x)  # replace string NAs with string "."
+    
+    return(x)
   }
   # get country long name
   if (is.null(XXX)){
     XXX         <- ExtractXXXfromWORKING(WORKING) 
   }
-  CountryLong   <- country.lookup[country.lookup[,1] == XXX, 2]
+  # for the metadata header: country long name
+  
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
   
   # define, create stats path if necessary (should never be necessary)
   STATS.path    <- file.path(WORKING, STATSFOLDER)
@@ -71,8 +80,8 @@ Write_e0 <- function(
     stop("in finding e0 estimates to write out, it looks like something is missing")
   }
   # some header info
-  DateMod       <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
-  MPvers        <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (in development)\n")
+  DateMod       <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
+  MPvers        <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
   # year groups
   
   # begin loop over N

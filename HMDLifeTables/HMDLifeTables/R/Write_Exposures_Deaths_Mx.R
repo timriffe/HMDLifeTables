@@ -6,6 +6,7 @@
 #' @param STATSFOLDER the folder name where output is to be written to (not a full path). Default \code{"RSTATS"}.
 #' @param MPVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' 
 #' @return function called for its side effect of creating the files \code{Exposures_1x1.txt} or \code{Deaths_1x1.txt}, etc. Time intervals are detected from the \code{.Rdata} file names. No value returned.
 #' 
@@ -18,12 +19,14 @@ Write_Exposures_Deaths_Mx <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS", 
   MPVERSION , # explicit, no default
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
 # -------------------------------------------------------------------
 # MatlabRound() is for rounding output, should give same result as matlab, 
 # assuming that's important by CB, updated by TR to take digits as arg.
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
-    
+    NAsmatch <- paste0( substr("                   ", 1, totalL - 2), "NA" )
+    NAsreplace <- paste0( substr("                   ", 1, totalL - 1), "." )
     # this 1) rounds, and
     # 2) makes sure that the zeros stay on the end of the number string to the specified number of digits
     if (is.numeric(x)){
@@ -39,11 +42,20 @@ Write_Exposures_Deaths_Mx <- function(
     }
     # add optional left padding to specify total character width
     x       <- sprintf(paste0("%", totalL, "s"), x)
-    x
+    x         <- ifelse( x == NAsmatch, NAsreplace, x)  # replace string NAs with string "."
+    
+    return(x)
   }
+  
   if (is.null(XXX)){
     XXX             <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
+  
+  # for the metadata header: country long name
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
+  
   # -----------------------------------------------------------
   Rbin.path         <- file.path(WORKING, "Rbin")
   # save formatted .txt out to this folder, make sure exists
@@ -79,19 +91,17 @@ Write_Exposures_Deaths_Mx <- function(
                            ifelse(any(grep(this.file, pattern = "Mx")), "Death rates"," Population")
                           )
                        )
-    DataType        <- paste0(", ", EorDorMorP, " (", PorC," ", dims, "), ")
+    DataType        <- paste0(EorDorMorP, " (", PorC," ", dims, "), ")
     if (any(grep(dims, pattern = "Pop"))){
       DataType      <- ifelse(any(grep(this.file, pattern = "5")),
                           "Population size (1-year)", "Population size (abridged)"
                        )
     }
 
-    # get country long name
-    CountryLong     <- country.lookup[country.lookup[, 1] == XXX, 2]
     # time stamp (perhaps make more precise sometime)
-    DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
+    DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
     # Methods Protocol version
-    MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (in development)\n")
+    MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
     
     
     # this is fancy character padding. 'Year' is either 4 or 9 characters long- 
@@ -123,7 +133,7 @@ Write_Exposures_Deaths_Mx <- function(
     # begin writing out
     cat(
       # metadata header
-      paste0(CountryLong, DataType, DateMod, MPvers,"\n"),
+      paste0(CountryLong, ", ", DataType, DateMod, MPvers,"\n"),
       # column headers, copied and pasted
       "  Year          Age             Female            Male           Total",
       # the data, rounded and formatted in place- no tabbing

@@ -22,4 +22,3 @@ this function takes any 'age by year' matrix, ideally with columns and row appro
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}, Carl Boe \email{boe@demog.berkeley.edu}
 }
-

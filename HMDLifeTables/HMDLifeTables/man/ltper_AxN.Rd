@@ -4,9 +4,9 @@
 \alias{ltper_AxN}
 \title{\code{ltper_AxN} calculates single sex period lifetables in various time intervals given LDB inputs}
 \usage{
-ltper_AxN(WORKING = getwd(), perComp = NULL, sex = "m", OPENAGE = 110,
-  RADIX = 1e+05, N = 1, abridged = FALSE, MPVERSION = 5,
-  save.bin = TRUE, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
+ltper_AxN(WORKING = getwd(), perComp = NULL, sex, OPENAGE = 110,
+  RADIX = 1e+05, N = 1, abridged = FALSE, MPVERSION, save.bin = TRUE,
+  XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -47,4 +47,3 @@ This function calls several functions, including \code{getPeriodComponents()}, \
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

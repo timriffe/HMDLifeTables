@@ -22,4 +22,3 @@ This function optimizes to Kannisto likelihood to ages 80+ in the data, and it r
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

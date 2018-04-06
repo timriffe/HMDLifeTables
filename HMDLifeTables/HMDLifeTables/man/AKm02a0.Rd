@@ -4,7 +4,7 @@
 \alias{AKm02a0}
 \title{\code{AKm02a0} estimates a0 using the Andreev-Kingkade rule of thumb.}
 \usage{
-AKm02a0(m0, sex = "m")
+AKm02a0(m0, sex)
 }
 \arguments{
 \item{m0}{a value or vector of values of m0, the death probability for age 0 infants.}
@@ -20,4 +20,3 @@ a0, the estimated average age at death of those dying in the first year of life,
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

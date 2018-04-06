@@ -31,4 +31,3 @@ This function is top level. It prepares population counts for males, females and
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

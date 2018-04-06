@@ -4,8 +4,8 @@
 \alias{Write_lt}
 \title{\code{Write_lt} a function to write formatted .txt files for both period and cohort lifetables.}
 \usage{
-Write_lt(WORKING = getwd(), STATSFOLDER = "RSTATS", MPVERSION = 5,
-  XXX = NULL)
+Write_lt(WORKING = getwd(), STATSFOLDER = "RSTATS", MPVERSION, XXX = NULL,
+  CountryLong = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -15,6 +15,8 @@ Write_lt(WORKING = getwd(), STATSFOLDER = "RSTATS", MPVERSION = 5,
 \item{MPVERSION}{5 or 6. Default 5. Here this only affects file headers.}
 
 \item{XXX}{the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.}
+
+\item{CountryLong}{the HMD country full name.}
 }
 \value{
 function called for its side effect of creating the lifetable txt output files, e.g. \code{mltper_1x1.txt} and other time/sex configurations. No value returned.
@@ -25,4 +27,3 @@ This function requires that all pertinent \code{ltper_AxN.Rdata} and \code{ltcoh
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

@@ -32,4 +32,3 @@ This function is called by \code{Exposures_coh()}, \code{ltcoh_Axn()}, \code{ltc
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

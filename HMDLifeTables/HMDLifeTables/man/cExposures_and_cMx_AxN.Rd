@@ -5,9 +5,8 @@
 \title{\code{cExposures_and_cMx_AxN} a function to prepare unrounded cExposures and cMx data.frames}
 \usage{
 cExposures_and_cMx_AxN(WORKING = getwd(), males = NULL, females = NULL,
-  abridged = FALSE, N = 1, OPENAGE = 110, min.years = 30,
-  MPVERSION = 5, save.bin = TRUE, XXX = NULL, LDBPATH = NULL,
-  IDBPATH = NULL)
+  abridged = FALSE, N = 1, OPENAGE = 110, min.years = 30, MPVERSION,
+  save.bin = TRUE, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation. Default \code{getwd()}.}
@@ -46,4 +45,3 @@ This function has no native check for whether or not results should be run. That
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

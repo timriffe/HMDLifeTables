@@ -20,4 +20,3 @@ a \code{APmatrix} a matrix in age-period format, with correctly labeled dimensio
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

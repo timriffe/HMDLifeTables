@@ -20,4 +20,3 @@ a \code{ACmatrix} a matrix in age-cohort format, with correctly labeled dimensio
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

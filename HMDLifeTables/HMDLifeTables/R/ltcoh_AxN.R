@@ -174,7 +174,7 @@ if (abridged){
                   du = du, 
                   sex = sex, 
                   OPENAGE = OPENAGE, 
-                  save.bin = FALSE, 
+                  save.bin = TRUE, 
                   MPVERSION = MPVERSION,
                   XXX = NULL,
                   LDBPATH = LDBPATH,

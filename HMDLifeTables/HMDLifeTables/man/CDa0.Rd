@@ -4,7 +4,7 @@
 \alias{CDa0}
 \title{\code{CDa0} estimate a0 using the Coale-Demeny rule of thumb.}
 \usage{
-CDa0(m0, sex = "f")
+CDa0(m0, sex)
 }
 \arguments{
 \item{m0}{a value or vector of values of m0, the death rate for age 0 infants.}
@@ -20,4 +20,3 @@ a0, the estimated average age at death of those dying in the first year of life,
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

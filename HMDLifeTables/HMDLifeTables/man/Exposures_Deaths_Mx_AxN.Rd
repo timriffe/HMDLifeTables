@@ -5,8 +5,8 @@
 \title{\code{Exposures_Deaths_Mx_AxN} a function to prepare unrounded Exposures, Deaths and Mx data.frames}
 \usage{
 Exposures_Deaths_Mx_AxN(WORKING = getwd(), males = NULL, females = NULL,
-  abridged = FALSE, N = 1, OPENAGE = 110, MPVERSION = 5,
-  save.bin = TRUE, XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
+  abridged = FALSE, N = 1, OPENAGE = 110, MPVERSION, save.bin = TRUE,
+  XXX = NULL, LDBPATH = NULL, IDBPATH = NULL)
 }
 \arguments{
 \item{WORKING}{path to working directory, which typically ends with the HMD country abbreviation.  Default \code{getwd()}.}
@@ -43,4 +43,3 @@ This function is a top-level function, and can be called independently. If argum
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

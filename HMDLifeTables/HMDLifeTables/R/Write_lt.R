@@ -6,7 +6,7 @@
 #' @param STATSFOLDER the folder name where output is to be written to (not a full path). Default \code{"RSTATS"}.
 #' @param MPVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
-#' 
+#' @param CountryLong the HMD country full name.
 #' @return function called for its side effect of creating the lifetable txt output files, e.g. \code{mltper_1x1.txt} and other time/sex configurations. No value returned.
 #' 
 #' @author Tim Riffe \email{triffe@@demog.berkeley.edu}
@@ -18,12 +18,14 @@ Write_lt <- function(
   WORKING = getwd(), 
   STATSFOLDER = "RSTATS", 
   MPVERSION , # explicit, no default
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
   
   # MatlabRound() is for rounding output, should give same result as matlab, assuming that's important
   # by CB, updated by TR to take digits as arg.
   MatlabRoundFW <- function(x, digits = 0, pad = TRUE, Age = FALSE, totalL = 8){ 
-    
+    NAsmatch <- paste0( substr("                   ", 1, totalL - 2), "NA" )
+    NAsreplace <- paste0( substr("                   ", 1, totalL - 1), "." )
     # this 1) rounds, and
     # 2) makes sure that the zeros stay on the end of the number string to the specified number of digits
     if (is.numeric(x)){
@@ -39,20 +41,26 @@ Write_lt <- function(
     }
     # add optional left padding to specify total character width
     x             <- sprintf(paste0("%", totalL, "s"), x)
-    x
+    x         <- ifelse( x == NAsmatch, NAsreplace, x)  # replace string NAs with string "."
+
+    return(x)
   }
   # get country abbrev
   if (is.null(XXX)){
     XXX           <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
   # for the metadata header: country long name
+  
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
   # ltper_AxN() should have been run with save.bin = TRUE, 
   # such that there's an Rbin folder waiting there with stuff in it
   Rbin.path       <- file.path(WORKING, "Rbin")
   # save formatted .txt out to this folder, make sure exists
   STATS.path      <- file.path(WORKING, STATSFOLDER)
-  # get country long name
-  CountryLong  <- country.lookup[country.lookup[,1] == XXX, 2]
+  
+  
   if (!file.exists(STATS.path)){
     dir.create(STATS.path)
     #Sys.chmod(STATS.path, mode = "2775", use_umask = FALSE)
@@ -79,9 +87,9 @@ Write_lt <- function(
     sexlong      <- ifelse( magic.letter == "f", "Females", ifelse (magic.letter == "m", "Males", "Total"))
     
     # time stamp (perhaps make more precise sometime)
-    DateMod      <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
+    DateMod      <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
     # Methods Protocol version
-    MPvers       <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (in development)\n")
+    MPvers       <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
     
     # this is fancy character padding. 'Year' is either 4 or 9 characters long- 
     # make 9, spaced properly

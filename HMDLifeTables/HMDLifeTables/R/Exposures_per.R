@@ -218,10 +218,10 @@ Exposures_per <- function(WORKING = getwd(),
 # convert to AP, large dimensions, will need to extract relevant years
 # AP1 and AP2 are numerically equal, but have different Year indexing, used
 # for correct alignment of triangles
-  b.bar.AP1                  <- AC2AP(b.bar.mat, Lexis = 1)
-  sigmasq.AP1                <- AC2AP(sigmasq.mat, 1)
-  b.bar.AP2                  <- AC2AP(b.bar.mat, Lexis = 2)
-  sigmasq.AP2                <- AC2AP(sigmasq.mat, 2)
+  b.bar.AP1                  <- AC2AP(b.bar.mat, Lexis = 2)
+  sigmasq.AP1                <- AC2AP(sigmasq.mat, 2)
+  b.bar.AP2                  <- AC2AP(b.bar.mat, Lexis = 1)
+  sigmasq.AP2                <- AC2AP(sigmasq.mat, 1)
 # sigma1 is the time at birth for cohort t-x-1. b2.bar for cohort t-x. These are PERIOD matrices, yay
 # NB: 1 is for upper triangle here, contra everywhere else in HMD, so be careful!
 

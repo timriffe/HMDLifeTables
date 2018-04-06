@@ -20,10 +20,9 @@
 #' @param OldStyle.  Logical.  When true, output is .csv files analogous to
 #'   those produced under Matlab V5 code (no headers), that are part of the
 #'   input for SAS diagnostics.  When FALSE (default, not yet implemented) the output will be ....
-
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is
 #'   extracted from \code{WORKING} as the last path part.
-#'   
+#' @param CountryLong the HMD country full name.
 #'   
 #' @return function called for its side effect of creating the lifetable txt
 #'   output files, e.g. \code{mltper_1x1.txt} and other time/sex configurations.
@@ -39,7 +38,8 @@ Write_csv <- function(
   STATSFOLDER = "RSTATS", 
   MPVERSION , # explicit, no default
   OldStyle=TRUE,  # compatible with SAS diagnostics
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
   
   # MatlabRound() is for rounding output, should give same result as matlab, assuming that's important
   # by CB, updated by TR to take digits as arg.
@@ -66,14 +66,19 @@ Write_csv <- function(
   if (is.null(XXX)){
     XXX           <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
+  
+  
   # for the metadata header: country long name
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
+  
   # ltper_AxN() should have been run with save.bin = TRUE, 
   # such that there's an Rbin folder waiting there with stuff in it
   Rbin.path       <- file.path(WORKING, "Rbin")
   # save formatted .txt out to this folder, make sure exists
   STATS.path      <- file.path(WORKING, STATSFOLDER)
-  # get country long name
-  CountryLong  <- country.lookup[country.lookup[,1] == XXX, 2]
+  
   if (!file.exists(STATS.path)){
     dir.create(STATS.path)
     #Sys.chmod(STATS.path, mode = "2775", use_umask = FALSE)

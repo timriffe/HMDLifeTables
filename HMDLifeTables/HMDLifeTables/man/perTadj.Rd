@@ -22,4 +22,3 @@ period territorial adjustments 'un'adjust population counts bring January 1 popu
 \author{
 Tim Riffe \email{triffe@demog.berkeley.edu}
 }
-

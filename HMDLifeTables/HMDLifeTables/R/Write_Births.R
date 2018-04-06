@@ -7,6 +7,7 @@
 #' @param LDBPATH in case the LexisDB is not in \code{WORKING} (local testing), the full path to the LexisDB folder. If left as \code{NULL} it is assumed to be \code{file.path(WORKING, "LexisDB")}
 #' @param PVERSION 5 or 6. Default 5. Here this only affects file headers.
 #' @param XXX the HMD country abbreviation. If left \code{NULL}, this is extracted from \code{WORKING} as the last path part.
+#' @param CountryLong the HMD country full name.
 #' 
 #' @return function called for its side effect of creating the file \code{Births.txt}. No value returned.
 #' 
@@ -22,11 +23,19 @@ Write_Births <- function(
   LDBPATH = NULL,
   IDBPATH = NULL,
   MPVERSION , # explicit, no default
-  XXX = NULL){
+  XXX = NULL,
+  CountryLong = NULL){
   
   if (is.null(XXX)){
     XXX           <- ExtractXXXfromWORKING(WORKING) # not sourced!
   }
+  
+  # for the metadata header: country long name
+  
+  if(length(CountryLong) == 0){
+    warning("*** !!! Missing long country name; output will be affected")
+  }
+  
   if (is.null(LDBPATH)){
     LDBPATH       <- file.path(WORKING, "LexisDB")
   }
@@ -41,10 +50,10 @@ Write_Births <- function(
   LDBobj.m        <- read.table(ldb.path.m, header = FALSE, sep = ",", 
                         col.names = c("Year", "Age", "Lexis", "Cohort", "Population", "Deaths"))
   
-  Bf              <- with(LDBobj.f, Population[Age == 0 & Lexis == 1 & Population > -1])
-  Bm              <- with(LDBobj.m, Population[Age == 0 & Lexis == 1 & Population > -1])
-  Bt              <- Bf + Bm
-  Year            <- with(LDBobj.m, Year[Age == 0 & Lexis == 1 & Population > -1])
+  Bf.ldb              <- with(LDBobj.f, Population[Age == 0 & Lexis == 1 & Population > -1])
+  Bm.ldb              <- with(LDBobj.m, Population[Age == 0 & Lexis == 1 & Population > -1])
+  Bt.ldb              <- Bf.ldb + Bm.ldb
+  Year.ldb            <- with(LDBobj.m, Year[Age == 0 & Lexis == 1 & Population > -1])
 
 
   ## CAB: override the above and take Births from InputDB, since that will give the full span of
@@ -58,35 +67,57 @@ Write_Births <- function(
 
   ## working subset
   idb.births <- idb.births[, c("Sex", "Year", "Births", "Access","LDB")]
-  ## set year as factor with complete recorded year range, to impute any missing entries 
-  idb.births$Year <- factor(idb.births$Year, levels=min(idb.births$Year):max(idb.births$Year))
- 
-  idb.births.m <- melt(idb.births, id.vars=c("Sex", "Year", "Access", "LDB") )
-  idb.births.c <- dcast(idb.births.m, Year + Sex + Access + LDB  ~ variable , drop=FALSE, fill=NULL)
-
-  ## remove duplicates where there are identical Year,Sex, Access entries and prefer
-  ## cases where LDB=1 over LDB=0.  Warn here because this situation is very confusing
-  idb.births.dups <- duplicated(idb.births.c[,1:3], fromLast=TRUE) # fromLast chooses LDB=1
-  if( any(idb.births.dups) ){
-    warning(paste("*** ", XXX, ": There are duplicate/conflicting entries for Births; preferring cases where LDB==1"))
-    idb.births.c <- idb.births.c[ !idb.births.dups,]
-  }
-  Bf <- idb.births.c$Births[ idb.births.c$Sex=='f' ]
-  Bm <- idb.births.c$Births[ idb.births.c$Sex=='m' ]
-  Year <-  as.character( idb.births.c$Year[ idb.births.c$Sex=='f' ] ) #was factor
-  Year <- as.integer(Year)
-  if( length(Bf) != length(Bm) || length(Bf) != length(Year) ){
-    warning(paste("*** ", XXX, ": Unequal Male, Female births lengths") )
-  }
-  Bt <- Bf + Bm  
-
+  idb.births <- idb.births[ idb.births$LDB == 1, ]
+  # for some aggregates, the Births file consists of a Header only or a Header and a line of missing values
+  # in which case we skip IDB
   
-  # for the metadata header: country long name
-  # country.lookup should load; if throws error, try data(country.lookup)
-  CountryLong     <- country.lookup[country.lookup[,1] == XXX,2]
-  DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ",")
+  if( length(unique(idb.births$Year) ) <= 1 && unique(idb.births$Year) == "."){ # use LDB as Births source
+    isEmptyIDBBirths <- TRUE
+    warning("*** Empty InputDB Births file -- using LexisDB for Births")
+    Bf <- Bf.ldb
+    Bm <- Bm.ldb
+    Bt <- Bt.ldb
+    Year <- Year.ldb
+    
+    
+  } else {  # use IDB as Births source
+    
+    isEmptyIDBBirths <- FALSE
+    ## set year as factor with complete recorded year range, to impute any missing entries 
+    idbbirthsExpectedYears <- seq(from=min(idb.births$Year), to=max(idb.births$Year), by=1)
+    
+    idb.births.m <- melt(idb.births, id.vars=c("Sex", "Year", "Access", "LDB") )
+    idb.births.c <- dcast(idb.births.m, Year + Sex + Access + LDB  ~ variable , drop=FALSE, fill=NULL)
+    
+    ## remove duplicates where there are identical Year,Sex, Access entries   
+    ## Warn here because this situation is very confusing
+    idb.births.dups <- duplicated(idb.births.c[,1:3]) 
+    if( any(idb.births.dups) ){
+      warning(paste("*** ", XXX, ": There are duplicate/conflicting entries for Births; preferring cases where LDB==1"))
+      idb.births.c <- idb.births.c[ !idb.births.dups,]
+    }
+    Bf <- idb.births.c$Births[ idb.births.c$Sex=='f' ]
+    Bm <- idb.births.c$Births[ idb.births.c$Sex=='m' ]
+    Year <-  as.character( idb.births.c$Year[ idb.births.c$Sex=='f' ] ) #was factor
+    Year <- as.integer(Year)
+    if( length(Bf) != length(Bm) || length(Bf) != length(Year) ){
+      warning(paste("*** ", XXX, ": Unequal Male, Female births lengths in IDB") )
+    }
+    
+    if( length( c( setdiff(Year, Year.ldb), setdiff(Year.ldb, Year) )) > 0 ){
+      warning(paste("*** ", XXX, ": Different Birth Years between IDB, LDB:",  paste(setdiff(Year, Year.ldb), setdiff(Year.ldb, Year) , collapse=" ")) )
+    }
+    if( length(setdiff(idbbirthsExpectedYears, Year)) > 0 ){
+      warning( paste("*** Fewer Birth years than expected in IDB -- missing data for years", setdiff(idbbirthsExpectedYears, Year), collapse=" ") )
+    }
+    Bt <- Bf + Bm  
+    
+  }
+  
+  
+  DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
   # Methods Protocol version
-  MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "MPv6 (in development)\n")
+  MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
   DataType        <- ",  Births (1-year)"
  
   # save formatted .txt out to this folder, make sure exists
