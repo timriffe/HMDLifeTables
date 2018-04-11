@@ -6,7 +6,7 @@ List of changes needed in this package
 * output to database of complete records, tie in to password system  
 * move Matlab rounding function to its own place in a utilities.R group   It is used in many different routines and should
   have the same structure and use in each case (correct calls for digits)
-
+* current code uses .Rdata and expects bin files with that suffix.  Change to .RData which is the standard
 * Move Lexis triangle exposure code from LT to LexisDB so that LexisDB exposures are correct.  This means adjusting the format of the LexisDB which would be good in any case.  
   
 * all LT calcs now begin with truncating information at OPENAGE.  Ideally, full age detail available from the InputDB would be carried through all the calculations, only invoking an OPENAGE setting at the end.  This would involve recoding everything.

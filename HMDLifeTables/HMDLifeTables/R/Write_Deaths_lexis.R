@@ -123,7 +123,7 @@ Write_Deaths_lexis <- function(
   
   DateMod        <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
   # Methods Protocol version
-  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
+  MPvers         <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)")
   DataType       <- ",  Deaths (Lexis triangle)"
   
   # write it out!

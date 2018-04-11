@@ -101,7 +101,7 @@ Write_Exposures_Deaths_Mx <- function(
     # time stamp (perhaps make more precise sometime)
     DateMod         <- paste0("\tLast modified: ", format(Sys.time(), "%d %b %Y"), ";")
     # Methods Protocol version
-    MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)\n")
+    MPvers          <- ifelse(MPVERSION == 5, " MPv5 (May07)", "  Methods Protocol: v6 (2017)")
     
     
     # this is fancy character padding. 'Year' is either 4 or 9 characters long- 
