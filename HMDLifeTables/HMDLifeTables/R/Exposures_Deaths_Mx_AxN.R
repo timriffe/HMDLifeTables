@@ -98,7 +98,10 @@ Exposures_Deaths_Mx_AxN <- function(
                                 sex = "f", 
                                 OPENAGE = OPENAGE, 
                                 save.bin = TRUE, 
-                                MPVERSION = MPVERSION
+                                MPVERSION = MPVERSION,
+                                XXX=XXX,
+                                LDBPATH = LDBPATH,
+                                IDBPATH = IDBPATH
                               )
   Exp.f <- Exp.f.list[["Exp"]]
   Exp.m.list       <- Exposures_per(WORKING = WORKING, 
@@ -109,7 +112,10 @@ Exposures_Deaths_Mx_AxN <- function(
                                 sex = "m", 
                                 OPENAGE = OPENAGE, 
                                 save.bin = TRUE, 
-                                MPVERSION = MPVERSION
+                                MPVERSION = MPVERSION,
+                                XXX=XXX,
+                                LDBPATH = LDBPATH,
+                                IDBPATH = IDBPATH
                               )
   Exp.m <- Exp.m.list[["Exp"]]
   # ---------------------------------------------------------------------------------
