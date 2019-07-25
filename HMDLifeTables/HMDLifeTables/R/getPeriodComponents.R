@@ -42,12 +42,12 @@ getPeriodComponents <- function(
 # read in data:
 # LDB 
   ldb.path      <- file.path(LDBPATH, paste0(sex, XXX, ".txt"))
-  LDBobj        <- read.table(ldb.path, header = FALSE, sep = ",", 
-    col.names = c("Year", "Age", "Lexis", "Cohort", "Population", "Deaths"))
+  LDBobj        <- read.table(ldb.path, header = TRUE, sep = ",", 
+    col.names = c("Year", "Age", "Lexis", "Cohort", "Population", "Deaths"), stringsAsFactors=FALSE)
 # tadj
   tadj.path     <- file.path(IDBPATH, paste0(XXX, "tadj.txt"))
   if (file.exists(tadj.path)){
-    tadj <- read.table(tadj.path, header = TRUE, sep = ",", na.strings = ".")
+    tadj <- read.table(tadj.path, header = TRUE, sep = ",", na.strings = ".", stringsAsFactors=FALSE)
   } else {
     tadj <- NULL
   }
