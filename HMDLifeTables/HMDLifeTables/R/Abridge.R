@@ -19,20 +19,25 @@
 ###############################################################################
 Abridge <- function(lx, Tx, ex, OPENAGE){
   abr.ages <- c(0, 1, seq(5, OPENAGE, by = 5))
+  n   <- diff(abr.ages)
+  n   <- matrix(n, ncol = ncol(lx), nrow = nrow(lx))
+  
   lx  <- lx[as.integer(rownames(lx)) %in% abr.ages, ]
   Tx  <- Tx[as.integer(rownames(Tx)) %in% abr.ages, ]
   ex  <- ex[as.integer(rownames(ex)) %in% abr.ages, ]
  
   # px, dx, qx, Lx, mx all 1 row shorter, with special close-out
-  px <- lx[2:nrow(lx), ] / lx[1:(nrow(lx) - 1), ]
+  px  <- lx[2:nrow(lx), ] / lx[1:(nrow(lx) - 1), ]
   px[is.infinite(px)] <- NA
-  dx <- lx[1:(nrow(lx) - 1), ] - lx[2:nrow(lx), ]
-  qx <- 1 - px
-  Lx <- Tx[1:(nrow(Tx) - 1), ] - Tx[2:nrow(Tx), ]
-  mx <- dx / Lx
+  dx  <- lx[1:(nrow(lx) - 1), ] - lx[2:nrow(lx), ]
+  qx  <- 1 - px
+  Lx  <- Tx[1:(nrow(Tx) - 1), ] - Tx[2:nrow(Tx), ]
+  mx  <- dx / Lx
   mx[is.infinite(mx)] <- NA
-  ax <- (Lx - replicate(ncol(Lx), diff(abr.ages)) * lx[2:nrow(lx), ]) / dx
-  ax[dx == 0 & !is.na(qx)] <- 2.5 
+  ax  <- (Lx - n * lx[2:nrow(lx), ]) / dx
+  # TR: 5-Aug-2020. Hypothetically could get 0 deaths in age 1-4.
+  ind <-dx == 0 & !is.na(qx)
+  ax[ind] <- n[ind] / 2
  
   # prepare open age group entries:
   dxOP <- lx[nrow(lx), ]
